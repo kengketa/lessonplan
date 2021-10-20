@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Transformers;
+
+use App\Models\{{ Model }};
+use League\Fractal\TransformerAbstract;
+
+class {{ Model }}Transformer extends TransformerAbstract
+{
+    public function transform({{ Model }} ${{ model }}): array
+    {
+        $data = [
+            {{ transformerFields }}
+        ];
+
+        return $data;
+    }
+}

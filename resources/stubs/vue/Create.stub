@@ -1,0 +1,46 @@
+<template>
+    <div>
+        <Breadcrumbs
+            :breadcrumbs="breadcrumbs"
+            :back="route('{{ namespace.models }}.index')"
+        />
+        <PageHeading>
+            Create {{ Model }}
+        </PageHeading>
+
+        <div>
+            <{{ Model }}Form :{{ model }}="{{ model }}" type="create" />
+        </div>
+    </div>
+</template>
+
+<script>
+    import Layout from '@/Shared/Layout';
+    import {{ Model }}Form from '@/Components/Forms/{{ Model }}Form';
+    import Breadcrumbs from '@/Components/Breadcrumbs';
+    import PageHeading from '@/Components/PageHeading';
+
+    export default {
+        name: '{{ Model }}Create',
+        components: {Breadcrumbs, PageHeading, {{ Model }}Form},
+        layout: Layout,
+        props: {
+        {{ model }}: {
+                type: Object,
+                required: true
+            },
+            errors: Object,
+        },
+        data() {
+            return {
+                breadcrumbs: [
+                    {name: '{{ Models }}', href: route('{{ namespace.models }}.index')},
+                    {name: 'Create {{ Model }}', href: '#'},
+                ],
+            };
+        },
+        methods: {},
+        mounted() {
+        }
+    };
+</script>

@@ -1,0 +1,14 @@
+/* Reset */
+@import 'tailwindcss/base';
+@import "customs/base.css";
+@import "customs/font.css";
+
+/* Components */
+@import 'tailwindcss/components';
+
+/*@layer components {*/
+@import "customs/button.css";
+@import "customs/link.css";
+/*}*/
+
+@import 'tailwindcss/utilities';

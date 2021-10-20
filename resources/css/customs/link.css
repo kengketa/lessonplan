@@ -1,0 +1,6 @@
+.link {
+    @apply font-normal text-primary-500;
+}
+.link:hover {
+    @apply text-primary-700 underline;
+}

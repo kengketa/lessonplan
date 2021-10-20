@@ -1,0 +1,83 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Actions\Save{{ Model }}Action;
+use App\Http\Requests\CreateOrUpdate{{ Model }}Request;
+use App\Models\{{ Model }};
+use App\Http\Controllers\Controller;
+use App\Transformers\{{ Model }}Transformer;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class {{ Model }}Controller extends Controller
+{
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(["search"]);
+        ${{ models }} = {{ Model }}::filter($filters)->latest()->paginate(30);
+        ${{ models }} = fractal(${{ models }}, new {{ Model }}Transformer())->toArray();
+
+        return Inertia::render(
+            '{{ modelNamespace }}/Index',
+            [
+                '{{ models }}' => ${{ models }},
+                'filters' => $filters,
+            ]);
+    }
+    public function create(): Response
+    {
+        return Inertia::render(
+            '{{ modelNamespace }}/Create',
+            [
+                '{{ model }}' => new {{ Model }}()
+            ]);
+    }
+
+    public function store(CreateOrUpdate{{ Model }}Request $request, Save{{ Model }}Action $save{{ Model }}Action): RedirectResponse
+    {
+        ${{ model }} = new {{ Model }}();
+        ${{ model }} = $save{{ Model }}Action->execute(${{ model }}, $request->validated());
+
+        return redirect()->route('{{ lowerNamespace }}.{{ models }}.show', ['{{ model }}' => ${{ model }}])->with("success", ' {{ Model }}  has been create!');
+    }
+
+    public function show({{ Model }} ${{ model }}): Response
+    {
+        ${{ model }} = fractal(${{ model }}, new {{ Model }}Transformer())->toArray();
+
+        return Inertia::render(
+            '{{ modelNamespace }}/Show',
+            [
+                '{{ model }}' => ${{ model }},
+            ]);
+    }
+
+    public function edit({{ Model }} ${{ model }}): Response
+    {
+        return Inertia::render(
+            '{{ modelNamespace }}/Edit',
+            [
+                '{{ model }}' => ${{ model }}
+            ]);
+    }
+
+    public function update(CreateOrUpdate{{ Model }}Request $request, {{ Model }} ${{ model }}, Save{{ Model }}Action $save{{ Model }}Action): RedirectResponse
+    {
+        ${{ model }} = $save{{ Model }}Action->execute(${{ model }}, $request->validated());
+
+        return redirect()->route("{{ lowerNamespace }}.{{ models }}.show", ['{{ model }}' => ${{ model }}])->with("success", "{{ Model }} has been update!");
+    }
+
+    public function destroy({{ Model }} ${{ model }}): RedirectResponse
+    {
+        if (${{ model }}->delete()) {
+            return redirect()->route("{{ lowerNamespace }}.{{ models }}.index")->with("success", "{{ Model }} has been destroy!");
+        } else {
+            return redirect()->route("{{ lowerNamespace }}.{{ models }}.index")->with("error", "Can't delete {{ Model }}");
+        }
+    }
+
+}
