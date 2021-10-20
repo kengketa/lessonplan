@@ -24,25 +24,47 @@
                   Add Grade
                 </DialogTitle>
                 <div class="mt-2">
-
-                  <TextInput
-                    name="name"
-                    v-model="form.name"
-                    :error="form.errors.name"
-                    :is-show-line="false"
-                    label="Name"
-                    placeholder="Sugarman Name"
+                  <SearchSelectInput :is-show-line="false"
+                                     label="ประเภท"
+                                     v-model="form.type"
+                                     :error="form.errors.type"
+                                     :options="[
+                        {
+                          id:1,
+                          name:'ศูนย์เด็ก'
+                        },
+                        {
+                          id:2,
+                          name:'อนุบาล'
+                        },
+                        {
+                          id:3,
+                          name:'ประถม'
+                        },
+                         {
+                          id:4,
+                          name:'มัธยม'
+                        },
+                  ]"
                   />
                   <TextInput
-                    name="email"
-                    v-model="form.email"
-                    :error="form.errors.email"
+                    name="level"
+                    v-model="form.level"
+                    :error="form.errors.level"
                     :is-show-line="false"
-                    label="Email"
-                    type="email"
-                    placeholder="Sugarman Email"
+                    label="ชั้น"
+                    type="number"
+                    placeholder="เช่น 1"
                   />
-
+                  <TextInput
+                    name="room_number"
+                    v-model="form.room_number"
+                    :error="form.errors.room_number"
+                    :is-show-line="false"
+                    label="ห้องที่"
+                    type="number"
+                    placeholder="ห้องที่"
+                  />
                 </div>
               </div>
             </div>
@@ -90,10 +112,15 @@ export default {
       type: Boolean,
       default: false
     },
+    schoolId: {
+      type: Number,
+      require: true
+    }
   },
   data() {
     return {
       form: useForm({
+        school_id: this.schoolId,
         type: null,
         level: null,
         room_number: null

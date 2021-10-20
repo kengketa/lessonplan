@@ -7,20 +7,23 @@ use Illuminate\Support\Str;
 
 class SaveGradeAction
 {
-    protected Grade $grade;
-
-    public function execute(Grade $grade, array $data): Grade
+    public function execute(array $data): Grade|null
     {
-        $this->grade = $grade;
-
-        if (! empty($this->grade->id)) {
-            $this->grade->update($data);
-            return $this->grade;
+        $grade = Grade::where('school_id', $data['school_id'])
+            ->where('type', $data['type'])
+            ->where('level', $data['level'])
+            ->where('room_number', $data['room_number'])
+            ->first();
+        if ($grade) {
+            return null;
         }
-
-        //create case
-        $this->grade = $this->grade->create($data);
-        return $this->grade;
+        $grade = Grade::create([
+            'school_id' => $data['school_id'],
+            'type' => $data['type'],
+            'level' => $data['level'],
+            'room_number' => $data['room_number']
+        ]);
+        return $grade;
     }
 
 }

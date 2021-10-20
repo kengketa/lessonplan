@@ -83,7 +83,7 @@
         </DataDisplayContainer>
       </div>
     </Card>
-    <AddGradeModal v-model="showAddGradeModal" />
+    <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
   </div>
 </template>
 

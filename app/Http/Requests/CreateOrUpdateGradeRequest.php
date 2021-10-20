@@ -14,16 +14,12 @@ class CreateOrUpdateGradeRequest extends FormRequest
      */
     public function rules()
     {
-
-        $rules=[
-
-            'school_id'	=>	['required', ],
-			'type'	=>	['required', ],
-			'level'	=>	['required', ],
-			'room_number'	=>	['required', ],
-			
+        $rules = [
+            'school_id' => ['required'],
+            'type' => ['required', 'numeric', 'in:1,2,3,4'],
+            'level' => ['required', 'numeric'],
+            'room_number' => ['required', 'numeric'],
         ];
-
         return $rules;
     }
 }

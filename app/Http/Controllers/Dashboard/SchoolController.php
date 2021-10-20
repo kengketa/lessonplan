@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Actions\SaveSchoolAction;
 use App\Http\Requests\CreateOrUpdateSchoolRequest;
+use App\Models\Grade;
 use App\Models\School;
 use App\Http\Controllers\Controller;
 use App\Transformers\GradeTransformer;
@@ -49,7 +50,8 @@ class SchoolController extends Controller
     public function show(School $school): Response
     {
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
-        $schoolData['grades'] = fractal($school->grades->sortBy('type'), new GradeTransformer())->toArray();
+        $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
+        $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
 
         return Inertia::render(
             'Dashboard/Schools/Show',

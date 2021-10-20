@@ -10,19 +10,18 @@
       v-if="label"
       :for="id"
       class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-      >{{ label }}</label
-    >
+    >{{ label }}</label>
     <div class="mt-1 sm:mt-0 sm:col-span-2">
       <div class="relative rounded-md shadow-sm max-w-lg">
         <span class="inline-block w-full rounded-md shadow-sm">
           <button
-            @click="open"
             type="button"
             class="relative z-0 w-full py-2 pl-3 pr-10 text-left transition cursor-pointer duration-150 ease-in-out bg-white border border-gray-300 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            @click="open"
           >
             <span class="block truncate">{{
-              selectedOption == null ? selectText : selectedOption.name
-            }}</span>
+                selectedOption == null ? selectText : selectedOption.name
+              }}</span>
             <span
               class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
             >
@@ -50,14 +49,14 @@
             @mouseleave="isOnSelecting = false"
           >
             <input
+              ref="searchInput"
+              v-model="search"
               class="block w-full border-gray-300 focus:outline-none sm:text-sm rounded-md"
               :class="{
                 'pr-10 text-red-900 border-red-300 focus:ring-red-500 focus:border-red-500': error,
                 'focus:ring-primary-500': !error,
               }"
-              v-model="search"
               placeholder="Search options"
-              ref="searchInput"
               type="text"
               @blur="closeWithBlur"
               @keydown.esc="close"
@@ -65,7 +64,7 @@
               @keydown.down="highlightNext"
               @keydown.enter.prevent="selectHighlighted"
               @keydown.tab.prevent
-            />
+            >
             <ul
               ref="optionsSelect"
               class="py-1 overflow-y-scroll text-base leading-6 rounded-md shadow-xs max-h-36 focus:outline-none sm:text-sm sm:leading-5"
@@ -73,13 +72,13 @@
               <li
                 v-for="(item, index) in filteredOptions"
                 :key="item.id"
-                @click="select(item)"
                 :class="[
                   `relative py-2 pl-3 select-none pr-9 hover:bg-blue-500 hover:text-white rounded-md cursor-pointer`,
                   index == highlightedIndex
                     ? 'bg-blue-500 text-white'
                     : 'text-gray-900 ',
                 ]"
+                @click="select(item)"
               >
                 <span class="block font-normal truncate">{{ item.name }} </span>
               </li>
@@ -89,15 +88,19 @@
                   `relative py-2 pl-3 text-gray-900 select-none pr-9 rounded-md cursor-default`,
                 ]"
               >
-                <span class="block font-normal truncate"
-                  >No results found for "{{ search }}"</span
-                >
+                <span
+                  class="block font-normal truncate"
+                >No results found for "{{ search }}"</span>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <p v-if="error" class="mt-2 text-sm text-red-600" :id="`${id}-error`">
+      <p
+        v-if="error"
+        :id="`${id}-error`"
+        class="mt-2 text-sm text-red-600"
+      >
         {{ error }}
       </p>
     </div>
@@ -105,12 +108,12 @@
 </template>
 
 <script>
-import { ExclamationCircleIcon } from "@heroicons/vue/solid";
-import { defineComponent, ref, onMounted, computed } from "vue";
+import {ExclamationCircleIcon} from '@heroicons/vue/solid';
+import {defineComponent, ref, onMounted, computed} from 'vue';
 
 const makeid = (length) => {
-  let result = "";
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   const charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -119,6 +122,9 @@ const makeid = (length) => {
 };
 
 export default defineComponent({
+  components: {
+    ExclamationCircleIcon,
+  },
   props: {
     id: {
       type: String,
@@ -126,10 +132,10 @@ export default defineComponent({
         return `search-select-input-${makeid(10)}`;
       },
     },
-    options: { required: true, type: Array },
+    options: {required: true, type: Array},
     selectText: {
       type: String,
-      default: "Select an option",
+      default: 'Select an option',
     },
     modelValue: {
       type: Number,
@@ -137,7 +143,7 @@ export default defineComponent({
     },
     type: {
       type: String,
-      default: "text",
+      default: 'text',
     },
     label: String,
     error: String,
@@ -164,17 +170,18 @@ export default defineComponent({
     const optionsSelect = ref();
 
     const isOpen = ref(true);
-    const search = ref("");
+    const search = ref('');
     const highlightedIndex = ref(0);
     const isOnSelecting = ref(false);
     onMounted(() => {
-      console.log("mounted");
+      console.log('mounted');
       isOpen.value = false;
     });
 
     const open = async () => {
       isOpen.value = true;
-      await setInterval(() => {}, 0);
+      await setInterval(() => {
+      }, 0);
       highlight(selectedOptionIndex.value);
       searchInput.value.focus();
     };
@@ -184,16 +191,16 @@ export default defineComponent({
     };
 
     const scrollToHighlighted = () => {
-      if (filteredOptions.length == 0) {
+      if (filteredOptions.value.length == 0) {
         return;
       }
       optionsSelect.value.children[highlightedIndex.value].scrollIntoView({
-        block: "nearest",
+        block: 'nearest',
       });
     };
     const select = async (item) => {
-      await context.emit("update:modelValue", item.id);
-      search.value = "";
+      await context.emit('update:modelValue', item.id);
+      search.value = '';
       highlightedIndex.value = selectedOptionIndex.value;
       close();
     };
@@ -267,9 +274,6 @@ export default defineComponent({
       selectedOption,
       selectedOptionIndex,
     };
-  },
-  components: {
-    ExclamationCircleIcon,
   },
 });
 </script>

@@ -45,23 +45,6 @@ class Grade extends Model
 
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-
-    public function scopeFilter(Builder $query, array $filters): void
-    {
-        if (!empty($filters["search"])) {
-            $query->where(function ($qr) use ($filters) {
-                $qr->where("school_id", "like", "%$filters[search]%")->orWhere("type", "like",
-                    "%$filters[search]%")->orWhere("level", "like", "%$filters[search]%")->orWhere("room_number",
-                    "like", "%$filters[search]%");
-            });
-        }
-    }
-
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');
