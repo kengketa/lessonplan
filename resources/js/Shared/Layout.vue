@@ -324,6 +324,7 @@ import {
   ChipIcon,
   FireIcon,
   QrcodeIcon,
+  AcademicCapIcon
 } from "@heroicons/vue/outline";
 import {Link} from "@inertiajs/inertia-vue3";
 import {SearchIcon} from "@heroicons/vue/solid";
@@ -347,6 +348,12 @@ const navs = {
     href: route("dashboard.users.index"),
     icon: UsersIcon,
     routeGroup: "dashboard.users.*",
+  },
+  schools: {
+    name: "Schools",
+    href: route("dashboard.schools.index"),
+    icon: AcademicCapIcon,
+    routeGroup: "dashboard.schools.*",
   },
 
   //roles: {
@@ -396,12 +403,12 @@ export default {
       const roles = this.$page.props.roleEnum;
       if (user.roles[0].id == roles.USER) {
         nav.push(navs.dashboard);
-
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.users);
-
+        nav.push(navs.schools);
       } else if (user.roles[0].id == roles.SUPER_ADMIN) {
         nav.push(navs.users);
+        nav.push(navs.schools);
       } else {
         //push nothing
       }

@@ -9,7 +9,7 @@
             class="button button-primary"
             :href="route('dashboard.schools.create')"
           >
-            <UserAddIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+            <AcademicCapIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             Create School
           </Link>
         </template>
@@ -22,12 +22,9 @@
             placeholder="search.."
           ></TextInput>
         </div>
-        <div class="col-span-12 md:col-span-2 flex items-end justify-end">
+        <div class="col-span-12 md:col-span-2 flex items-center">
           <div>
-            <button
-              @click="clearForm"
-              class="button button-secondary button-small"
-            >
+            <button @click="clearForm" class="button button-secondary button-small">
               Clear
             </button>
           </div>
@@ -91,7 +88,7 @@ import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-import {UserAddIcon} from "@heroicons/vue/solid";
+import {UserAddIcon, AcademicCapIcon} from "@heroicons/vue/solid";
 import {Link} from "@inertiajs/inertia-vue3";
 
 export default {
@@ -107,6 +104,7 @@ export default {
     SelectInput,
     Breadcrumbs,
     UserAddIcon,
+    AcademicCapIcon,
     Link
   },
   props: {

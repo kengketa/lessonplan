@@ -55,7 +55,7 @@ class School extends Model
     {
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("name", "like", "%$filters[search]%")->orWhere("address", "like", "%$filters[search]%");
+                $qr->where("name", "like", "%$filters[search]%");
             });
         }
     }
