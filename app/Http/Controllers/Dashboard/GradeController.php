@@ -27,6 +27,7 @@ class GradeController extends Controller
                 'filters' => $filters,
             ]);
     }
+
     public function create(): Response
     {
         return Inertia::render(
@@ -41,7 +42,8 @@ class GradeController extends Controller
         $grade = new Grade();
         $grade = $saveGradeAction->execute($grade, $request->validated());
 
-        return redirect()->route('dashboard.grades.show', ['grade' => $grade])->with("success", ' Grade  has been create!');
+        return redirect()->route('dashboard.grades.show', ['grade' => $grade])->with("success",
+            ' Grade  has been create!');
     }
 
     public function show(Grade $grade): Response
@@ -64,19 +66,24 @@ class GradeController extends Controller
             ]);
     }
 
-    public function update(CreateOrUpdateGradeRequest $request, Grade $grade, SaveGradeAction $saveGradeAction): RedirectResponse
-    {
+    public function update(
+        CreateOrUpdateGradeRequest $request,
+        Grade $grade,
+        SaveGradeAction $saveGradeAction
+    ): RedirectResponse {
         $grade = $saveGradeAction->execute($grade, $request->validated());
 
-        return redirect()->route("dashboard.grades.show", ['grade' => $grade])->with("success", "Grade has been update!");
+        return redirect()->route("dashboard.grades.show", ['grade' => $grade])->with("success",
+            "Grade has been update!");
     }
 
     public function destroy(Grade $grade): RedirectResponse
     {
+        $school = $grade->school;
         if ($grade->delete()) {
-            return redirect()->route("dashboard.grades.index")->with("success", "Grade has been destroy!");
+            return redirect()->route("dashboard.schools.show", $school->id)->with("success", "Grade has been removed!");
         } else {
-            return redirect()->route("dashboard.grades.index")->with("error", "Can't delete Grade");
+            return redirect()->route("dashboard.schools.show", $school->id)->with("error", "Grade can't be removed!");
         }
     }
 

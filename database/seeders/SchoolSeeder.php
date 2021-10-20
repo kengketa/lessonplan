@@ -27,10 +27,10 @@ class SchoolSeeder extends Seeder
             ]);
         }
         $schools = School::all();
-        $types = [Grade::NURSERY_LEVEL, Grade::KINDERGATEN_LEVEL, Grade::PRIMARY_LEVEL];
+        $types = [Grade::NURSERY_TYPE, Grade::KINDERGATEN_TYPE, Grade::PRIMARY_TYPE];
         foreach ($schools as $school) {
             foreach ($types as $type) {
-                if ($type === Grade::PRIMARY_TYPE) {
+                if ($type === Grade::NURSERY_TYPE) {
                     Grade::create([
                         'school_id' => $school->id,
                         'type' => $type,
@@ -44,7 +44,7 @@ class SchoolSeeder extends Seeder
                         'room_number' => 2
                     ]);
                 }
-                if ($type === Grade::KINDPRIMARY_TYPE) {
+                if ($type === Grade::KINDERGATEN_TYPE) {
                     Grade::create([
                         'school_id' => $school->id,
                         'type' => $type,

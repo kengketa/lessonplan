@@ -62,14 +62,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::delete("schools/{school}", [SchoolController::class, "destroy"])->name("dashboard.schools.destroy");
 
         //grades
-        Route::get("grades", [GradeController::class, "index"])->name("dashboard.grades.index");
-        Route::get("grades/create", [GradeController::class, "create"])->name("dashboard.grades.create");
-        Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
         Route::post("grades", [GradeController::class, "store"])->name("dashboard.grades.store");
-        Route::get("grades/{grade}/edit", [GradeController::class, "edit"])->name("dashboard.grades.edit");
-        Route::put("grades/{grade}", [GradeController::class, "update"])->name("dashboard.grades.update");
         Route::delete("grades/{grade}", [GradeController::class, "destroy"])->name("dashboard.grades.destroy");
-
 
     });
 });

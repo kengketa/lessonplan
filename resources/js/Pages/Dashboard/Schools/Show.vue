@@ -7,6 +7,13 @@
       confirm-text="Delete School"
       :confirm-event="deleteSchool"
     />
+    <ConfirmDialog
+      v-model="showDeleteGradeDialog"
+      title="Delete Grade?"
+      :body="`Grade: ${ deletingGrade ? deletingGrade.name : null} will be deleted.`"
+      confirm-text="Delete Grade"
+      :confirm-event="deleteGrade"
+    />
     <Breadcrumbs
       :breadcrumbs="breadcrumbs"
       :back="route('dashboard.schools.index')"
@@ -45,52 +52,38 @@
         <DataDisplayContainer>
           <DataDisplayRow>
             <template #label>
-              name
+              Name
             </template>
             {{ school.name }}
           </DataDisplayRow>
           <DataDisplayRow>
             <template #label>
-              address
+              Address
             </template>
             {{ school.address }}
+          </DataDisplayRow>
+          <DataDisplayRow>
+            <template #label>
+              Grades
+            </template>
+            <div class="flex flex-wrap">
+              <div v-for="grade in school.grades.data" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
+                <span>{{ grade.name }}</span>
+                <button @click="deletePreConfirm(grade)" class="absolute -top-2 -right-2 text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button @click="showAddGradeModal=true" class="button button-primary button-small">Add Grade</button>
           </DataDisplayRow>
         </DataDisplayContainer>
       </div>
     </Card>
-    <div>
-      <TableDisplayContainer>
-        <template #header>
-          <TableTh v-for="(column,index) in columns" :key="index">
-            <div class="flex">
-              <span>{{ column }}</span>
-            </div>
-          </TableTh>
-          <TableTh>Actions</TableTh>
-        </template>
-        <template #body>
-          <tr
-            v-for="(item, itemIndex) in school.grades.data"
-            :key="item"
-            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
-          >
-            <TableTd>
-              <inertia-link
-                :href="route('dashboard.grades.show',item.id)"
-                class="hover:underline"
-              >
-                {{ item.name }}
-              </inertia-link>
-            </TableTd>
-            <TableTd>
-              <inertia-link :href="route('dashboard.grades.edit', item.id)" class="link">
-                Edit
-              </inertia-link>
-            </TableTd>
-          </tr>
-        </template>
-      </TableDisplayContainer>
-    </div>
+    <AddGradeModal v-model="showAddGradeModal" />
   </div>
 </template>
 
@@ -106,6 +99,7 @@ import TableDisplayContainer from "@/Components/TableDisplayContainer";
 import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
 import {Link} from '@inertiajs/inertia-vue3';
+import AddGradeModal from "@/Components/Forms/AddGradeModal";
 
 import {
   ExternalLinkIcon,
@@ -121,7 +115,7 @@ import Button from '@/Jetstream/Button';
 export default {
   name: 'SchoolShow',
   components: {
-    Card, PageHeading, Breadcrumbs, DataDisplayContainer,
+    Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
     ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link
   },
@@ -141,10 +135,20 @@ export default {
       columns: ['grade'],
       deleteForm: useForm({}),
       isShowDeleteDialog: false,
+      showDeleteGradeDialog: false,
+      showAddGradeModal: false,
+      deletingGrade: null
     };
   },
   computed: {},
   methods: {
+    deletePreConfirm(grade) {
+      this.deletingGrade = grade;
+      this.showDeleteGradeDialog = true;
+    },
+    deleteGrade() {
+      this.deleteForm.delete(route('dashboard.grades.destroy', this.deletingGrade.id));
+    },
     deleteSchool() {
       this.deleteForm.delete(route('dashboard.schools.destroy', {school: this.school.id}));
     },
