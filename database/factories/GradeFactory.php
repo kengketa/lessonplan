@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
+use App\Models\Grade;
 use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SchoolFactory extends Factory
+class GradeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = School::class;
+    protected $model = Grade::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +23,10 @@ class SchoolFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->sentence(10),
-            'address' => null,
+            'school_id' => School::inRandomOrder()->id ?? School::factory(),
+            'type' => $this->faker->numberBetween(1, 100),
+            'level' => $this->faker->numberBetween(1, 100),
+            'room_number' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

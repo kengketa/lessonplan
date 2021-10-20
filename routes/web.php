@@ -7,6 +7,7 @@ use App\Http\Controllers\UserSetupController;
 use Inertia\Inertia;
 use App\Models\Role;
 use App\Http\Controllers\Dashboard\SchoolController;
+use App\Http\Controllers\Dashboard\GradeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ Route::post("do-setup", [UserSetupController::class, "doSetup"])->name("user-set
 
 Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(function () {
 
-    Route::middleware(["role:" . Role::ROLE_ADMIN.'|'.Role::ROLE_SUPER_ADMIN])->group(function () {
+    Route::middleware(["role:".Role::ROLE_ADMIN.'|'.Role::ROLE_SUPER_ADMIN])->group(function () {
         //users
         Route::get("users", [UserController::class, "index"])->name("dashboard.users.index");
         Route::get("users/create", [UserController::class, "create"])->name("dashboard.users.create");
@@ -52,13 +53,23 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::put("users/{user}/restore", [UserController::class, "restore"])->name("dashboard.users.restore");
 
         //schools
-        Route::get("schools", [SchoolController::class,"index"])->name("dashboard.schools.index");
-        Route::get("schools/create", [SchoolController::class,"create"])->name("dashboard.schools.create");
-        Route::get("schools/{school}", [SchoolController::class,"show"])->name("dashboard.schools.show");
-        Route::post("schools", [SchoolController::class,"store"])->name("dashboard.schools.store");
-        Route::get("schools/{school}/edit", [SchoolController::class,"edit"])->name("dashboard.schools.edit");
-        Route::put("schools/{school}", [SchoolController::class,"update"])->name("dashboard.schools.update");
-        Route::delete("schools/{school}", [SchoolController::class,"destroy"])->name("dashboard.schools.destroy");
+        Route::get("schools", [SchoolController::class, "index"])->name("dashboard.schools.index");
+        Route::get("schools/create", [SchoolController::class, "create"])->name("dashboard.schools.create");
+        Route::get("schools/{school}", [SchoolController::class, "show"])->name("dashboard.schools.show");
+        Route::post("schools", [SchoolController::class, "store"])->name("dashboard.schools.store");
+        Route::get("schools/{school}/edit", [SchoolController::class, "edit"])->name("dashboard.schools.edit");
+        Route::put("schools/{school}", [SchoolController::class, "update"])->name("dashboard.schools.update");
+        Route::delete("schools/{school}", [SchoolController::class, "destroy"])->name("dashboard.schools.destroy");
+
+        //grades
+        Route::get("grades", [GradeController::class, "index"])->name("dashboard.grades.index");
+        Route::get("grades/create", [GradeController::class, "create"])->name("dashboard.grades.create");
+        Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
+        Route::post("grades", [GradeController::class, "store"])->name("dashboard.grades.store");
+        Route::get("grades/{grade}/edit", [GradeController::class, "edit"])->name("dashboard.grades.edit");
+        Route::put("grades/{grade}", [GradeController::class, "update"])->name("dashboard.grades.update");
+        Route::delete("grades/{grade}", [GradeController::class, "destroy"])->name("dashboard.grades.destroy");
+
 
     });
 });

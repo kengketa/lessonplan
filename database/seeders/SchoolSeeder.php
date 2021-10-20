@@ -14,6 +14,16 @@ class SchoolSeeder extends Seeder
      */
     public function run()
     {
-        School::factory()->count(3)->create();
+        $schools = [
+            ['name' => 'โรงเรียนเทศบาลตำบลงิม (คือเวียงจ่ำ)'],
+            ['name' => 'โรงเรียนอนุบาล เทศบาลตำบลจุน'],
+            ['name' => 'Tessaban 5'],
+            ['name' => 'Tessaban 4'],
+        ];
+        foreach ($schools as $school) {
+            School::factory()->create([
+                'name' => $school['name']
+            ]);
+        }
     }
 }
