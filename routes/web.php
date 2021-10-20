@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSetupController;
 use Inertia\Inertia;
 use App\Models\Role;
+use App\Http\Controllers\Dashboard\SchoolController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,16 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::put("users/{user}", [UserController::class, "update"])->name("dashboard.users.update");
         Route::delete("users/{user}", [UserController::class, "destroy"])->name("dashboard.users.destroy");
         Route::put("users/{user}/restore", [UserController::class, "restore"])->name("dashboard.users.restore");
+
+        //schools
+        Route::get("schools", [SchoolController::class,"index"])->name("dashboard.schools.index");
+        Route::get("schools/create", [SchoolController::class,"create"])->name("dashboard.schools.create");
+        Route::get("schools/{school}", [SchoolController::class,"show"])->name("dashboard.schools.show");
+        Route::post("schools", [SchoolController::class,"store"])->name("dashboard.schools.store");
+        Route::get("schools/{school}/edit", [SchoolController::class,"edit"])->name("dashboard.schools.edit");
+        Route::put("schools/{school}", [SchoolController::class,"update"])->name("dashboard.schools.update");
+        Route::delete("schools/{school}", [SchoolController::class,"destroy"])->name("dashboard.schools.destroy");
+
     });
 });
 Route::middleware(["auth"])->group(function () {

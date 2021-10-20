@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         if (config('app.env') !== 'testing') {
             $this->call(RolePermissionSeeder::class);
             $this->call(UsersSeeder::class);
+			$this->call(SchoolSeeder::class);
         }
     }
 }
