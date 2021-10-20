@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Role;
 use App\Http\Controllers\Dashboard\SchoolController;
 use App\Http\Controllers\Dashboard\GradeController;
+use App\Http\Controllers\Dashboard\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,8 +67,19 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::delete("grades/{grade}", [GradeController::class, "destroy"])->name("dashboard.grades.destroy");
 
     });
+
+    //reports
+    Route::get("reports", [ReportController::class, "index"])->name("dashboard.reports.index");
+    Route::get("reports/create", [ReportController::class, "create"])->name("dashboard.reports.create");
+    Route::get("reports/{report}", [ReportController::class, "show"])->name("dashboard.reports.show");
+    Route::post("reports", [ReportController::class, "store"])->name("dashboard.reports.store");
+    Route::get("reports/{report}/edit", [ReportController::class, "edit"])->name("dashboard.reports.edit");
+    Route::put("reports/{report}", [ReportController::class, "update"])->name("dashboard.reports.update");
+    Route::delete("reports/{report}", [ReportController::class, "destroy"])->name("dashboard.reports.destroy");
+
 });
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
+
 
 });
