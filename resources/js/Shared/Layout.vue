@@ -403,6 +403,8 @@ export default {
       const roles = this.$page.props.roleEnum;
       if (user.roles[0].id == roles.USER) {
         nav.push(navs.dashboard);
+      } else if (user.roles[0].id == roles.TEACHER) {
+        // push report
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.users);
         nav.push(navs.schools);
