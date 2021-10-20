@@ -8,13 +8,23 @@ class GradePresenter extends BasePresenter
 {
     protected $model;
 
-//    public function name()
-//    {
-//        if (app()->getLocale() == 'th') {
-//            return $this->model->name_th;
-//        }
-//
-//        return $this->model->name_en;
-//    }
+    public function name()
+    {
+        return $this->getType().''.$this->level.'/'.$this->room_number;
+    }
+
+    private function getType()
+    {
+        if ($this->model->type === Grade::NURSERY_TYPE) {
+            return 'ศูนย์เด็ก';
+        }
+        if ($this->model->type === Grade::KINDERGATEN_TYPE) {
+            return 'อ.';
+        }
+        if ($this->model->type === Grade::PRIMARY_TYPE) {
+            return 'ป.';
+        }
+        return "";
+    }
 
 }

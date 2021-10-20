@@ -23,7 +23,8 @@ class School extends Model
      * @var array
      */
     protected $fillable = [
-        'name','address',
+        'name',
+        'address',
     ];
 
     /**
@@ -52,10 +53,15 @@ class School extends Model
 
     public function scopeFilter(Builder $query, array $filters): void
     {
-        if (! empty($filters["search"])) {
+        if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
                 $qr->where("name", "like", "%$filters[search]%")->orWhere("address", "like", "%$filters[search]%");
             });
         }
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'school_id');
     }
 }

@@ -6,6 +6,7 @@ use App\Actions\SaveSchoolAction;
 use App\Http\Requests\CreateOrUpdateSchoolRequest;
 use App\Models\School;
 use App\Http\Controllers\Controller;
+use App\Transformers\GradeTransformer;
 use App\Transformers\SchoolTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,15 +19,15 @@ class SchoolController extends Controller
     {
         $filters = $request->only(["search"]);
         $schools = School::filter($filters)->latest()->paginate(30);
-        $schools = fractal($schools, new SchoolTransformer())->toArray();
-
+        $schoolData = fractal($schools, new SchoolTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Schools/Index',
             [
-                'schools' => $schools,
+                'schools' => $schoolData,
                 'filters' => $filters,
             ]);
     }
+
     public function create(): Response
     {
         return Inertia::render(
@@ -41,18 +42,21 @@ class SchoolController extends Controller
         $school = new School();
         $school = $saveSchoolAction->execute($school, $request->validated());
 
-        return redirect()->route('dashboard.schools.show', ['school' => $school])->with("success", ' School  has been create!');
+        return redirect()->route('dashboard.schools.show', ['school' => $school])->with("success",
+            ' School  has been create!');
     }
 
     public function show(School $school): Response
     {
-        $school = fractal($school, new SchoolTransformer())->toArray();
+        $schoolData = fractal($school, new SchoolTransformer())->toArray();
+        $schoolData['grades'] = fractal($school->grades->sortBy('type'), new GradeTransformer())->toArray();
 
         return Inertia::render(
             'Dashboard/Schools/Show',
             [
-                'school' => $school,
-            ]);
+                'school' => $schoolData,
+            ]
+        );
     }
 
     public function edit(School $school): Response
@@ -64,11 +68,15 @@ class SchoolController extends Controller
             ]);
     }
 
-    public function update(CreateOrUpdateSchoolRequest $request, School $school, SaveSchoolAction $saveSchoolAction): RedirectResponse
-    {
+    public function update(
+        CreateOrUpdateSchoolRequest $request,
+        School $school,
+        SaveSchoolAction $saveSchoolAction
+    ): RedirectResponse {
         $school = $saveSchoolAction->execute($school, $request->validated());
 
-        return redirect()->route("dashboard.schools.show", ['school' => $school])->with("success", "School has been update!");
+        return redirect()->route("dashboard.schools.show", ['school' => $school])->with("success",
+            "School has been update!");
     }
 
     public function destroy(School $school): RedirectResponse

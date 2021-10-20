@@ -15,10 +15,10 @@ class Grade extends Model
 
     protected $presenter = GradePresenter::class;
 
-    public const NURSERY_LEVEL = 1;
-    public const KINDERGATEN_LEVEL = 2;
-    public const PRIMARY_LEVEL = 3;
-    public const SECONDARY_LEVEL = 4;
+    public const NURSERY_TYPE = 1;
+    public const KINDERGATEN_TYPE = 2;
+    public const PRIMARY_TYPE = 3;
+    public const SECONDARY_TYPE = 4;
 
     protected $fillable = [
         'school_id',
