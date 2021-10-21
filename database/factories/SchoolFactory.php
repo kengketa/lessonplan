@@ -24,6 +24,14 @@ class SchoolFactory extends Factory
         return [
             'name' => $this->faker->sentence(10),
             'address' => null,
+            'subjects' => [
+                ['id' => 1, 'name' => 'phonics'],
+                ['id' => 2, 'name' => 'english'],
+                ['id' => 3, 'name' => 'maths'],
+                ['id' => 4, 'name' => 'sci'],
+                ['id' => 5, 'name' => 'arts'],
+                ['id' => 6, 'name' => 'pe'],
+            ]
         ];
     }
 }

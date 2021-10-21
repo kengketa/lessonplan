@@ -40,7 +40,7 @@ class ReportFactory extends Factory
                 'vocabs' => [$this->faker->word, $this->faker->word, $this->faker->word, $this->faker->word],
                 'details' => $this->faker->sentence(20),
             ],
-            'subject' => $this->faker->text(20),
+            'subject' => 1,
             'outcome' => $this->faker->sentence(20),
             'outstanding_student' => $this->faker->sentence(20),
             'need_improvement_student' => $this->faker->sentence(20),

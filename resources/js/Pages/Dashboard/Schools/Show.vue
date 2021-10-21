@@ -14,6 +14,13 @@
       confirm-text="Delete Grade"
       :confirm-event="deleteGrade"
     />
+    <ConfirmDialog
+      v-model="showDeleteSubjectDialog"
+      title="Delete subject?"
+      :body="`Subject: ${ deletingSubject ? deletingSubject.name : null} will be deleted.`"
+      confirm-text="Delete Subject"
+      :confirm-event="deleteSubject"
+    />
     <Breadcrumbs
       :breadcrumbs="breadcrumbs"
       :back="route('dashboard.schools.index')"
@@ -69,7 +76,7 @@
             <div class="flex flex-wrap">
               <div v-for="grade in school.grades.data" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
                 <span>{{ grade.name }}</span>
-                <button @click="deletePreConfirm(grade)" class="absolute -top-2 -right-2 text-red-500">
+                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-2 -right-2 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -80,10 +87,29 @@
             </div>
             <button @click="showAddGradeModal=true" class="button button-primary button-small">Add Grade</button>
           </DataDisplayRow>
+          <DataDisplayRow>
+            <template #label>
+              Subjects
+            </template>
+            <div class="flex flex-wrap">
+              <div v-for="subject in school.subjects" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
+                <span class="uppercase">{{ subject.name }}</span>
+                <button @click="deleteSubjectPreConfirm(subject)" class="absolute -top-2 -right-2 text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button @click="showAddSubjectModal=true" class="button button-primary button-small">Add Subject</button>
+          </DataDisplayRow>
         </DataDisplayContainer>
       </div>
     </Card>
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
+    <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
   </div>
 </template>
 
@@ -101,6 +127,7 @@ import TableTd from "@/Components/TableTd";
 import {Link} from '@inertiajs/inertia-vue3';
 import AddGradeModal from "@/Components/Forms/AddGradeModal";
 
+
 import {
   ExternalLinkIcon,
   EyeIcon,
@@ -111,10 +138,12 @@ import {
 } from '@heroicons/vue/solid';
 import {useForm} from '@inertiajs/inertia-vue3';
 import Button from '@/Jetstream/Button';
+import AddSubjectModal from "../../../Components/Forms/AddSubjectModal";
 
 export default {
   name: 'SchoolShow',
   components: {
+    AddSubjectModal,
     Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
     ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link
@@ -134,20 +163,34 @@ export default {
       ],
       columns: ['grade'],
       deleteForm: useForm({}),
+      subjectForm: useForm({
+        id: null
+      }),
       isShowDeleteDialog: false,
       showDeleteGradeDialog: false,
+      showDeleteSubjectDialog: false,
       showAddGradeModal: false,
-      deletingGrade: null
+      showAddSubjectModal: false,
+      deletingGrade: null,
+      deletingSubject: null,
     };
   },
   computed: {},
   methods: {
-    deletePreConfirm(grade) {
+    deleteGradePreConfirm(grade) {
       this.deletingGrade = grade;
       this.showDeleteGradeDialog = true;
     },
+    deleteSubjectPreConfirm(subject) {
+      this.deletingSubject = subject;
+      this.showDeleteSubjectDialog = true;
+    },
     deleteGrade() {
       this.deleteForm.delete(route('dashboard.grades.destroy', this.deletingGrade.id));
+    },
+    deleteSubject() {
+      this.subjectForm.id = this.deletingSubject.id
+      this.subjectForm.post(route('dashboard.schools.delete_subject', this.school.id));
     },
     deleteSchool() {
       this.deleteForm.delete(route('dashboard.schools.destroy', {school: this.school.id}));

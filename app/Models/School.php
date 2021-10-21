@@ -25,6 +25,7 @@ class School extends Model
     protected $fillable = [
         'name',
         'address',
+        'subjects'
     ];
 
     /**
@@ -42,7 +43,7 @@ class School extends Model
      * @var array
      */
     protected $casts = [
-
+        'subjects' => 'json'
     ];
 
     /**

@@ -16,14 +16,40 @@ class SchoolSeeder extends Seeder
     public function run()
     {
         $schools = [
-            ['name' => 'โรงเรียนเทศบาลตำบลงิม (คือเวียงจ่ำ)'],
-            ['name' => 'โรงเรียนอนุบาล เทศบาลตำบลจุน'],
-            ['name' => 'Tessaban 5'],
-            ['name' => 'Tessaban 4'],
+            [
+                'name' => 'โรงเรียนเทศบาลตำบลงิม (คือเวียงจ่ำ)',
+                'subjects' => [
+                    ['id' => 1, 'name' => 'phonics'],
+                ]
+            ],
+            [
+                'name' => 'โรงเรียนอนุบาล เทศบาลตำบลจุน',
+                'subjects' => [
+                    ['id' => 1, 'name' => 'phonics'],
+                ]
+            ],
+            [
+                'name' => 'Tessaban 5',
+                'subjects' => [
+                    ['id' => 1, 'name' => 'phonics'],
+                    ['id' => 2, 'name' => 'english'],
+                    ['id' => 3, 'name' => 'maths'],
+                    ['id' => 4, 'name' => 'sci'],
+                    ['id' => 5, 'name' => 'arts'],
+                    ['id' => 6, 'name' => 'pe'],
+                ]
+            ],
+            [
+                'name' => 'Tessaban 4',
+                'subjects' => [
+                    ['id' => 1, 'name' => 'phonics'],
+                ]
+            ],
         ];
         foreach ($schools as $school) {
             School::factory()->create([
-                'name' => $school['name']
+                'name' => $school['name'],
+                'subjects' => $school['subjects']
             ]);
         }
         $schools = School::all();

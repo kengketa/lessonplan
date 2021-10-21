@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Actions\SaveSchoolAction;
 use App\Http\Requests\CreateOrUpdateSchoolRequest;
 use App\Models\Grade;
+use App\Models\Report;
 use App\Models\School;
 use App\Http\Controllers\Controller;
 use App\Transformers\GradeTransformer;
@@ -13,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Arr;
 
 class SchoolController extends Controller
 {
@@ -88,6 +90,42 @@ class SchoolController extends Controller
         } else {
             return redirect()->route("dashboard.schools.index")->with("error", "Can't delete School");
         }
+    }
+
+    public function addSubject(School $school, Request $request)
+    {
+        $request->validate(['subject' => 'required']);
+        $subjects = $school->subjects;
+        $lastId = $subjects[count($subjects) - 1]['id'];
+        $newSubject = ['id' => $lastId + 1, 'name' => $request['subject']];
+        $subjects[] = $newSubject;
+        $school->subjects = $subjects;
+        $school->save();
+        return redirect()->route("dashboard.schools.show", $school->id)
+            ->with("success", "Subject has been added.");
+    }
+
+    public function deleteSubject(School $school, Request $request)
+    {
+        $request->validate(['id' => 'required']);
+        $foundReport = Report::whereHas('grade.school', function ($q) use ($school) {
+            $q->where('id', $school->id);
+        })->where('subject', $request['id'])->count();
+
+        if ($foundReport > 0) {
+            return redirect()->route("dashboard.schools.show", $school->id)
+                ->with("error", "This subject can not be deleted as it is related to reports");
+        }
+        $subjects = $school->subjects;
+        $toRemoveId = $request['id'];
+        $filteredSubjects = Arr::where($subjects, function ($subject, $key) use ($toRemoveId) {
+            return $subject['id'] != $toRemoveId;
+        });
+        $school->subjects = $filteredSubjects;
+        $school->save();
+
+        return redirect()->route("dashboard.schools.show", $school->id)
+            ->with("success", "Subject has been remove.");
     }
 
 }

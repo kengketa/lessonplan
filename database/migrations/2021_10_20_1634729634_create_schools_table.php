@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Schema;
 class CreateSchoolsTable extends Migration
 {
     protected $table = "schools";
+
     public function up()
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string("name");
-			$table->text("address")->nullable();
+            $table->text("address")->nullable();
+            $table->json('subjects')->nullable();
             $table->timestamps();
         });
     }

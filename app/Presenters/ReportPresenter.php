@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App\Models\Report;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class ReportPresenter extends BasePresenter
 {
@@ -19,6 +20,16 @@ class ReportPresenter extends BasePresenter
         $topic = $this->model->topic;
         $topic['type'] = $topic['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
         return $topic;
+    }
+
+    public function subject()
+    {
+        $subjectId = $this->model->subject;
+        $subjects = $this->model->grade->school->subjects;
+        $filteredSubject = Arr::where($subjects, function ($subject, $key) use ($subjectId) {
+            return $subject['id'] == $subjectId;
+        });
+        return ucfirst($filteredSubject[0]['name']);
     }
 
 }
