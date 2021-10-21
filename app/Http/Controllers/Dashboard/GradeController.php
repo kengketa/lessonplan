@@ -6,8 +6,10 @@ use App\Actions\SaveGradeAction;
 use App\Http\Requests\CreateOrUpdateGradeRequest;
 use App\Models\Grade;
 use App\Http\Controllers\Controller;
+use App\Models\Report;
 use App\Models\School;
 use App\Transformers\GradeTransformer;
+use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,6 +37,23 @@ class GradeController extends Controller
         } else {
             return redirect()->route("dashboard.schools.show", $school->id)->with("error", "Grade can't be removed!");
         }
+    }
+
+    public function show(Grade $grade)
+    {
+        $gradeData = fractal($grade, new GradeTransformer())->toArray();
+        $reports = Report::where('grade_id', $grade->id)
+            ->orderBy('week_number')
+            ->orderBy('lesson_number')
+            ->paginate(30);
+        $reportData = fractal($reports, new ReportTransformer())->toArray();
+        return Inertia::render(
+            'Dashboard/Grades/Show',
+            [
+                'grade' => $gradeData,
+                'reports' => $reportData
+            ]
+        );
     }
 
 }

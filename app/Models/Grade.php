@@ -49,4 +49,10 @@ class Grade extends Model
     {
         return $this->belongsTo(School::class, 'school_id');
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'grade_id');
+    }
+
 }

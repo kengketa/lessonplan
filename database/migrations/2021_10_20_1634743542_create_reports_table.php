@@ -11,8 +11,10 @@ class CreateReportsTable extends Migration
     public function up()
     {
         Schema::create('reports', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger("grade_id")->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedInteger('academic_year');
+            $table->unsignedTinyInteger('semester');
             $table->integer("week_number");
             $table->integer("lesson_number");
             $table->date("date")->nullable();

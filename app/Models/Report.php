@@ -16,6 +16,9 @@ class Report extends Model
 
     protected $presenter = ReportPresenter::class;
 
+    public const TOPIC_PHONIC = 1;
+    public const TOPIC_LEARNING_AREA = 2;
+
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +27,8 @@ class Report extends Model
      */
     protected $fillable = [
         'grade_id',
+        'academic_year',
+        'semester',
         'week_number',
         'lesson_number',
         'date',
@@ -64,14 +69,7 @@ class Report extends Model
     {
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("grade_id", "like", "%$filters[search]%")->orWhere("week_number", "like",
-                    "%$filters[search]%")->orWhere("lesson_number", "like", "%$filters[search]%")->orWhere("date",
-                    "like", "%$filters[search]%")->orWhere("topic", "like", "%$filters[search]%")->orWhere("subject",
-                    "like", "%$filters[search]%")->orWhere("outcome", "like",
-                    "%$filters[search]%")->orWhere("outstanding_student", "like",
-                    "%$filters[search]%")->orWhere("need_improvement_student", "like",
-                    "%$filters[search]%")->orWhere("creator", "like", "%$filters[search]%")->orWhere("approver", "like",
-                    "%$filters[search]%");
+                $qr->Where("topic", "like", "%$filters[search]%");
             });
         }
     }

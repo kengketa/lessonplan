@@ -3,18 +3,15 @@
 namespace App\Presenters;
 
 use App\Models\Report;
+use Carbon\Carbon;
 
 class ReportPresenter extends BasePresenter
 {
     protected $model;
 
-//    public function name()
-//    {
-//        if (app()->getLocale() == 'th') {
-//            return $this->model->name_th;
-//        }
-//
-//        return $this->model->name_en;
-//    }
+    public function date()
+    {
+        return Carbon::parse($this->model->date)->format('d M Y');
+    }
 
 }
