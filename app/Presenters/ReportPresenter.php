@@ -14,4 +14,11 @@ class ReportPresenter extends BasePresenter
         return Carbon::parse($this->model->date)->format('d M Y');
     }
 
+    public function topic()
+    {
+        $topic = $this->model->topic;
+        $topic['type'] = $topic['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
+        return $topic;
+    }
+
 }

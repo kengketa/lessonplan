@@ -17,7 +17,7 @@ class ReportTransformer extends TransformerAbstract
             'week_number' => $report->week_number,
             'lesson_number' => $report->lesson_number,
             'date' => $report->present()->date,
-            'topic' => $report->topic,
+            'topic' => $report->present()->topic,
             'subject' => $report->subject,
             'outcome' => $report->outcome,
             'outstanding_student' => $report->outstanding_student,
