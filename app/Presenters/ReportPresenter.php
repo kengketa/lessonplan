@@ -17,9 +17,10 @@ class ReportPresenter extends BasePresenter
 
     public function plans()
     {
-        $topic = $this->model->plans;
-        $topic['type'] = $topic['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
-        return $topic;
+//        $plans = $this->model->plans;
+//        dd($plans);
+//        $plans['type'] = $plans['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
+        return "sdfd";
     }
 
     public function subject()

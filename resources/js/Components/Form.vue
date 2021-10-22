@@ -11,14 +11,15 @@
 
 <script>
 import SubmitButton from "./SubmitButton";
+
 export default {
-  components: { SubmitButton },
+  components: {SubmitButton},
   props: {
     submitEvent: Function,
     formClass: String,
   },
   data() {
-    return { isSubmitting: false, updateState: 0, currentState: 0 };
+    return {isSubmitting: false, updateState: 0, currentState: 0};
   },
   async updated() {
     if (this.isSubmitting && this.hasFlash) {
@@ -45,7 +46,7 @@ export default {
     clearFlash() {
       this.$page.props.flash.success = null;
       this.$page.props.flash.errror = null;
-      this.$page.props.errors = {};
+      // this.$page.props.errors = {};
     },
   },
 };

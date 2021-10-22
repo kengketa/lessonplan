@@ -41,13 +41,13 @@ class ReportController extends Controller
             ]);
     }
 
-    public function store(CreateOrUpdateReportRequest $request, SaveReportAction $saveReportAction): RedirectResponse
+    public function store(CreateOrUpdateReportRequest $request, SaveReportAction $saveReportAction)
     {
+        $school = School::find($request['school_id']);
         $report = new Report();
-        $report = $saveReportAction->execute($report, $request->validated());
-
-        return redirect()->route('dashboard.reports.show', ['report' => $report])->with("success",
-            ' Report  has been create!');
+        $addedReports = $saveReportAction->execute($report, $school, $request->validated());
+        return redirect()->route('dashboard.schools.show', $school->id)
+            ->with("success", 'Lesson plans has been created.');
     }
 
     public function show(Report $report): Response

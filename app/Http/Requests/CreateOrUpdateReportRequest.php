@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use app\Models\Report;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class CreateOrUpdateReportRequest extends FormRequest
 {
@@ -14,23 +15,21 @@ class CreateOrUpdateReportRequest extends FormRequest
      */
     public function rules()
     {
+        $rules = [
+            'school_id' => ['required', 'exists:schools,id'],
+            'subject' => ['required', 'numeric'],
+            'week_number' => ['required', 'numeric'],
+            'lesson_number' => ['required', 'numeric'],
+            'report.for_grades' => ['required'],
+            'report.for_grades.*.id' => ['required', 'exists:grades,id'],
+            'report.for_grades.*.date' => ['required', 'date'],
 
-        $rules=[
-
-            'grade_id'	=>	['required', ],
-			'week_number'	=>	['required', ],
-			'lesson_number'	=>	['required', ],
-			'date'	=>	['nullable', 'date', ],
-			'topic'	=>	['nullable', 'json', ],
-			'subject'	=>	['nullable', 'string', ],
-			'outcome'	=>	['nullable', 'string', ],
-			'outstanding_student'	=>	['nullable', 'string', ],
-			'need_improvement_student'	=>	['nullable', 'string', ],
-			'creator'	=>	['required', ],
-			'approver'	=>	['nullable', ],
-			
+            'report.plans' => ['required'],
+            'report.plans.*.type' => ['required'],
+            'report.plans.*.topic' => ['required'],
+            'report.plans.*.vocabs' => ['nullable'],
+            'report.plans.*.details' => ['nullable'],
         ];
-
         return $rules;
     }
 }
