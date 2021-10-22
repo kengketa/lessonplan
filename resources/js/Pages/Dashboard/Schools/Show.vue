@@ -285,10 +285,10 @@ export default {
       }),
       filterForm: useForm({
         filters: {
-          academic_year: this.filters ? parseInt(this.filters.academic_year) : null,
-          semester: this.filters ? parseInt(this.filters.semester) : null,
-          grade: this.filters ? parseInt(this.filters.grade) : null,
-          subject: this.filters ? parseInt(this.filters.subject) : null,
+          academic_year: this.filters ? parseInt(this.filters.academic_year) : 0,
+          semester: this.filters ? parseInt(this.filters.semester) : 0,
+          grade: this.filters ? parseInt(this.filters.grade) : 0,
+          subject: this.filters ? parseInt(this.filters.subject) : 0,
         }
       }),
       isShowDeleteDialog: false,
@@ -301,6 +301,7 @@ export default {
     };
   },
   mounted() {
+
   },
   computed: {},
   watch: {

@@ -68,18 +68,25 @@ class Report extends Model
     public function scopeFilter(Builder $query, array|null $filters): void
     {
         if (!isset($filters)) {
+            $query->where('academic_year', getCurrentAcademicYear())->where('semester', getCurrentSemester());
             return;
         }
-        if ($filters['academic_year'] != null && $filters['academic_year'] != 'NaN') {
+        if ($filters['academic_year'] == 0) {
+            $query->where('academic_year', getCurrentAcademicYear());
+        }
+        if ($filters['semester'] == 0) {
+            $query->where('semester', getCurrentSemester());
+        }
+        if ($filters['academic_year'] != 0) {
             $query->where('academic_year', $filters['academic_year']);
         }
-        if ($filters['semester'] != null && $filters['semester'] != 'NaN') {
+        if ($filters['semester'] != 0) {
             $query->where('semester', $filters['semester']);
         }
-        if ($filters['grade'] != null && $filters['grade'] != 'NaN') {
+        if ($filters['grade'] != 0) {
             $query->where('grade_id', $filters['grade']);
         }
-        if ($filters['subject'] != null && $filters['subject'] != 'NaN') {
+        if ($filters['subject'] != 0) {
             $query->where('subject', $filters['subject']);
         }
     }

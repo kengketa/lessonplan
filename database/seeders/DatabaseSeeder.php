@@ -14,11 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         if (config('app.env') !== 'testing') {
+
             $this->call(RolePermissionSeeder::class);
             $this->call(UsersSeeder::class);
-			$this->call(SchoolSeeder::class);
-			$this->call(GradeSeeder::class);
-			$this->call(ReportSeeder::class);
+            $this->call(SettingSeeder::class);
+            $this->call(SchoolSeeder::class);
+            $this->call(GradeSeeder::class);
+            $this->call(ReportSeeder::class);
         }
     }
 }

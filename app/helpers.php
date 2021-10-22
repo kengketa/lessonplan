@@ -8,6 +8,7 @@ function snakeCaseToText($text)
 function getYears()
 {
     $years = [
+        ['id' => 0, 'name' => 'Current'],
         ['id' => 2019, 'name' => '2019'],
         ['id' => 2020, 'name' => '2020'],
         ['id' => 2021, 'name' => '2021'],
@@ -27,8 +28,21 @@ function getYears()
 function getSemesters()
 {
     $semester = [
+        ['id' => 0, 'name' => 'Current'],
         ['id' => 1, 'name' => 'semseter 1'],
         ['id' => 2, 'name' => 'semester 2'],
     ];
     return $semester;
+}
+
+function getCurrentAcademicYear()
+{
+    $settings = \App\Models\Setting::first()->settings;
+    return (integer)$settings['current_academic_year'];
+}
+
+function getCurrentSemester()
+{
+    $settings = \App\Models\Setting::first()->settings;
+    return (integer)$settings['current_semester'];
 }
