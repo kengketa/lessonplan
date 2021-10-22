@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Grade;
 use App\Models\Report;
+use App\Models\School;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,8 +28,9 @@ class ReportFactory extends Factory
         $teacherCount = User::role(Role::ROLE_TEACHER)->get()->count();
         $teacher = User::role(Role::ROLE_TEACHER)->get();
         $admin = User::role(Role::ROLE_ADMIN)->get();
+        $school = School::find(1);
         return [
-            'grade_id' => Grade::first()->id ?? Grade::factory(),
+            'grade_id' => Grade::where('school_id', $school->id)->inRandomOrder()->first()->id,
             'academic_year' => $this->faker->randomElement([2020, 2021]),
             'semester' => $this->faker->randomElement([1, 2]),
             'week_number' => $this->faker->numberBetween(1, 20),

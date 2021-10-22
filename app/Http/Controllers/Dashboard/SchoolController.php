@@ -17,6 +17,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Arr;
 
+
 class SchoolController extends Controller
 {
     public function index(Request $request): Response
@@ -50,15 +51,19 @@ class SchoolController extends Controller
             ' School  has been create!');
     }
 
-    public function show(School $school): Response
+    public function show(School $school, Request $request): Response
     {
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
         $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
         $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
+        $years = getYears();
+        $semesters = getSemesters();
+        $schoolData['years'] = $years;
+        $schoolData['semesters'] = $semesters;
         $schoolId = $school->id;
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);
-        })
+        })->filter($request['filters'])
             ->orderBy('week_number')
             ->orderBy('lesson_number')
             ->paginate(30);
@@ -67,7 +72,8 @@ class SchoolController extends Controller
             'Dashboard/Schools/Show',
             [
                 'school' => $schoolData,
-                'reports' => $reportData
+                'reports' => $reportData,
+                'filters' => $request['filters']
             ]
         );
     }

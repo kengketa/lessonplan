@@ -119,6 +119,35 @@
       </div>
     </Card>
     <section>
+      <div class="grid grid-cols-5 gap-2">
+        <SearchSelectInput
+          :options="school.years"
+          :is-show-line="false"
+          v-model="filterForm.filters.academic_year"
+          label="Academicyear"
+        />
+        <SearchSelectInput
+          :options="school.semesters"
+          v-model="filterForm.filters.semester"
+          :is-show-line="false"
+          label="Semester"
+        />
+        <SearchSelectInput
+          :options="school.grades.data"
+          v-model="filterForm.filters.grade"
+          :is-show-line="false"
+          label="filter class"
+        />
+        <SearchSelectInput
+          :options="school.subjects"
+          v-model="filterForm.filters.subject"
+          :is-show-line="false"
+          label="filter subject"
+        />
+        <div class="flex items-end">
+          <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1">Clear</button>
+        </div>
+      </div>
       <TableDisplayContainer>
         <template #header>
           <TableTh v-for="(column,index) in columns" :key="index">
@@ -214,10 +243,14 @@ import {
 import {useForm} from '@inertiajs/inertia-vue3';
 import Button from '@/Jetstream/Button';
 import AddSubjectModal from "../../../Components/Forms/AddSubjectModal";
+import TextInput from "../../../Components/TextInput";
+import SearchSelectInput from "../../../Components/SearchSelectInput";
 
 export default {
   name: 'SchoolShow',
   components: {
+    SearchSelectInput,
+    TextInput,
     AddSubjectModal,
     Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
@@ -230,6 +263,10 @@ export default {
     reports: {
       type: Object,
       required: true
+    },
+    filters: {
+      type: Object,
+      default: null
     },
     flash: Object,
     errorBags: Object,
@@ -246,6 +283,14 @@ export default {
       subjectForm: useForm({
         id: null
       }),
+      filterForm: useForm({
+        filters: {
+          academic_year: this.filters ? parseInt(this.filters.academic_year) : null,
+          semester: this.filters ? parseInt(this.filters.semester) : null,
+          grade: this.filters ? parseInt(this.filters.grade) : null,
+          subject: this.filters ? parseInt(this.filters.subject) : null,
+        }
+      }),
       isShowDeleteDialog: false,
       showDeleteGradeDialog: false,
       showDeleteSubjectDialog: false,
@@ -255,8 +300,35 @@ export default {
       deletingSubject: null,
     };
   },
+  mounted() {
+  },
   computed: {},
+  watch: {
+    'filterForm.filters.academic_year': function () {
+      this.submitSearch()
+    },
+    'filterForm.filters.semester': function () {
+      this.submitSearch()
+    },
+    'filterForm.filters.grade': function () {
+      this.submitSearch()
+    },
+    'filterForm.filters.subject': function () {
+      this.submitSearch()
+    },
+  },
   methods: {
+    clearFilter() {
+      let url = route('dashboard.schools.show', this.school.id);
+      this.$inertia.visit(url,
+        {
+          preserveScroll: true
+        });
+    },
+    submitSearch() {
+      let url = route('dashboard.schools.show', this.school.id);
+      this.filterForm.get(url);
+    },
     deleteGradePreConfirm(grade) {
       this.deletingGrade = grade;
       this.showDeleteGradeDialog = true;

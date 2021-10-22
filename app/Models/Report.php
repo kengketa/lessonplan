@@ -65,12 +65,22 @@ class Report extends Model
      * @var array
      */
 
-    public function scopeFilter(Builder $query, array $filters): void
+    public function scopeFilter(Builder $query, array|null $filters): void
     {
-        if (!empty($filters["search"])) {
-            $query->where(function ($qr) use ($filters) {
-                $qr->Where("topic", "like", "%$filters[search]%");
-            });
+        if (!isset($filters)) {
+            return;
+        }
+        if ($filters['academic_year'] != null && $filters['academic_year'] != 'NaN') {
+            $query->where('academic_year', $filters['academic_year']);
+        }
+        if ($filters['semester'] != null && $filters['semester'] != 'NaN') {
+            $query->where('semester', $filters['semester']);
+        }
+        if ($filters['grade'] != null && $filters['grade'] != 'NaN') {
+            $query->where('grade_id', $filters['grade']);
+        }
+        if ($filters['subject'] != null && $filters['subject'] != 'NaN') {
+            $query->where('subject', $filters['subject']);
         }
     }
 
