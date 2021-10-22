@@ -9,6 +9,7 @@ use App\Models\Report;
 use App\Models\School;
 use App\Http\Controllers\Controller;
 use App\Transformers\GradeTransformer;
+use App\Transformers\ReportTransformer;
 use App\Transformers\SchoolTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,11 +55,19 @@ class SchoolController extends Controller
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
         $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
         $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
-
+        $schoolId = $school->id;
+        $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+            $q->where('id', $schoolId);
+        })
+            ->orderBy('week_number')
+            ->orderBy('lesson_number')
+            ->paginate(30);
+        $reportData = fractal($reports, new ReportTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Schools/Show',
             [
                 'school' => $schoolData,
+                'reports' => $reportData
             ]
         );
     }

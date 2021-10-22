@@ -65,4 +65,9 @@ class School extends Model
     {
         return $this->hasMany(Grade::class, 'school_id');
     }
+
+    public function reports()
+    {
+        return $this->hasManyThrough(Report::class, Grade::class);
+    }
 }

@@ -29,16 +29,24 @@ class ReportFactory extends Factory
         $admin = User::role(Role::ROLE_ADMIN)->get();
         return [
             'grade_id' => Grade::first()->id ?? Grade::factory(),
-            'academic_year' => 2021,
-            'semester' => 2,
+            'academic_year' => $this->faker->randomElement([2020, 2021]),
+            'semester' => $this->faker->randomElement([1, 2]),
             'week_number' => $this->faker->numberBetween(1, 20),
             'lesson_number' => $this->faker->numberBetween(1, 5),
             'date' => $this->faker->date(),
             'plans' => [
-                "type" => $this->faker->randomElement([Report::TOPIC_PHONIC, Report::TOPIC_LEARNING_AREA]),
-                'topic' => $this->faker->sentence(5),
-                'vocabs' => [$this->faker->word, $this->faker->word, $this->faker->word, $this->faker->word],
-                'details' => $this->faker->sentence(20),
+                0 => [
+                    "type" => $this->faker->randomElement([Report::TOPIC_PHONIC, Report::TOPIC_LEARNING_AREA]),
+                    'topic' => $this->faker->sentence(5),
+                    'vocabs' => [$this->faker->word, $this->faker->word, $this->faker->word, $this->faker->word],
+                    'details' => $this->faker->sentence(20),
+                ],
+                1 => [
+                    "type" => $this->faker->randomElement([Report::TOPIC_PHONIC, Report::TOPIC_LEARNING_AREA]),
+                    'topic' => $this->faker->sentence(5),
+                    'vocabs' => [$this->faker->word, $this->faker->word, $this->faker->word, $this->faker->word],
+                    'details' => $this->faker->sentence(20),
+                ]
             ],
             'subject' => 1,
             'outcome' => $this->faker->sentence(20),

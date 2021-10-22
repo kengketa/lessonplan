@@ -118,6 +118,70 @@
         </DataDisplayContainer>
       </div>
     </Card>
+    <section>
+      <TableDisplayContainer>
+        <template #header>
+          <TableTh v-for="(column,index) in columns" :key="index">
+            <div class="flex">
+              <span>{{ column }}</span>
+            </div>
+          </TableTh>
+          <TableTh>Actions</TableTh>
+        </template>
+        <template #body>
+          <tr
+            v-for="(item, itemIndex) in reports.data"
+            :key="item"
+            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+          >
+            <TableTd>
+              <div>
+                {{ item.grade_name }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.subject }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.week_number }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.lesson_number }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.date }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                <ul>
+                  <li v-for="(topic,index) in item.topics" :key="index">
+                    <div class="w-80 truncate">
+                      {{ topic }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </TableTd>
+            <TableTd>
+              <Link :href="route('dashboard.reports.edit', item.id)" class="link">
+                Edit
+              </Link>
+            </TableTd>
+          </tr>
+        </template>
+        <template #pagination>
+          <Pagination :data="reports.meta.pagination"></Pagination>
+        </template>
+      </TableDisplayContainer>
+    </section>
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
   </div>
@@ -136,7 +200,7 @@ import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
 import {Link} from '@inertiajs/inertia-vue3';
 import AddGradeModal from "@/Components/Forms/AddGradeModal";
-
+import Pagination from "@/Components/Pagination";
 
 import {
   ExternalLinkIcon,
@@ -157,11 +221,16 @@ export default {
     AddSubjectModal,
     Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
-    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link, DocumentReportIcon
+    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link, DocumentReportIcon,
+    Pagination
   },
   layout: Layout,
   props: {
     school: Object,
+    reports: {
+      type: Object,
+      required: true
+    },
     flash: Object,
     errorBags: Object,
     errors: Object,
@@ -172,7 +241,7 @@ export default {
         {name: 'Schools', href: route('dashboard.schools.index')},
         {name: this.school.name, href: '#'},
       ],
-      columns: ['grade'],
+      columns: ['grade', 'subject', 'week', 'lesson', 'teaching date', 'topic'],
       deleteForm: useForm({}),
       subjectForm: useForm({
         id: null

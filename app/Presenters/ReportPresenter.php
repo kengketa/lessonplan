@@ -17,10 +17,22 @@ class ReportPresenter extends BasePresenter
 
     public function plans()
     {
-//        $plans = $this->model->plans;
-//        dd($plans);
-//        $plans['type'] = $plans['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
-        return "sdfd";
+        $plans = $this->model->plans;
+        foreach ($plans as $key => $plan) {
+            $plans[$key]['type'] = $plan['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
+        }
+        return $plans;
+    }
+
+    public function topics()
+    {
+        $plans = $this->model->plans;
+        $topics = [];
+        foreach ($plans as $plan) {
+            $type = $plan['type'] == Report::TOPIC_PHONIC ? 'Phonics' : 'Learning Area';
+            $topics[] = $type.' : '.$plan['topic'];
+        }
+        return $topics;
     }
 
     public function subject()
