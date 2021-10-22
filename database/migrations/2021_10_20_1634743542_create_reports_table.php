@@ -18,7 +18,7 @@ class CreateReportsTable extends Migration
             $table->integer("week_number");
             $table->integer("lesson_number");
             $table->date("date")->nullable();
-            $table->json("topic")->nullable();
+            $table->json("plans")->nullable();
             $table->unsignedTinyInteger("subject")->nullable();
             $table->text("outcome")->nullable();
             $table->text("outstanding_student")->nullable();

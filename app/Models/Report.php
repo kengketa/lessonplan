@@ -32,7 +32,7 @@ class Report extends Model
         'week_number',
         'lesson_number',
         'date',
-        'topic',
+        'plans',
         'subject',
         'outcome',
         'outstanding_student',
@@ -56,7 +56,7 @@ class Report extends Model
      * @var array
      */
     protected $casts = [
-        'topic' => 'json'
+        'plans' => 'json'
     ];
 
     /**

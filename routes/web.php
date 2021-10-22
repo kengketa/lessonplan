@@ -66,6 +66,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::put("schools/{school}", [SchoolController::class, "update"])->name("dashboard.schools.update");
         Route::delete("schools/{school}", [SchoolController::class, "destroy"])->name("dashboard.schools.destroy");
 
+
         //grades
         Route::post("grades", [GradeController::class, "store"])->name("dashboard.grades.store");
         Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
@@ -76,7 +77,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 
     //reports
     Route::get("reports", [ReportController::class, "index"])->name("dashboard.reports.index");
-    Route::get("reports/create", [ReportController::class, "create"])->name("dashboard.reports.create");
+    //Route::get("reports/create", [ReportController::class, "create"])->name("dashboard.reports.create");
+    Route::get("schools/{school}/reports/create",
+        [ReportController::class, "create"])->name("dashboard.reports.create");
     Route::get("reports/{report}", [ReportController::class, "show"])->name("dashboard.reports.show");
     Route::post("reports", [ReportController::class, "store"])->name("dashboard.reports.store");
     Route::get("reports/{report}/edit", [ReportController::class, "edit"])->name("dashboard.reports.edit");

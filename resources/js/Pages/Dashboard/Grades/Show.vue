@@ -63,7 +63,7 @@
               :href="route('dashboard.reports.show',item.id)"
               class="hover:underline"
             >
-              {{ item.topic.title }}
+              {{ item.plans.topic }}
             </Link>
           </TableTd>
           <TableTd>

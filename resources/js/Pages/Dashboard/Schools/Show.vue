@@ -31,6 +31,13 @@
     </span>
       <template #actions>
         <Link
+          :href="route('dashboard.reports.create', school.id)"
+          class="button button-primary mr-2"
+        >
+          <DocumentReportIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+          Create Report
+        </Link>
+        <Link
           :href="route('dashboard.schools.edit', school.id)"
           class="button button-primary mr-2"
         >
@@ -74,9 +81,12 @@
               Grades
             </template>
             <div class="flex flex-wrap">
-              <div v-for="grade in school.grades.data" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
-                <span>{{ grade.name }}</span>
-                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-2 -right-2 text-red-500">
+              <div class="relative ml-1 my-3" v-for="grade in school.grades.data">
+                <a :href="route('dashboard.grades.show',grade.id)"
+                   class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
+                  <span>{{ grade.name }}</span>
+                </a>
+                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-4 right-0 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -134,7 +144,8 @@ import {
   PencilIcon,
   TrashIcon,
   CheckCircleIcon,
-  ExclamationCircleIcon
+  ExclamationCircleIcon,
+  DocumentReportIcon
 } from '@heroicons/vue/solid';
 import {useForm} from '@inertiajs/inertia-vue3';
 import Button from '@/Jetstream/Button';
@@ -146,7 +157,7 @@ export default {
     AddSubjectModal,
     Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
-    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link
+    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link, DocumentReportIcon
   },
   layout: Layout,
   props: {

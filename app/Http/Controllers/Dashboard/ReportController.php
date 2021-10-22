@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Actions\PrepareReportAction;
 use App\Actions\SaveReportAction;
 use App\Http\Requests\CreateOrUpdateReportRequest;
 use App\Models\Report;
 use App\Http\Controllers\Controller;
+use App\Models\School;
 use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,12 +29,15 @@ class ReportController extends Controller
                 'filters' => $filters,
             ]);
     }
-    public function create(): Response
+
+    public function create(School $school, Request $request)
     {
+        $emptyReport = new PrepareReportAction();
+        $reportData = $emptyReport->execute($school);
         return Inertia::render(
             'Dashboard/Reports/Create',
             [
-                'report' => new Report()
+                'report' => $reportData
             ]);
     }
 
@@ -41,7 +46,8 @@ class ReportController extends Controller
         $report = new Report();
         $report = $saveReportAction->execute($report, $request->validated());
 
-        return redirect()->route('dashboard.reports.show', ['report' => $report])->with("success", ' Report  has been create!');
+        return redirect()->route('dashboard.reports.show', ['report' => $report])->with("success",
+            ' Report  has been create!');
     }
 
     public function show(Report $report): Response
@@ -64,11 +70,15 @@ class ReportController extends Controller
             ]);
     }
 
-    public function update(CreateOrUpdateReportRequest $request, Report $report, SaveReportAction $saveReportAction): RedirectResponse
-    {
+    public function update(
+        CreateOrUpdateReportRequest $request,
+        Report $report,
+        SaveReportAction $saveReportAction
+    ): RedirectResponse {
         $report = $saveReportAction->execute($report, $request->validated());
 
-        return redirect()->route("dashboard.reports.show", ['report' => $report])->with("success", "Report has been update!");
+        return redirect()->route("dashboard.reports.show", ['report' => $report])->with("success",
+            "Report has been update!");
     }
 
     public function destroy(Report $report): RedirectResponse

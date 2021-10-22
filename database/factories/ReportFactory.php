@@ -34,9 +34,9 @@ class ReportFactory extends Factory
             'week_number' => $this->faker->numberBetween(1, 20),
             'lesson_number' => $this->faker->numberBetween(1, 5),
             'date' => $this->faker->date(),
-            'topic' => [
+            'plans' => [
                 "type" => $this->faker->randomElement([Report::TOPIC_PHONIC, Report::TOPIC_LEARNING_AREA]),
-                'title' => $this->faker->sentence(5),
+                'topic' => $this->faker->sentence(5),
                 'vocabs' => [$this->faker->word, $this->faker->word, $this->faker->word, $this->faker->word],
                 'details' => $this->faker->sentence(20),
             ],
