@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Grade;
+use App\Models\Role;
 use App\Models\School;
+use App\Models\SchoolTeacher;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class SchoolSeeder extends Seeder
@@ -98,6 +101,22 @@ class SchoolSeeder extends Seeder
                         }
                     }
                 }
+            }
+        }
+        $teachers = User::role(Role::ROLE_TEACHER)->get();
+        //Seed mock teacher in schools
+        foreach ($schools as $school) {
+            for ($i = 0; $i < 5; $i++) {
+                $teacherId = $teachers->random()->id;
+                $foundTeacher = SchoolTeacher::where('school_id', $school->id)
+                    ->where('teacher_id', $teacherId)->first();
+                if ($foundTeacher) {
+                    continue;
+                }
+                SchoolTeacher::factory()->create([
+                    'school_id' => $school->id,
+                    'teacher_id' => $teacherId
+                ]);
             }
         }
     }

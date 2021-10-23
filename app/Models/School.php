@@ -70,4 +70,9 @@ class School extends Model
     {
         return $this->hasManyThrough(Report::class, Grade::class);
     }
+
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'school_teachers', 'school_id', 'teacher_id');
+    }
 }

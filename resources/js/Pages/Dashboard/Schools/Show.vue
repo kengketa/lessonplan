@@ -21,6 +21,13 @@
       confirm-text="Delete Subject"
       :confirm-event="deleteSubject"
     />
+    <ConfirmDialog
+      v-model="showRemoveTeacherDialog"
+      title="Remove teacher from this school?"
+      :body="`Teacher: ${ removingTeacher ? removingTeacher.name : null} will be removed from this school.`"
+      confirm-text="Remove"
+      :confirm-event="removeTeacher"
+    />
     <Breadcrumbs
       :breadcrumbs="breadcrumbs"
       :back="route('dashboard.schools.index')"
@@ -81,12 +88,11 @@
               Grades
             </template>
             <div class="flex flex-wrap">
-              <div class="relative ml-1 my-3" v-for="grade in school.grades.data">
-                <a :href="route('dashboard.grades.show',grade.id)"
-                   class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
+              <div class="relative ml-1 my-1" v-for="grade in school.grades.data">
+                <p class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
                   <span>{{ grade.name }}</span>
-                </a>
-                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-4 right-0 text-red-500">
+                </p>
+                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-1 right-0 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,6 +121,24 @@
             </div>
             <button @click="showAddSubjectModal=true" class="button button-primary button-small">Add Subject</button>
           </DataDisplayRow>
+          <DataDisplayRow>
+            <template #label>
+              Teachers
+            </template>
+            <div class="flex flex-wrap">
+              <div v-for="teacher in school.teachers" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
+                <span>{{ teacher.name }}</span>
+                <button @click="removeTeacherPreConfirm(teacher)" class="absolute -top-2 -right-2 text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button @click="showAddTeacherModal=true" class="button button-primary button-small">Add Teacher</button>
+          </DataDisplayRow>
         </DataDisplayContainer>
       </div>
     </Card>
@@ -133,7 +157,7 @@
           label="Semester"
         />
         <SearchSelectInput
-          :options="school.years"
+          :options="school.teachers"
           :is-show-line="false"
           v-model="filterForm.filters.teacher"
           label="Teacher"
@@ -224,6 +248,7 @@
     </section>
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
+    <AddTeacherModal v-model="showAddTeacherModal" :school="school" />
   </div>
 </template>
 
@@ -256,10 +281,12 @@ import Button from '@/Jetstream/Button';
 import AddSubjectModal from "../../../Components/Forms/AddSubjectModal";
 import TextInput from "../../../Components/TextInput";
 import SearchSelectInput from "../../../Components/SearchSelectInput";
+import AddTeacherModal from "../../../Components/Forms/AddTeacherModal";
 
 export default {
   name: 'SchoolShow',
   components: {
+    AddTeacherModal,
     SearchSelectInput,
     TextInput,
     AddSubjectModal,
@@ -294,6 +321,9 @@ export default {
       subjectForm: useForm({
         id: null
       }),
+      teacherForm: useForm({
+        id: null
+      }),
       filterForm: useForm({
         filters: {
           academic_year: this.filters ? parseInt(this.filters.academic_year) : 0,
@@ -305,10 +335,13 @@ export default {
       isShowDeleteDialog: false,
       showDeleteGradeDialog: false,
       showDeleteSubjectDialog: false,
+      showRemoveTeacherDialog: false,
       showAddGradeModal: false,
       showAddSubjectModal: false,
+      showAddTeacherModal: false,
       deletingGrade: null,
       deletingSubject: null,
+      removingTeacher: null,
     };
   },
   mounted() {
@@ -341,6 +374,10 @@ export default {
       let url = route('dashboard.schools.show', this.school.id);
       this.filterForm.get(url);
     },
+    removeTeacherPreConfirm(teacher) {
+      this.removingTeacher = teacher;
+      this.showRemoveTeacherDialog = true;
+    },
     deleteGradePreConfirm(grade) {
       this.deletingGrade = grade;
       this.showDeleteGradeDialog = true;
@@ -348,6 +385,10 @@ export default {
     deleteSubjectPreConfirm(subject) {
       this.deletingSubject = subject;
       this.showDeleteSubjectDialog = true;
+    },
+    removeTeacher() {
+      this.teacherForm.id = this.removingTeacher.id;
+      this.teacherForm.post(route('dashboard.schools.remove_teacher', this.school.id));
     },
     deleteGrade() {
       this.deleteForm.delete(route('dashboard.grades.destroy', this.deletingGrade.id));

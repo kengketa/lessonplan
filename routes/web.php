@@ -61,6 +61,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [SchoolController::class, "addSubject"])->name("dashboard.schools.add_subject");
         Route::post("schools/{school}/delete-subject",
             [SchoolController::class, "deleteSubject"])->name("dashboard.schools.delete_subject");
+        Route::post("schools/{school}/add-teacher",
+            [SchoolController::class, "addTeacher"])->name("dashboard.schools.add_teacher");
+        Route::post("schools/{school}/remove-teacher",
+            [SchoolController::class, "removeTeacher"])->name("dashboard.schools.remove_teacher");
         Route::post("schools", [SchoolController::class, "store"])->name("dashboard.schools.store");
         Route::get("schools/{school}/edit", [SchoolController::class, "edit"])->name("dashboard.schools.edit");
         Route::put("schools/{school}", [SchoolController::class, "update"])->name("dashboard.schools.update");

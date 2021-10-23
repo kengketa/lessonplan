@@ -6,11 +6,15 @@ use App\Actions\SaveSchoolAction;
 use App\Http\Requests\CreateOrUpdateSchoolRequest;
 use App\Models\Grade;
 use App\Models\Report;
+use App\Models\Role;
 use App\Models\School;
 use App\Http\Controllers\Controller;
+use App\Models\SchoolTeacher;
+use App\Models\User;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
 use App\Transformers\SchoolTransformer;
+use App\Transformers\UserTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -56,6 +60,9 @@ class SchoolController extends Controller
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
         $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
         $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
+        $schoolData['teachers'] = fractal($school->teachers, new UserTransformer())->toArray()['data'];
+        $teachers = User::role(Role::ROLE_TEACHER)->get();
+        $schoolData['all_teachers'] = fractal($teachers, new UserTransformer())->toArray()['data'];
         $years = getYears();
         $semesters = getSemesters();
         $schoolData['years'] = $years;
@@ -143,6 +150,31 @@ class SchoolController extends Controller
 
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Subject has been remove.");
+    }
+
+    public function addTeacher(School $school, Request $request)
+    {
+        $request->validate(['teacher_id' => 'required']);
+        $foundTeacherInTheSchool = SchoolTeacher::where('school_id', $school->id)
+            ->where('teacher_id', $request['teacher_id'])->first();
+        if ($foundTeacherInTheSchool) {
+            return redirect()->route("dashboard.schools.show", $school->id)
+                ->with("error", "The teacher you added is in already in this school.");
+        }
+        SchoolTeacher::create([
+            'school_id' => $school->id,
+            'teacher_id' => $request['teacher_id']
+        ]);
+        return redirect()->route("dashboard.schools.show", $school->id)
+            ->with("success", "Teacher has been added.");
+    }
+
+    public function removeTeacher(School $school, Request $request)
+    {
+        $request->validate(['id' => 'required']);
+        SchoolTeacher::where('school_id', $school->id)->where('teacher_id', $request['id'])->delete();
+        return redirect()->route("dashboard.schools.show", $school->id)
+            ->with("success", "Teacher has been removed.");
     }
 
 }

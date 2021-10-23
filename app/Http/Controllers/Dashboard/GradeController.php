@@ -31,6 +31,11 @@ class GradeController extends Controller
 
     public function destroy(Grade $grade): RedirectResponse
     {
+        if ($grade->reports->count() > 0) {
+            return redirect()->route("dashboard.schools.show", $grade->school->id)
+                ->with("error", "Grade can't be removed as it is related with reports.");
+        }
+
         $school = $grade->school;
         if ($grade->delete()) {
             return redirect()->route("dashboard.schools.show", $school->id)->with("success", "Grade has been removed!");
