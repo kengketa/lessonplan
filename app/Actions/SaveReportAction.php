@@ -38,6 +38,8 @@ class SaveReportAction
         $this->report->lesson_number = $data['lesson_number'];
         $this->report->plans = $plans;
         $this->report->subject = $data['subject'];
+        $this->report->updated_at = Carbon::now();
+        $this->report->approver_id = null;
         $this->report->save();
         $updatedReport = new PrepareReportAction();
         $updatedReportData = $updatedReport->execute($this->report->grade->school, $this->report);
@@ -64,7 +66,8 @@ class SaveReportAction
             $newReport['lesson_number'] = $data['lesson_number'];
             $newReport['plans'] = $plans;
             $newReport['subject'] = $data['subject'];
-            $newReport['creator'] = Auth::id();
+            $newReport['creator_id'] = Auth::id();
+            $newReport['approver_id'] = null;
             $addedReports[] = Report::create($newReport);
         }
         return $addedReports;

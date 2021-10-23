@@ -37,8 +37,8 @@ class Report extends Model
         'outcome',
         'outstanding_student',
         'need_improvement_student',
-        'creator',
-        'approver',
+        'creator_id',
+        'approver_id',
     ];
 
     /**
@@ -96,8 +96,13 @@ class Report extends Model
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
-    public function creatorUser()
+    public function creator()
     {
-        return $this->belongsTo(User::class, 'creator');
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approver_id');
     }
 }

@@ -1,160 +1,159 @@
 <template>
-  <Card>
-    <Form
-      form-class="space-y-8 divide-y divide-gray-200"
-      :submit-event="submit"
-    >
-      <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-        <div class="space-y-6 sm:space-y-5">
-          <div>
-            <h3 v-if="report.id == null" class="text-lg leading-6 text-gray-900">
-              Create Lesson plan
-            </h3>
-            <h3 v-else class="text-lg leading-6 text-gray-900">
-              Update Lesson plan
-            </h3>
-          </div>
-          <section>
-            <SearchSelectInput
-              :options="report.all_subjects"
-              v-model="form.subject"
-              :is-show-line="false"
-              :error="form.errors.subject"
-              label="Subject"
-            />
-            <TextInput
-              v-model="form.week_number"
-              :is-show-line="false"
-              :error="form.errors.week_number"
-              type="number"
-              label="Week number"
-              placeholder="Week number"
-            />
-            <TextInput
-              v-model="form.lesson_number"
-              :is-show-line="false"
-              :error="form.errors.lesson_number"
-              type="number"
-              label="Lesson number"
-              placeholder="Lesson number"
-            />
-            <div class="mt-2">
-              <p class="text-sm font-medium text-gray-700">Classes</p>
-              <div class="grid grid-cols-4 gap-2">
-                <div v-for="(grade,gradeIndex) in form.report.for_grades" :key="gradeIndex"
-                     class="border px-4 py-4 relative">
-                  <SearchSelectInput
-                    :options="report.all_grades"
-                    v-model="form.report.for_grades[gradeIndex].id"
-                    :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.id')]"
-                    :is-show-line="false"
-                    label="Class"
-                  />
-                  <DatePickerInput
-                    :is-show-line="false"
-                    v-model="form.report.for_grades[gradeIndex].date"
-                    :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.date')]"
-                    label="Teaching Date"
-                  />
-                  <button v-if="type==='create'" @click="removeClass(gradeIndex)" type="button"
-                          class="absolute top-2 right-2 text-red-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </button>
-                </div>
-                <button v-if="type === 'create'" @click="addClass()" type="button"
-                        class="border border-dashed h-48 px-4 py-4 flex justify-center items-center">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                  </svg>
-                  <span>Add Class</span>
-                </button>
-              </div>
-              <p v-show="form.errors['report.for_grades']" class="text-red-500 mt-1">
-                There must be at least 1 class for this lesson plan
-              </p>
+  <Card :approve="computedApprove">
+    <Form :submit-event="submit">
+      <div>
+        <div class="flex justify-between items-center">
+          <h3 v-if="report.id == null" class="text-lg leading-6 text-gray-900">Create Lesson plan</h3>
+          <h3 v-if="report.id != null" class="text-lg leading-6 text-gray-900">Update Lesson plan</h3>
+          <p class="text-xl text-gray-700 px-2 py-2 bg-blue-100 rounded-md">{{ report.teacher_name }}</p>
+        </div>
+      </div>
+      <div>
+        <div class="grid grid-cols-3 gap-2">
+          <SearchSelectInput
+            :options="report.all_subjects"
+            v-model="form.subject"
+            :is-show-line="false"
+            :error="form.errors.subject"
+            label="Subject"
+          />
+          <TextInput
+            v-model="form.week_number"
+            :is-show-line="false"
+            :error="form.errors.week_number"
+            type="number"
+            label="Week number"
+            placeholder="Week number"
+          />
+          <TextInput
+            v-model="form.lesson_number"
+            :is-show-line="false"
+            :error="form.errors.lesson_number"
+            type="number"
+            label="Lesson number"
+            placeholder="Lesson number"
+          />
+        </div>
+        <div class="my-4">
+          <p class="text-sm font-medium text-gray-700">Classes</p>
+          <div class="grid grid-cols-4 gap-2">
+            <div v-for="(grade,gradeIndex) in form.report.for_grades" :key="gradeIndex"
+                 class="border px-4 py-4 relative">
+              <SearchSelectInput
+                :options="report.all_grades"
+                v-model="form.report.for_grades[gradeIndex].id"
+                :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.id')]"
+                :is-show-line="false"
+                label="Class"
+              />
+              <DatePickerInput
+                :is-show-line="false"
+                v-model="form.report.for_grades[gradeIndex].date"
+                :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.date')]"
+                label="Teaching Date"
+              />
+              <button v-if="type==='create'" @click="removeClass(gradeIndex)" type="button"
+                      class="absolute top-2 right-2 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
             </div>
-            <div class="mt-2">
-              <p class="text-sm font-medium text-gray-700">Lesson Plans</p>
-              <div class="grid grid-cols-2 gap-2">
-                <div v-for="(plan,planIndex) in form.report.plans" :key="planIndex"
-                     class="border px-4 py-4 relative">
-                  <form v-on:submit.prevent>
-                    <SearchSelectInput
-                      :options="report.types"
-                      v-model="form.report.plans[planIndex].type"
-                      :error="form.errors[this.getErrorKey('report.plans.',planIndex,'.type')]"
-                      :is-show-line="false"
-                      label="Type"
-                    />
-                    <TextInput
-                      v-model="form.report.plans[planIndex].topic"
-                      :is-show-line="false"
-                      :error="form.errors[this.getErrorKey('report.plans.',planIndex,'.topic')]"
-                      type="text"
-                      label="Topic"
-                      placeholder="Topic"
-                    />
-                    <div class="flex flex-wrap mt-2">
-                      <div class="bg-yellow-100 px-2 py-1 rounded-md mx-2 my-2 relative"
-                           v-for="(vocab,vocabIndex) in form.report.plans[planIndex].vocabs"
-                           :key="vocabIndex">
-                        <span>{{ vocab }}</span>
-                        <button @click="removeVocab(vocabIndex,planIndex)" type="button"
-                                class="absolute -top-2 -right-2 text-red-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                               stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="mt-2">
-                      <p class="text-sm font-medium text-gray-700">Add vocabs</p>
-                      <input type="text" @keyup.enter="addVocab(planIndex)"
-                             v-model="form.report.plans[planIndex].typing_vocab"
-                             placeholder="enter to add a vocabulary"
-                             class="block w-full border-gray-300 focus:outline-none text-sm rounded-md focus:ring-primary-500">
-                    </div>
-                    <div class="mt-2">
-                      <p>Lesson plan details</p>
-                      <Editor
-                        v-model="form.report.plans[planIndex].details"
-                        api-key="qim61prn7zxz2okj6r41dsv2xyfrdew8z6uzxvfck7fgnsdn"
-                        :init="customEditor"
-                      />
-                    </div>
-                    <button @click="removePlan(planIndex)" type="button" class="absolute top-2 right-2 text-red-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+            <button v-if="type === 'create'" @click="addClass()" type="button"
+                    class="border border-dashed h-48 px-4 py-4 flex justify-center items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              <span>Add Class</span>
+            </button>
+          </div>
+          <p v-show="form.errors['report.for_grades']" class="text-red-500 mt-1">
+            There must be at least 1 class for this lesson plan
+          </p>
+        </div>
+        <div class="my-4">
+          <p class="text-sm font-medium text-gray-700">Lesson Plans</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div v-for="(plan,planIndex) in form.report.plans" :key="planIndex"
+                 class="border px-4 py-4 relative"
+            >
+              <form v-on:submit.prevent>
+                <SearchSelectInput
+                  :options="report.types"
+                  v-model="form.report.plans[planIndex].type"
+                  :error="form.errors[this.getErrorKey('report.plans.',planIndex,'.type')]"
+                  :is-show-line="false"
+                  label="Type"
+                />
+                <TextInput
+                  v-model="form.report.plans[planIndex].topic"
+                  :is-show-line="false"
+                  :error="form.errors[this.getErrorKey('report.plans.',planIndex,'.topic')]"
+                  type="text"
+                  label="Topic"
+                  placeholder="Topic"
+                />
+                <div class="flex flex-wrap mt-2">
+                  <div class="bg-yellow-100 px-2 py-1 rounded-md mx-2 my-2 relative"
+                       v-for="(vocab,vocabIndex) in form.report.plans[planIndex].vocabs"
+                       :key="vocabIndex">
+                    <span>{{ vocab }}</span>
+                    <button @click="removeVocab(vocabIndex,planIndex)" type="button"
+                            class="absolute -top-2 -right-2 text-red-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                            stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </button>
-                  </form>
+                  </div>
                 </div>
-                <button @click="addPlan()" type="button"
-                        class="border border-dashed h-80 px-4 py-4 flex justify-center items-center">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                       xmlns="http://www.w3.org/2000/svg">
+                <div class="mt-2">
+                  <p class="text-sm font-medium text-gray-700">Add vocabs</p>
+                  <input type="text" @keyup.enter="addVocab(planIndex)"
+                         v-model="form.report.plans[planIndex].typing_vocab"
+                         placeholder="enter to add a vocabulary"
+                         class="block w-full border-gray-300 focus:outline-none text-sm rounded-md focus:ring-primary-500">
+                </div>
+                <div class="mt-2">
+                  <p>Lesson plan details</p>
+                  <Editor
+                    v-model="form.report.plans[planIndex].details"
+                    api-key="qim61prn7zxz2okj6r41dsv2xyfrdew8z6uzxvfck7fgnsdn"
+                    :init="customEditor"
+                  />
+                </div>
+                <button @click="removePlan(planIndex)" type="button" class="absolute top-2 right-2 text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Add Plan</span>
                 </button>
-              </div>
-              <p v-show="form.errors['report.plans']" class="text-red-500 mt-1">
-                There must be at least 1 lesson plan
-              </p>
+              </form>
             </div>
-          </section>
+            <button v-if="report.approver == null" @click="addPlan()" type="button"
+                    class="border border-dashed h-80 px-4 py-4 flex justify-center items-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              <span>Add Plan</span>
+            </button>
+          </div>
+          <p v-show="form.errors['report.plans']" class="text-red-500 mt-1">
+            There must be at least 1 lesson plan
+          </p>
         </div>
+      </div>
+      <div class="flex flex-col items-end text-sm text-gray-400">
+        <p>Created: {{ report.created_at }} </p>
+        <p>Last updated: {{ report.updated_at }}</p>
       </div>
     </Form>
   </Card>
@@ -221,7 +220,20 @@ export default {
   mounted() {
 
   },
-  computed: {},
+  computed: {
+    computedApprove() {
+      if (this.type === 'create') {
+        return 'unapproved';
+      }
+      if (this.type === 'edit' && this.report.approver == null) {
+        return 'waiting'
+      }
+      if (this.type === 'edit' && this.report.approver != null) {
+        return 'approved'
+      }
+      return null;
+    }
+  },
   methods: {
     getErrorKey(front, index, prop) {
       let key = front + index + prop;

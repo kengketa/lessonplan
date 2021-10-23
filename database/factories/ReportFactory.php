@@ -26,8 +26,8 @@ class ReportFactory extends Factory
     public function definition()
     {
         $teacherCount = User::role(Role::ROLE_TEACHER)->get()->count();
-        $teacher = User::role(Role::ROLE_TEACHER)->get();
-        $admin = User::role(Role::ROLE_ADMIN)->get();
+        $teachers = User::role(Role::ROLE_TEACHER)->get();
+        $admins = User::role(Role::ROLE_ADMIN)->get();
         $school = School::find(1);
         return [
             'grade_id' => Grade::where('school_id', $school->id)->inRandomOrder()->first()->id,
@@ -54,8 +54,8 @@ class ReportFactory extends Factory
             'outcome' => $this->faker->sentence(20),
             'outstanding_student' => $this->faker->sentence(20),
             'need_improvement_student' => $this->faker->sentence(20),
-            'creator' => $teacher->random()->id,
-            'approver' => $admin->random()->id
+            'creator_id' => $teachers->random()->id,
+            'approver_id' => $admins->random()->id
         ];
     }
 }

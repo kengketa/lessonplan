@@ -171,7 +171,7 @@
           >
             <TableTd>
               <div>
-                {{ item.teacher }}
+                {{ item.teacher_name }}
               </div>
             </TableTd>
             <TableTd>

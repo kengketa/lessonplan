@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\School;
 use App\Transformers\GradeTransformer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PrepareReportAction
@@ -17,6 +18,8 @@ class PrepareReportAction
             $report = $this->prepareExistReport($existReport);
             return $report;
         }
+        $report['teacher_name'] = Auth::user()->name;
+        $report['approver'] = null;
         $report['school'] = $school->toArray();
         $report['all_grades'] = fractal($school->grades, new GradeTransformer())->toArray()['data'];
         $report['all_subjects'] = $school->subjects;
@@ -32,6 +35,8 @@ class PrepareReportAction
     private function prepareExistReport(Report $report)
     {
         $newReport['id'] = $report->id;
+        $newReport['teacher_name'] = $report->creator ? $report->creator->name : 'undefined';
+        $newReport['approver'] = $report->approver ? $report->approver->toArray() : null;
         $newReport['week_number'] = $report->week_number;
         $newReport['lesson_number'] = $report->lesson_number;
         $newReport['subject'] = $report->subject;
@@ -53,6 +58,8 @@ class PrepareReportAction
             $newPlan['details'] = $plan['details'];
             $newReport['plans'][] = $newPlan;
         }
+        $newReport['created_at'] = $report->present()->createdAt;
+        $newReport['updated_at'] = $report->present()->updatedAt;
         return $newReport;
     }
 

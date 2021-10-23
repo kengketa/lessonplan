@@ -23,13 +23,13 @@ class CreateReportsTable extends Migration
             $table->text("outcome")->nullable();
             $table->text("outstanding_student")->nullable();
             $table->text("need_improvement_student")->nullable();
-            $table->unsignedBigInteger("creator")->nullable();
-            $table->unsignedBigInteger("approver")->nullable();
+            $table->unsignedBigInteger("creator_id")->nullable();
+            $table->unsignedBigInteger("approver_id")->nullable();
             $table->timestamps();
 
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('set null');
-            $table->foreign('creator')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('approver')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('approver_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
