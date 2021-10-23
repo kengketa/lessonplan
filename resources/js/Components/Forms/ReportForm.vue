@@ -4,7 +4,6 @@
       form-class="space-y-8 divide-y divide-gray-200"
       :submit-event="submit"
     >
-      {{ form.errors }}
       <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div class="space-y-6 sm:space-y-5">
           <div>
@@ -197,9 +196,9 @@ export default {
     return {
       form: useForm({
         school_id: this.report.school.id,
-        week_number: null,
-        lesson_number: null,
-        subject: 1,
+        week_number: this.report.week_number ?? null,
+        lesson_number: this.report.lesson_number ?? null,
+        subject: this.report.subject ?? 1,
         report: this.report
       }),
       customEditor: {

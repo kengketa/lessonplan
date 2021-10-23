@@ -44,8 +44,8 @@ export default {
       }
     },
     clearFlash() {
-      this.$page.props.flash.success = null;
-      this.$page.props.flash.errror = null;
+      // this.$page.props.flash.success = null;
+      // this.$page.props.flash.errror = null;
       // this.$page.props.errors = {};
     },
   },

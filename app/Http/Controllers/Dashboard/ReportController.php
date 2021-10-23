@@ -63,10 +63,13 @@ class ReportController extends Controller
 
     public function edit(Report $report): Response
     {
+        $school = $report->grade->school;
+        $emptyReport = new PrepareReportAction();
+        $reportData = $emptyReport->execute($school, $report);
         return Inertia::render(
             'Dashboard/Reports/Edit',
             [
-                'report' => $report
+                'report' => $reportData
             ]);
     }
 
@@ -75,10 +78,9 @@ class ReportController extends Controller
         Report $report,
         SaveReportAction $saveReportAction
     ): RedirectResponse {
-        $report = $saveReportAction->execute($report, $request->validated());
-
-        return redirect()->route("dashboard.reports.show", ['report' => $report])->with("success",
-            "Report has been update!");
+        $reportData = $saveReportAction->execute($report, $report->grade->school, $request->validated());
+        return redirect()->route("dashboard.reports.edit", $report->id)
+            ->with("success", "Report has been updated.");
     }
 
     public function destroy(Report $report): RedirectResponse

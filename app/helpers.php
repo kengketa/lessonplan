@@ -8,7 +8,7 @@ function snakeCaseToText($text)
 function getYears()
 {
     $years = [
-        ['id' => 0, 'name' => 'Current'],
+        ['id' => 0, 'name' => 'Current ('.getCurrentAcademicYear().')'],
         ['id' => 2019, 'name' => '2019'],
         ['id' => 2020, 'name' => '2020'],
         ['id' => 2021, 'name' => '2021'],
@@ -28,7 +28,7 @@ function getYears()
 function getSemesters()
 {
     $semester = [
-        ['id' => 0, 'name' => 'Current'],
+        ['id' => 0, 'name' => 'Current ('.getCurrentSemester().')'],
         ['id' => 1, 'name' => 'semseter 1'],
         ['id' => 2, 'name' => 'semester 2'],
     ];

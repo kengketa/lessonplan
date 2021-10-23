@@ -77,7 +77,6 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 
     //reports
     Route::get("reports", [ReportController::class, "index"])->name("dashboard.reports.index");
-    //Route::get("reports/create", [ReportController::class, "create"])->name("dashboard.reports.create");
     Route::get("schools/{school}/reports/create",
         [ReportController::class, "create"])->name("dashboard.reports.create");
     Route::get("reports/{report}", [ReportController::class, "show"])->name("dashboard.reports.show");
