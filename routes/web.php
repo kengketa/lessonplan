@@ -76,10 +76,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
     });
 
     //reports
-    Route::get("reports", [ReportController::class, "index"])->name("dashboard.reports.index");
     Route::get("schools/{school}/reports/create",
         [ReportController::class, "create"])->name("dashboard.reports.create");
-    Route::get("reports/{report}", [ReportController::class, "show"])->name("dashboard.reports.show");
     Route::post("reports", [ReportController::class, "store"])->name("dashboard.reports.store");
     Route::get("reports/{report}/edit", [ReportController::class, "edit"])->name("dashboard.reports.edit");
     Route::put("reports/{report}", [ReportController::class, "update"])->name("dashboard.reports.update");

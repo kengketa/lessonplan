@@ -56,7 +56,8 @@
                     :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.date')]"
                     label="Teaching Date"
                   />
-                  <button @click="removeClass(gradeIndex)" type="button" class="absolute top-2 right-2 text-red-500">
+                  <button v-if="type==='create'" @click="removeClass(gradeIndex)" type="button"
+                          class="absolute top-2 right-2 text-red-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,7 +65,7 @@
                     </svg>
                   </button>
                 </div>
-                <button @click="addClass()" type="button"
+                <button v-if="type === 'create'" @click="addClass()" type="button"
                         class="border border-dashed h-48 px-4 py-4 flex justify-center items-center">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                        xmlns="http://www.w3.org/2000/svg">

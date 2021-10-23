@@ -13,6 +13,7 @@ class ReportTransformer extends TransformerAbstract
             'id' => $report->id,
             'grade_id' => $report->grade_id,
             'grade_name' => $report->grade->present()->name,
+            'teacher' => $report->creatorUser->name,
             'academic_year' => $report->academic_year,
             'semester' => $report->semester,
             'week_number' => $report->week_number,

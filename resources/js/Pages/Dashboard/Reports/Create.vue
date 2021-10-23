@@ -2,7 +2,7 @@
   <div>
     <Breadcrumbs
       :breadcrumbs="breadcrumbs"
-      :back="route('dashboard.reports.index')"
+      :back="route('dashboard.schools.show',report.school.id)"
     />
     <PageHeading>
       Create Lesson Plan

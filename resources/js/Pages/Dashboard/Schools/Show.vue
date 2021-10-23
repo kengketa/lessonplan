@@ -118,8 +118,8 @@
         </DataDisplayContainer>
       </div>
     </Card>
-    <section>
-      <div class="grid grid-cols-5 gap-2">
+    <section class="mt-4">
+      <div class="grid grid-cols-6 gap-2">
         <SearchSelectInput
           :options="school.years"
           :is-show-line="false"
@@ -131,6 +131,12 @@
           v-model="filterForm.filters.semester"
           :is-show-line="false"
           label="Semester"
+        />
+        <SearchSelectInput
+          :options="school.years"
+          :is-show-line="false"
+          v-model="filterForm.filters.teacher"
+          label="Teacher"
         />
         <SearchSelectInput
           :options="school.grades.data"
@@ -148,7 +154,7 @@
           <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1">Clear</button>
         </div>
       </div>
-      <TableDisplayContainer>
+      <TableDisplayContainer class="mt-4">
         <template #header>
           <TableTh v-for="(column,index) in columns" :key="index">
             <div class="flex">
@@ -163,6 +169,11 @@
             :key="item"
             :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
           >
+            <TableTd>
+              <div>
+                {{ item.teacher }}
+              </div>
+            </TableTd>
             <TableTd>
               <div>
                 {{ item.grade_name }}
@@ -278,7 +289,7 @@ export default {
         {name: 'Schools', href: route('dashboard.schools.index')},
         {name: this.school.name, href: '#'},
       ],
-      columns: ['grade', 'subject', 'week', 'lesson', 'teaching date', 'topic'],
+      columns: ['teacher', 'grade', 'subject', 'week', 'lesson', 'teaching date', 'topic'],
       deleteForm: useForm({}),
       subjectForm: useForm({
         id: null

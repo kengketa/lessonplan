@@ -95,4 +95,9 @@ class Report extends Model
     {
         return $this->belongsTo(Grade::class, 'grade_id');
     }
+
+    public function creatorUser()
+    {
+        return $this->belongsTo(User::class, 'creator');
+    }
 }
