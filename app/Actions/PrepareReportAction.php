@@ -29,6 +29,7 @@ class PrepareReportAction
         ];
         $report['for_grades'] = [];
         $report['plans'] = [];
+        $report['creator_id'] = Auth::user()->id;
         return $report;
     }
 
@@ -58,6 +59,7 @@ class PrepareReportAction
             $newPlan['details'] = $plan['details'];
             $newReport['plans'][] = $newPlan;
         }
+        $newReport['creator_id'] = $report->creator->id;
         $newReport['created_at'] = $report->present()->createdAt;
         $newReport['updated_at'] = $report->present()->updatedAt;
         return $newReport;

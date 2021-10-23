@@ -6,6 +6,7 @@
         {{ title }}
         <template #actions>
           <Link
+            v-if="$page.props.authUserRole==='SUPER_ADMIN' || $page.props.authUserRole==='ADMIN'"
             class="button button-primary"
             :href="route('dashboard.schools.create')"
           >
@@ -63,7 +64,8 @@
             </TableTd>
 
             <TableTd>
-              <Link :href="route('dashboard.schools.edit', item.id)" class="link">
+              <Link v-if="$page.props.authUserRole==='SUPER_ADMIN' || $page.props.authUserRole==='ADMIN'"
+                    :href="route('dashboard.schools.edit', item.id)" class="link">
                 Edit
               </Link>
             </TableTd>

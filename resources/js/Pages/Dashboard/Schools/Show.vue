@@ -42,16 +42,18 @@
           class="button button-primary mr-2"
         >
           <DocumentReportIcon class="h-5 w-5 mr-2" aria-hidden="true" />
-          Create Report
+          Create Lesson plan
         </Link>
         <Link
+          v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
           :href="route('dashboard.schools.edit', school.id)"
           class="button button-primary mr-2"
         >
           <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
           Edit
         </Link>
-        <form class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
+        <form v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+              class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
           <button type="submit" class="button button-danger">
             <TrashIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             Delete
@@ -92,7 +94,8 @@
                 <p class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
                   <span>{{ grade.name }}</span>
                 </p>
-                <button @click="deleteGradePreConfirm(grade)" class="absolute -top-1 right-0 text-red-500">
+                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                        @click="deleteGradePreConfirm(grade)" class="absolute -top-1 right-0 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -101,7 +104,9 @@
                 </button>
               </div>
             </div>
-            <button @click="showAddGradeModal=true" class="button button-primary button-small">Add Grade</button>
+            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                    @click="showAddGradeModal=true" class="button button-primary button-small">Add Grade
+            </button>
           </DataDisplayRow>
           <DataDisplayRow>
             <template #label>
@@ -110,7 +115,8 @@
             <div class="flex flex-wrap">
               <div v-for="subject in school.subjects" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
                 <span class="uppercase">{{ subject.name }}</span>
-                <button @click="deleteSubjectPreConfirm(subject)" class="absolute -top-2 -right-2 text-red-500">
+                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                        @click="deleteSubjectPreConfirm(subject)" class="absolute -top-2 -right-2 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -119,7 +125,9 @@
                 </button>
               </div>
             </div>
-            <button @click="showAddSubjectModal=true" class="button button-primary button-small">Add Subject</button>
+            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                    @click="showAddSubjectModal=true" class="button button-primary button-small">Add Subject
+            </button>
           </DataDisplayRow>
           <DataDisplayRow>
             <template #label>
@@ -128,7 +136,8 @@
             <div class="flex flex-wrap">
               <div v-for="teacher in school.teachers" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
                 <span>{{ teacher.name }}</span>
-                <button @click="removeTeacherPreConfirm(teacher)" class="absolute -top-2 -right-2 text-red-500">
+                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                        @click="removeTeacherPreConfirm(teacher)" class="absolute -top-2 -right-2 text-red-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -137,7 +146,9 @@
                 </button>
               </div>
             </div>
-            <button @click="showAddTeacherModal=true" class="button button-primary button-small">Add Teacher</button>
+            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                    @click="showAddTeacherModal=true" class="button button-primary button-small">Add Teacher
+            </button>
           </DataDisplayRow>
         </DataDisplayContainer>
       </div>
@@ -330,6 +341,7 @@ export default {
           semester: this.filters ? parseInt(this.filters.semester) : 0,
           grade: this.filters ? parseInt(this.filters.grade) : 0,
           subject: this.filters ? parseInt(this.filters.subject) : 0,
+          teacher: this.filters ? parseInt(this.filters.teacher) : 0
         }
       }),
       isShowDeleteDialog: false,
@@ -345,7 +357,9 @@ export default {
     };
   },
   mounted() {
-
+    if (this.$page.props.authUserRole === 'TEACHER' && this.filterForm.filters.teacher === 0) {
+      this.filterForm.filters.teacher = this.$page.props.authUser.id;
+    }
   },
   computed: {},
   watch: {
@@ -359,6 +373,9 @@ export default {
       this.submitSearch()
     },
     'filterForm.filters.subject': function () {
+      this.submitSearch()
+    },
+    'filterForm.filters.teacher': function () {
       this.submitSearch()
     },
   },

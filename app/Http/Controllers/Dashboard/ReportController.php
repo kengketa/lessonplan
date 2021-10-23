@@ -50,17 +50,6 @@ class ReportController extends Controller
             ->with("success", 'Lesson plans has been created.');
     }
 
-    public function show(Report $report): Response
-    {
-        $report = fractal($report, new ReportTransformer())->toArray();
-
-        return Inertia::render(
-            'Dashboard/Reports/Show',
-            [
-                'report' => $report,
-            ]);
-    }
-
     public function edit(Report $report): Response
     {
         $school = $report->grade->school;

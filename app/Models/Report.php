@@ -89,6 +89,9 @@ class Report extends Model
         if ($filters['subject'] != 0) {
             $query->where('subject', $filters['subject']);
         }
+        if ($filters['teacher'] != 0) {
+            $query->where('creator_id', $filters['teacher']);
+        }
     }
 
     public function grade()

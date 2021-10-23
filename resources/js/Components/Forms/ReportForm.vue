@@ -1,6 +1,10 @@
 <template>
   <Card :approve="computedApprove">
-    <Form :submit-event="submit">
+    <Form
+      :disabled="report.creator_id != $page.props.authUser.id && $page.props.authUserRole === 'TEACHER'"
+      :submit-event="submit"
+      :need-confirm-text="needConfirmTextComputed"
+    >
       <div>
         <div class="flex justify-between items-center">
           <h3 v-if="report.id == null" class="text-lg leading-6 text-gray-900">Create Lesson plan</h3>
@@ -221,6 +225,12 @@ export default {
 
   },
   computed: {
+    needConfirmTextComputed() {
+      if (this.computedApprove === 'approved') {
+        return 'Are you sure to resubmit this approved lesson plan?'
+      }
+      return null;
+    },
     computedApprove() {
       if (this.type === 'create') {
         return 'unapproved';

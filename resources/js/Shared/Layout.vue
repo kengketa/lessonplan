@@ -405,7 +405,7 @@ export default {
         nav.push(navs.dashboard);
       } else if (user.roles[0].id == roles.TEACHER) {
         nav.push(navs.dashboard);
-        nav.push(navs.schools);
+        //nav.push(navs.schools);
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);

@@ -174,7 +174,6 @@ export default defineComponent({
     const highlightedIndex = ref(0);
     const isOnSelecting = ref(false);
     onMounted(() => {
-      console.log('mounted');
       isOpen.value = false;
     });
 
