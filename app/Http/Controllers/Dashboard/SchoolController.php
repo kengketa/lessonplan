@@ -17,6 +17,8 @@ use App\Transformers\SchoolTransformer;
 use App\Transformers\UserTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Arr;
@@ -27,7 +29,7 @@ class SchoolController extends Controller
     public function index(Request $request): Response
     {
         $filters = $request->only(["search"]);
-        $schools = School::filter($filters)->latest()->paginate(30);
+        $schools = School::filter($filters)->paginate(30);
         $schoolData = fractal($schools, new SchoolTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Schools/Index',
@@ -55,8 +57,17 @@ class SchoolController extends Controller
             ' School  has been create!');
     }
 
-    public function show(School $school, Request $request): Response
+    public function show(School $school, Request $request): Response|RedirectResponse
     {
+        $user = Auth::user();
+        $thisUserIsInTheSchool = $school->teachers->filter(function ($q) use ($user) {
+            return $q->id == $user->id;
+        });
+        if ($thisUserIsInTheSchool->count() === 0 && $user->roles[0]->name === Role::ROLE_TEACHER) {
+            return redirect()->route('dashboard.schools.index')
+                ->with("error", 'You are not authorized.');
+        }
+
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
         $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
         $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();

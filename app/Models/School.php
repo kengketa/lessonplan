@@ -7,6 +7,7 @@ use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class School extends Model
 {
@@ -54,6 +55,13 @@ class School extends Model
 
     public function scopeFilter(Builder $query, array $filters): void
     {
+        $user = Auth::user();
+        if ($user->roles[0]->name === Role::ROLE_TEACHER) {
+            $query->whereHas('teachers', function ($q) use ($user) {
+                $q->where('teacher_id', $user->id);
+            });
+        }
+
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
                 $qr->where("name", "like", "%$filters[search]%");
