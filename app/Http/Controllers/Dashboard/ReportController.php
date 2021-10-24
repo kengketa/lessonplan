@@ -131,7 +131,22 @@ class ReportController extends Controller
         }
         $reports = Report::find($reportIds);
         $reportData = fractal($reports, new ReportTransformer())->toArray()['data'];
-        return view('print_reports')->with('reports', $reportData);
+
+        $page = 1;
+        $reportDataGroupByPage[$page] = [];
+        foreach ($reportData as $report) {
+            if (count($reportDataGroupByPage[$page]) < 2) {
+                $reportDataGroupByPage[$page][] = $report;
+            } else {
+                $page++;
+                $reportDataGroupByPage[$page][] = $report;;
+            }
+        }
+        return Inertia::render(
+            'Dashboard/Reports/Print',
+            [
+                'pages' => $reportDataGroupByPage
+            ]);
     }
 
 }

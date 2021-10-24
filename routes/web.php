@@ -26,7 +26,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 Route::get('/test', function () {
-    return view('print_reports');
+    return Inertia::render('Dashboard/Reports/Print');
 });
 
 Route::get("posts", [PostController::class, "index"])->name("posts.index");
