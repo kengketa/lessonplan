@@ -25,8 +25,8 @@ class ReportTransformer extends TransformerAbstract
             'outcome' => $report->outcome,
             'outstanding_student' => $report->outstanding_student,
             'need_improvement_student' => $report->need_improvement_student,
-            'creator' => $report->creator,
-            'approver' => $report->approver,
+            'creator' => $report->creator?->toArray(),
+            'approver' => $report->approver?->toArray(),
             'created_at' => $report->present()->createdAt,
             'updated_at' => $report->present()->updatedAt,
         ];

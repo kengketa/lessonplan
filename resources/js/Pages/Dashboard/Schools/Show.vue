@@ -186,7 +186,10 @@
           label="filter subject"
         />
         <div class="flex items-end">
-          <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1">Clear</button>
+          <button @click="print()" type="button" class="button button-primary button-small mb-1">Print</button>
+          <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
+            Clear
+          </button>
         </div>
       </div>
       <TableDisplayContainer class="mt-4">
@@ -267,6 +270,7 @@
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
     <AddTeacherModal v-model="showAddTeacherModal" :school="school" />
+    <PrintModal v-model="showPrintModal" :print-list="printList" />
   </div>
 </template>
 
@@ -300,10 +304,12 @@ import AddSubjectModal from "../../../Components/Forms/AddSubjectModal";
 import TextInput from "../../../Components/TextInput";
 import SearchSelectInput from "../../../Components/SearchSelectInput";
 import AddTeacherModal from "../../../Components/Forms/AddTeacherModal";
+import PrintModal from "../../../Components/Forms/PrintModal";
 
 export default {
   name: 'SchoolShow',
   components: {
+    PrintModal,
     AddTeacherModal,
     SearchSelectInput,
     TextInput,
@@ -358,9 +364,11 @@ export default {
       showAddGradeModal: false,
       showAddSubjectModal: false,
       showAddTeacherModal: false,
+      showPrintModal: false,
       deletingGrade: null,
       deletingSubject: null,
       removingTeacher: null,
+      printList: []
     };
   },
   mounted() {
@@ -370,6 +378,13 @@ export default {
   },
   computed: {},
   watch: {
+    showPrintModal() {
+      if (this.showPrintModal === false) {
+        setTimeout(() => {
+          this.printList = [];
+        }, 200);
+      }
+    },
     'filterForm.filters.academic_year': function () {
       this.submitSearch()
     },
@@ -387,6 +402,22 @@ export default {
     },
   },
   methods: {
+    print() {
+      this.reports.data.forEach(report => {
+        let newPrintList = {
+          id: report.id,
+          print: false,
+          teacher_name: report.teacher_name,
+          grade: report.grade_name,
+          subject: report.subject,
+          week_number: report.week_number,
+          lesson_number: report.lesson_number,
+          topics: report.topics
+        }
+        this.printList.push(newPrintList);
+      });
+      this.showPrintModal = true;
+    },
     clearFilter() {
       let url = route('dashboard.schools.show', this.school.id);
       this.$inertia.visit(url,

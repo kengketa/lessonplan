@@ -25,6 +25,9 @@ use App\Http\Controllers\PageController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+Route::get('/test', function () {
+    return view('print_reports');
+});
 
 Route::get("posts", [PostController::class, "index"])->name("posts.index");
 
@@ -89,6 +92,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::put("reports/{report}", [ReportController::class, "update"])->name("dashboard.reports.update");
         Route::post("reports/{report}/next",
             [ReportController::class, "next"])->name("dashboard.reports.next");
+
+        Route::post("print-reports", [ReportController::class, "print"])->name("dashboard.reports.print");
 
     });
 

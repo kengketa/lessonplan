@@ -11,6 +11,7 @@ use App\Models\School;
 use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -115,6 +116,22 @@ class ReportController extends Controller
             return redirect()->route("dashboard.reports.edit", $report->id);
         }
         return redirect()->route("dashboard.reports.edit", $nextReport->id);
+    }
+
+    public function print(Request $request)
+    {
+        $printLists = $request['print_list'];
+        $toBePrintedReports = Arr::where($printLists, function ($report, $key) {
+            return $report['print'] == true;
+        });
+        //dd($toBePrintedReports);
+        $reportIds = [];
+        foreach ($toBePrintedReports as $report) {
+            $reportIds[] = $report['id'];
+        }
+        $reports = Report::find($reportIds);
+        $reportData = fractal($reports, new ReportTransformer())->toArray()['data'];
+        return view('print_reports')->with('reports', $reportData);
     }
 
 }
