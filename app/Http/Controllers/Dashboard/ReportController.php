@@ -13,8 +13,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Browsershot\Browsershot;
 
 class ReportController extends Controller
 {
@@ -129,6 +131,14 @@ class ReportController extends Controller
         foreach ($toBePrintedReports as $report) {
             $reportIds[] = $report['id'];
         }
+        $url = route('dashboard.reports.print_preview', ['reportIds' => $reportIds]);
+        //Browsershot::url($url)->save('example.pdf');
+        return redirect($url);
+    }
+
+    public function printPreview(Request $request)
+    {
+        $reportIds = $request['reportIds'];
         $reports = Report::find($reportIds);
         $reportData = fractal($reports, new ReportTransformer())->toArray()['data'];
 
@@ -142,7 +152,6 @@ class ReportController extends Controller
                 $reportDataGroupByPage[$page][] = $report;;
             }
         }
-//        dd($reportDataGroupByPage);
         return Inertia::render(
             'Dashboard/Reports/Print',
             [

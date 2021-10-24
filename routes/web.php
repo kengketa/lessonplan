@@ -94,6 +94,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ReportController::class, "next"])->name("dashboard.reports.next");
 
         Route::post("print-reports", [ReportController::class, "print"])->name("dashboard.reports.print");
+        Route::get("print-reports-preview",
+            [ReportController::class, "printPreview"])->name("dashboard.reports.print_preview");
 
     });
 

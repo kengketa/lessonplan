@@ -17,10 +17,10 @@
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-0 border-t-2 border-blue-500 mt-2">
+      <div class="grid grid-cols-2 gap-0 border-t border-gray-200 mt-2">
         <div v-for="(report,reportIndex) in page" :key="reportIndex"
              class="mt-1 px-2 report-space-height relative"
-             :class="reportIndex%2 === 0 ? 'border-r-2 border-blue-500' : ''"
+             :class="reportIndex%2 === 0 ? 'border-r border-gray-200' : ''"
         >
           <div class="text-center">
             <p>Grade: {{ report.grade_name }}</p>
@@ -32,13 +32,13 @@
           </div>
           <div v-for="(plan,planIndex) in report.plans" :key="planIndex" class="grid grid-cols-2 gap-0 mt-1">
             <div class="border-t border-b border-l">
-              <p class="text-sm py-0.5 px-2">{{ plan.type }}: {{ plan.topic }}</p>
+              <p class="text-sm py-0.5 px-2 bg-indigo-100">{{ plan.type }}: {{ plan.topic }}</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 <p v-html="plan.details"></p>
               </div>
             </div>
             <div class="border">
-              <p class="text-sm py-0.5 px-2">Vocabularies</p>
+              <p class="text-sm py-0.5 px-2 bg-yellow-100">Vocabularies</p>
               <div class="border-t flex flex-wrap px-2 py-1" :class="fontSize">
                 <p v-for="(vocab,vocabIndex) in plan.vocabs" :key="vocabIndex"
                    class="border rounded-md px-0.5 py-0.5 mx-0.5 my-0.5">
@@ -49,13 +49,13 @@
           </div>
           <div class="grid grid-cols-2 gap-0 mt-1">
             <div class="border-t border-b border-l">
-              <p class="text-sm py-0.5 px-2">Teaching Materials</p>
+              <p class="text-sm py-0.5 px-2 bg-pink-100">Teaching Materials</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.teaching_materials }}
               </div>
             </div>
             <div class="border">
-              <p class="text-sm py-0.5 px-2">Activities</p>
+              <p class="text-sm py-0.5 px-2 bg-pink-100">Activities</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.activities }}
               </div>
@@ -63,19 +63,19 @@
           </div>
           <div class="grid grid-cols-2 gap-0 mt-1">
             <div class="col-span-2 border-t border-l border-r">
-              <p class="text-sm py-0.5 px-2 text-center">Outcome</p>
+              <p class="text-sm py-0.5 px-2 text-center bg-indigo-100">Outcome</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.outcome }}
               </div>
             </div>
             <div class="border-t border-b border-l">
-              <p class="text-sm py-0.5 px-2">Hight distinction students</p>
+              <p class="text-sm py-0.5 px-2 bg-green-100">Hight distinction students</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.outstanding_students }}
               </div>
             </div>
             <div class="border">
-              <p class="text-sm py-0.5 px-2">Need improvment students</p>
+              <p class="text-sm py-0.5 px-2 bg-red-100">Need improvment students</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.need_improvement_students }}
               </div>
