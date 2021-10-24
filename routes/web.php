@@ -70,6 +70,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
         Route::delete("grades/{grade}", [GradeController::class, "destroy"])->name("dashboard.grades.destroy");
 
+        //reports
+        Route::post("reports/{report}/approve",
+            [ReportController::class, "approve"])->name("dashboard.reports.approve");
+
     });
 
     Route::middleware(["role:".Role::ROLE_ADMIN.'|'.Role::ROLE_SUPER_ADMIN.'|'.Role::ROLE_TEACHER])->group(function () {
@@ -83,6 +87,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::post("reports", [ReportController::class, "store"])->name("dashboard.reports.store");
         Route::get("reports/{report}/edit", [ReportController::class, "edit"])->name("dashboard.reports.edit");
         Route::put("reports/{report}", [ReportController::class, "update"])->name("dashboard.reports.update");
+        Route::post("reports/{report}/next",
+            [ReportController::class, "next"])->name("dashboard.reports.next");
 
     });
 

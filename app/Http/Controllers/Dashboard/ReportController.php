@@ -11,6 +11,7 @@ use App\Models\School;
 use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -53,8 +54,8 @@ class ReportController extends Controller
     public function edit(Report $report): Response
     {
         $school = $report->grade->school;
-        $emptyReport = new PrepareReportAction();
-        $reportData = $emptyReport->execute($school, $report);
+        $transformedReport = new PrepareReportAction();
+        $reportData = $transformedReport->execute($school, $report);
         return Inertia::render(
             'Dashboard/Reports/Edit',
             [
@@ -79,6 +80,38 @@ class ReportController extends Controller
         } else {
             return redirect()->route("dashboard.reports.index")->with("error", "Can't delete Report");
         }
+    }
+
+    public function approve(Report $report)
+    {
+        $report->approver_id = Auth::id();
+        $report->save();
+        return redirect()->route("dashboard.reports.edit", $report->id)->with("success", "Lesson plan approved");
+    }
+
+    public function next(Report $report)
+    {
+        $schoolId = $report->grade->school->id;
+        $nextReport = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+            $q->where('id', $schoolId);
+        })
+            ->where('academic_year', $report->academic_year)
+            ->where('semester', $report->semester)
+            ->where('creator_id', $report->creator_id)
+            ->where('id', '>', $report->id)
+            ->first();
+
+        if ($nextReport == null) {
+            $nextReport = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+                $q->where('id', $schoolId);
+            })
+                ->where('academic_year', $report->academic_year)
+                ->where('semester', $report->semester)
+                ->where('creator_id', $report->creator_id)
+                ->where('id', '!=', $report->id)
+                ->first();
+        }
+        return redirect()->route("dashboard.reports.edit", $nextReport->id);
     }
 
 }

@@ -5,7 +5,14 @@
       :back="route('dashboard.schools.show',report.school.id)"
     />
     <PageHeading>
-      Edit Report
+      <div class="flex sm:justify-between">
+        <p>Edit Lesson Plan</p>
+        <button @click="next()" type="button" class="button button-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </PageHeading>
     <div>
       <ReportForm :report="report" type="edit" />
@@ -38,7 +45,12 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    next() {
+      let url = route('dashboard.reports.next', this.report.id);
+      this.$inertia.post(url);
+    }
+  },
   mounted() {
   }
 };

@@ -155,9 +155,15 @@
           </p>
         </div>
       </div>
-      <div class="flex flex-col items-end text-sm text-gray-400">
+      <div v-if="type==='edit'" class="flex flex-col items-end text-sm text-gray-400">
         <p>Created: {{ report.created_at }} </p>
         <p>Last updated: {{ report.updated_at }}</p>
+        <p v-if="report.approver != null">Approved by: {{ report.approver.name }}</p>
+      </div>
+      <div
+        v-if="report.approver === null && ($page.props.authUserRole==='ADMIN' || $page.props.authUserRole==='SUPER_ADMIN')"
+        class="flex justify-end">
+        <button @click="approve()" type="button" class="button button-primary button-small">Approve</button>
       </div>
     </Form>
   </Card>
@@ -244,7 +250,18 @@ export default {
       return null;
     }
   },
+  updated() {
+    this.form.school_id = this.report.school.id;
+    this.form.week_number = this.report.week_number ?? null;
+    this.form.lesson_number = this.report.lesson_number ?? null;
+    this.form.subject = this.report.subject ?? 1;
+    this.form.report = this.report;
+  },
   methods: {
+    approve() {
+      let url = route('dashboard.reports.approve', this.report.id);
+      this.$inertia.post(url);
+    },
     getErrorKey(front, index, prop) {
       let key = front + index + prop;
       return key;
