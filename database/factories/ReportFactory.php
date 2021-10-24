@@ -51,9 +51,11 @@ class ReportFactory extends Factory
                 ]
             ],
             'subject' => 1,
+            'teaching_materials' => $this->faker->sentence(20),
+            'activities' => $this->faker->sentence(20),
             'outcome' => $this->faker->sentence(20),
-            'outstanding_student' => $this->faker->sentence(20),
-            'need_improvement_student' => $this->faker->sentence(20),
+            'outstanding_students' => $this->faker->sentence(20),
+            'need_improvement_students' => $this->faker->sentence(20),
             'creator_id' => $teachers->random()->id,
             'approver_id' => $admins->random()->id
         ];

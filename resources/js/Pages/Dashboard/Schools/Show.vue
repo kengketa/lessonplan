@@ -216,7 +216,7 @@
             </TableTd>
             <TableTd>
               <div>
-                {{ item.subject }}
+                <span class="capitalize">{{ item.subject }}</span>
               </div>
             </TableTd>
             <TableTd>

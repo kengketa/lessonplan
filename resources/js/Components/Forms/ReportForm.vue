@@ -140,7 +140,7 @@
                 </button>
               </form>
             </div>
-            <button v-if="report.approver == null" @click="addPlan()" type="button"
+            <button v-if="type === 'create'" @click="addPlan()" type="button"
                     class="border border-dashed h-80 px-4 py-4 flex justify-center items-center">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                    xmlns="http://www.w3.org/2000/svg">
@@ -154,14 +154,59 @@
             There must be at least 1 lesson plan
           </p>
         </div>
+        <div class="my-4">
+          <div class="grid grid-cols-2 gap-2">
+            <TextareaInput
+              :is-show-line="false"
+              label="Teaching materials"
+              v-model="form.teaching_materials"
+              :error="form.errors.teaching_materials"
+              rows="5"
+            />
+            <TextareaInput
+              :is-show-line="false"
+              label="Activities"
+              v-model="form.activities"
+              :error="form.errors.activities"
+              rows="5"
+            />
+          </div>
+        </div>
+        <div class="my-4" v-if="type === 'edit'" id="outcome group">
+          <div class="grid grid-cols-1">
+            <TextareaInput
+              :is-show-line="false"
+              label="Outcome"
+              v-model="form.outcome"
+              :error="form.errors.outcome"
+              rows="5"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <TextareaInput
+              :is-show-line="false"
+              label="High distinction students"
+              v-model="form.outstanding_students"
+              :error="form.errors.outstanding_students"
+              rows="5"
+            />
+            <TextareaInput
+              :is-show-line="false"
+              label="Need improvment students"
+              v-model="form.need_improvement_students"
+              :error="form.errors.need_improvement_students"
+              rows="5"
+            />
+          </div>
+        </div>
       </div>
-      <div v-if="type==='edit'" class="flex flex-col items-end text-sm text-gray-400">
+      <div v-if="type === 'edit'" class="flex flex-col items-end text-sm text-gray-400">
         <p>Created: {{ report.created_at }} </p>
         <p>Last updated: {{ report.updated_at }}</p>
         <p v-if="report.approver != null">Approved by: {{ report.approver.name }}</p>
       </div>
       <div
-        v-if="report.approver === null && ($page.props.authUserRole==='ADMIN' || $page.props.authUserRole==='SUPER_ADMIN')"
+        v-if="type === 'edit' && report.approver === null && ($page.props.authUserRole==='ADMIN' || $page.props.authUserRole==='SUPER_ADMIN')"
         class="flex justify-end">
         <button @click="approve()" type="button" class="button button-primary button-small">Approve</button>
       </div>
@@ -209,6 +254,11 @@ export default {
         week_number: this.report.week_number ?? null,
         lesson_number: this.report.lesson_number ?? null,
         subject: this.report.subject ?? 1,
+        teaching_materials: this.report.teaching_materials ?? null,
+        activities: this.report.activities ?? null,
+        outcome: this.report.outcome ?? null,
+        outstanding_students: this.report.outstanding_students ?? null,
+        need_improvement_students: this.report.need_improvement_students ?? null,
         report: this.report
       }),
       customEditor: {
@@ -251,11 +301,13 @@ export default {
     }
   },
   updated() {
-    this.form.school_id = this.report.school.id;
-    this.form.week_number = this.report.week_number ?? null;
-    this.form.lesson_number = this.report.lesson_number ?? null;
-    this.form.subject = this.report.subject ?? 1;
-    this.form.report = this.report;
+    if (this.type === 'edit') {
+      this.form.school_id = this.report.school.id;
+      this.form.week_number = this.report.week_number ?? null;
+      this.form.lesson_number = this.report.lesson_number ?? null;
+      this.form.subject = this.report.subject ?? 1;
+      this.form.report = this.report;
+    }
   },
   methods: {
     approve() {

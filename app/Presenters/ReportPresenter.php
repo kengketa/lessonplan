@@ -42,7 +42,11 @@ class ReportPresenter extends BasePresenter
         $filteredSubject = Arr::where($subjects, function ($subject, $key) use ($subjectId) {
             return $subject['id'] == $subjectId;
         });
-        return ucfirst($filteredSubject[0]['name']);
+        $subjectName = null;
+        foreach ($filteredSubject as $subject) {
+            $subjectName = $subject['name'];
+        }
+        return $subjectName;
     }
 
 }

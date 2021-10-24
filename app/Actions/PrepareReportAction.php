@@ -59,9 +59,15 @@ class PrepareReportAction
             $newPlan['details'] = $plan['details'];
             $newReport['plans'][] = $newPlan;
         }
+        $newReport['teaching_materials'] = $report->teaching_materials;
+        $newReport['activities'] = $report->activities;
+        $newReport['outcome'] = $report->outcome;
+        $newReport['outstanding_students'] = $report->outstanding_students;
+        $newReport['need_improvement_students'] = $report->need_improvement_students;
         $newReport['creator_id'] = $report->creator->id;
         $newReport['created_at'] = $report->present()->createdAt;
         $newReport['updated_at'] = $report->present()->updatedAt;
+        //dd($newReport['plans'][0]['details']);
         return $newReport;
     }
 

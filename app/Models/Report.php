@@ -35,8 +35,10 @@ class Report extends Model
         'plans',
         'subject',
         'outcome',
-        'outstanding_student',
-        'need_improvement_student',
+        'teaching_materials',
+        'activities',
+        'outstanding_students',
+        'need_improvement_students',
         'creator_id',
         'approver_id',
     ];

@@ -111,6 +111,9 @@ class ReportController extends Controller
                 ->where('id', '!=', $report->id)
                 ->first();
         }
+        if ($nextReport == null) { // when no more report to next
+            return redirect()->route("dashboard.reports.edit", $report->id);
+        }
         return redirect()->route("dashboard.reports.edit", $nextReport->id);
     }
 

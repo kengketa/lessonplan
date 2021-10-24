@@ -2,7 +2,6 @@
   <div>
     <div class="content m-1">
       <Breadcrumbs :breadcrumbs="breadcrumbs" />
-      <PageHeading></PageHeading>
       <div class="grid grid-cols-3 gap-8 mt-4">
         <Card v-for="school in schools" :key="school.id"
               @click="visit(school)"

@@ -20,9 +20,11 @@ class CreateReportsTable extends Migration
             $table->date("date")->nullable();
             $table->json("plans")->nullable();
             $table->unsignedTinyInteger("subject")->nullable();
+            $table->text('teaching_materials')->nullable();
+            $table->text('activities')->nullable();
             $table->text("outcome")->nullable();
-            $table->text("outstanding_student")->nullable();
-            $table->text("need_improvement_student")->nullable();
+            $table->text("outstanding_students")->nullable();
+            $table->text("need_improvement_students")->nullable();
             $table->unsignedBigInteger("creator_id")->nullable();
             $table->unsignedBigInteger("approver_id")->nullable();
             $table->timestamps();
