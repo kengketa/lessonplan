@@ -142,6 +142,7 @@ class ReportController extends Controller
                 $reportDataGroupByPage[$page][] = $report;;
             }
         }
+//        dd($reportDataGroupByPage);
         return Inertia::render(
             'Dashboard/Reports/Print',
             [
