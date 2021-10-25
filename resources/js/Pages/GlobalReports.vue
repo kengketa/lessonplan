@@ -1,29 +1,34 @@
 <template>
   <div>
-    <div v-for="(page,pageIndex) in pages" :key="pageIndex" class="page-break">
-      <div>
-        <div class="flex justify-center">
-          <div class="w-2/12">
-            <p>Lesson Plan</p>
-          </div>
-          <div class="w-6/12">
-            <p>School: {{ page[0].school_name }}</p>
-          </div>
-          <div class="w-2/12">
-            <p>Teacher: {{ page[0].teacher_name }}</p>
-          </div>
-          <div class="w-2/12">
-            <p>Subject: {{ page[0].subject }}</p>
-          </div>
+    <div>
+      <div class="lg:hidden grid grid-cols-2 gap-2">
+        <div class="col-span-2 text-center py-2 font-semibold text-lg text-gray-700">{{ pages[1][0].school_name }}</div>
+        <div class="text-center">{{ pages[1][0].teacher_name }}</div>
+        <div class="text-center">{{ pages[1][0].subject }}</div>
+      </div>
+      <div class="hidden lg:flex justify-center px-2 py-2 font-semibold text-gray-700">
+        <div class="w-2/12">
+          <p>Lesson Plan</p>
+        </div>
+        <div class="w-6/12">
+          <p>School: {{ pages[1][0].school_name }}</p>
+        </div>
+        <div class="w-2/12">
+          <p>Teacher: {{ pages[1][0].teacher_name }}</p>
+        </div>
+        <div class="w-2/12">
+          <p>Subject: {{ pages[1][0].subject }}</p>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-0 border-t border-gray-200 mt-2">
+    </div>
+    <div v-for="(page,pageIndex) in pages" :key="pageIndex" class="page-break">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:border-t border-gray-200 mt-2">
         <div v-for="(report,reportIndex) in page" :key="reportIndex"
-             class="mt-1 px-2 report-space-height relative"
+             class="mt-1 mb-10 px-2 relative"
              :class="reportIndex%2 === 0 ? 'border-r border-gray-200' : ''"
         >
-          <div class="text-center">
-            <p>Grade: {{ report.grade_name }}</p>
+          <div class="text-center border-t lg:border-t-0">
+            <p class="font-semibold text-gray-700">Grade: {{ report.grade_name }}</p>
           </div>
           <div class="grid grid-cols-3 gap-2 text-sm">
             <p>Week: {{ report.week_number }}</p>
@@ -81,35 +86,30 @@
               </div>
             </div>
           </div>
-          <div class="absolute right-8 bottom-0">
-            <div class="text-center text-sm">
-              <p>Signature___________________</p>
-              <p>( {{ report.teacher_name }} )</p>
-            </div>
-          </div>
         </div>
-
       </div>
     </div>
-    <div class="fixed top-4 right-4 z-100">
-      <button type="button"
-              @click="print()"
-              class="no-print button button-primary z-100 shadow-md transition transform ease-in-out hover:scale-105 hover:shadow-lg">
-        Print
-      </button>
-      <div class="flex justify-between mt-1 no-print">
-        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-2xs')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+    <div class="fixed bottom-0 h-20 bg-blue-900 w-full text-center text-gray-100 flex justify-center items-center">
+      <div>
+        <div>
+          <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+               width="60px" height="60px" viewBox="0 0 200.000000 200.000000"
+               preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(0.000000,200.000000) scale(0.012210,-0.012210)"
+               fill="#F3F4F6" stroke="none">
+              <path d="M2870 8345 l0 -4735 5285 0 5285 0 0 4735 0 4735 -5285 0 -5285 0 0
+              -4735z m4740 1989 l0 -1484 -1700 0 -1700 0 0 1485 0 1485 1688 2 c928 2 1693
+              1 1700 -1 9 -2 12 -308 12 -1487z m4600 1 l0 -1485 -1635 0 -1635 0 0 1483 c0
+              816 2 1486 4 1488 2 2 738 3 1635 1 l1631 -2 0 -1485z m-4600 -4295 l0 -1360
+              -1700 0 -1700 0 0 1360 0 1360 1700 0 1700 0 0 -1360z m4600 0 l0 -1360 -1635
+              0 -1635 0 0 1360 0 1360 1635 0 1635 0 0 -1360z" />
+            </g>
           </svg>
-        </button>
-        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-xs')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-          </svg>
-        </button>
+        </div>
+      </div>
+      <div class="text-left">
+        <p>Brighton Education co.,ltd.,</p>
+        <p class="text-sm">©{{ new Date().getFullYear() }} All rights reserved.</p>
       </div>
     </div>
   </div>
@@ -119,17 +119,13 @@
 
 
 export default {
-  name: 'ReportPrint',
+  name: 'GlobalReports',
   components: {},
   props: {
     pages: {
       type: Object,
       required: true
     },
-    reportIds: {
-      type: Array,
-      required: true
-    }
   },
   data() {
     return {
@@ -137,21 +133,13 @@ export default {
     };
   },
   methods: {
-    print() {
-      let payload = {
-        link: window.location.href
-      };
-      axios.post(route('dashboard.reports.generate_link'), payload)
-      //window.print();
-    },
+
     setSize(size) {
       this.fontSize = size;
     }
   },
   mounted() {
-    console.log('-----------------');
-    console.log(this.reportIds);
-    console.log('-----------------');
+
   }
 };
 </script>

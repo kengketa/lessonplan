@@ -139,6 +139,35 @@ class ReportController extends Controller
     public function printPreview(Request $request)
     {
         $reportIds = $request['reportIds'];
+        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        return Inertia::render(
+            'Dashboard/Reports/Print',
+            [
+                'reportIds' => $reportIds,
+                'pages' => $reportDataGroupByPage
+            ]);
+    }
+
+    public function generateLink(Request $request)
+    {
+        $link = $request['link'];
+        $globalLink = str_replace('dashboard/print-reports-preview', 'global-reports', $link);
+        dd($globalLink);
+    }
+
+    public function globalReports(Request $request)
+    {
+        $reportIds = $request['reportIds'];
+        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        return Inertia::render(
+            'GlobalReports',
+            [
+                'pages' => $reportDataGroupByPage
+            ]);
+    }
+
+    private function prepareReportGroupByPage(array $reportIds)
+    {
         $reports = Report::find($reportIds);
         $reportData = fractal($reports, new ReportTransformer())->toArray()['data'];
 
@@ -152,11 +181,7 @@ class ReportController extends Controller
                 $reportDataGroupByPage[$page][] = $report;;
             }
         }
-        return Inertia::render(
-            'Dashboard/Reports/Print',
-            [
-                'pages' => $reportDataGroupByPage
-            ]);
+        return $reportDataGroupByPage;
     }
 
 }

@@ -96,10 +96,15 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::post("print-reports", [ReportController::class, "print"])->name("dashboard.reports.print");
         Route::get("print-reports-preview",
             [ReportController::class, "printPreview"])->name("dashboard.reports.print_preview");
+        Route::post("print-reports-generate-link",
+            [ReportController::class, "generateLink"])->name("dashboard.reports.generate_link");
 
     });
 
 });
+
+Route::get("global-reports", [ReportController::class, "globalReports"])->name("reports.global");
+
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
 
