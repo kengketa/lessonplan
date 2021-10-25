@@ -5,7 +5,7 @@
       <div class="grid grid-cols-3 gap-8 mt-4">
         <Card v-for="school in schools" :key="school.id"
               @click="visit(school)"
-              class="bg-blue-100 relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+              class="bg-blue-200 relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg">
           <p class="text-gray-700 absolute top-1 left-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor">

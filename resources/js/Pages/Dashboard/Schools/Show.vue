@@ -34,7 +34,7 @@
     />
     <PageHeading>
     <span class="hidden lg:inline">
-      <span class="max-w-xs truncate">{{ school.name }}</span>
+      <span class="max-w-xs truncate text-2xl">{{ school.name }}</span>
     </span>
       <template #actions>
         <Link
@@ -61,6 +61,118 @@
         </form>
       </template>
     </PageHeading>
+    <section class="mt-4">
+      <div class="grid grid-cols-6 gap-2">
+        <SearchSelectInput
+          :options="school.years"
+          :is-show-line="false"
+          v-model="filterForm.filters.academic_year"
+          label="Academicyear"
+        />
+        <SearchSelectInput
+          :options="school.semesters"
+          v-model="filterForm.filters.semester"
+          :is-show-line="false"
+          label="Semester"
+        />
+        <SearchSelectInput
+          :options="school.teachers"
+          :is-show-line="false"
+          v-model="filterForm.filters.teacher"
+          label="Teacher"
+        />
+        <SearchSelectInput
+          :options="school.grades.data"
+          v-model="filterForm.filters.grade"
+          :is-show-line="false"
+          label="filter class"
+        />
+        <SearchSelectInput
+          :options="school.subjects"
+          v-model="filterForm.filters.subject"
+          :is-show-line="false"
+          label="filter subject"
+        />
+        <div class="flex items-end">
+          <button @click="print()" type="button" class="button button-primary button-small mb-1">Print</button>
+          <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
+            Clear
+          </button>
+        </div>
+      </div>
+      <TableDisplayContainer class="mt-4">
+        <template #header>
+          <TableTh v-for="(column,index) in columns" :key="index">
+            <div class="flex">
+              <span>{{ column }}</span>
+            </div>
+          </TableTh>
+          <TableTh>Actions</TableTh>
+        </template>
+        <template #body>
+          <tr
+            class="cursor-pointer transition ease-in-out duration-200 hover:bg-gray-200"
+            v-for="(item, itemIndex) in reports.data"
+            :key="item"
+            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+          >
+            <TableTd>
+              <div>
+                {{ item.teacher_name }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.grade_name }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                <span class="capitalize">{{ item.subject }}</span>
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.week_number }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.lesson_number }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                {{ item.date }}
+              </div>
+            </TableTd>
+            <TableTd>
+              <div>
+                <ul>
+                  <li v-for="(topic,index) in item.topics" :key="index">
+                    <div class="w-80 truncate">
+                      {{ topic }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </TableTd>
+            <TableTd>
+              <p v-if="item.approver != null" class="text-green-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </p>
+            </TableTd>
+          </tr>
+        </template>
+        <template #pagination>
+          <Pagination :data="reports.meta.pagination"></Pagination>
+        </template>
+      </TableDisplayContainer>
+    </section>
     <Card>
       <div class="md:flex md:items-center md:justify-between">
         <div class="flex">
@@ -153,120 +265,6 @@
         </DataDisplayContainer>
       </div>
     </Card>
-    <section class="mt-4">
-      <div class="grid grid-cols-6 gap-2">
-        <SearchSelectInput
-          :options="school.years"
-          :is-show-line="false"
-          v-model="filterForm.filters.academic_year"
-          label="Academicyear"
-        />
-        <SearchSelectInput
-          :options="school.semesters"
-          v-model="filterForm.filters.semester"
-          :is-show-line="false"
-          label="Semester"
-        />
-        <SearchSelectInput
-          :options="school.teachers"
-          :is-show-line="false"
-          v-model="filterForm.filters.teacher"
-          label="Teacher"
-        />
-        <SearchSelectInput
-          :options="school.grades.data"
-          v-model="filterForm.filters.grade"
-          :is-show-line="false"
-          label="filter class"
-        />
-        <SearchSelectInput
-          :options="school.subjects"
-          v-model="filterForm.filters.subject"
-          :is-show-line="false"
-          label="filter subject"
-        />
-        <div class="flex items-end">
-          <button @click="print()" type="button" class="button button-primary button-small mb-1">Print</button>
-          <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
-            Clear
-          </button>
-        </div>
-      </div>
-      <TableDisplayContainer class="mt-4">
-        <template #header>
-          <TableTh v-for="(column,index) in columns" :key="index">
-            <div class="flex">
-              <span>{{ column }}</span>
-            </div>
-          </TableTh>
-          <TableTh>Actions</TableTh>
-        </template>
-        <template #body>
-          <tr
-            v-for="(item, itemIndex) in reports.data"
-            :key="item"
-            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
-          >
-            <TableTd>
-              <div>
-                {{ item.teacher_name }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.grade_name }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                <span class="capitalize">{{ item.subject }}</span>
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.week_number }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.lesson_number }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.date }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                <ul>
-                  <li v-for="(topic,index) in item.topics" :key="index">
-                    <div class="w-80 truncate">
-                      {{ topic }}
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </TableTd>
-            <TableTd>
-              <Link :href="route('dashboard.reports.edit', item.id)" class="link">
-                Edit
-                <p v-if="item.approver != null" class="text-green-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                       stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </p>
-              </Link>
-            </TableTd>
-          </tr>
-        </template>
-        <template #pagination>
-          <Pagination :data="reports.meta.pagination"></Pagination>
-        </template>
-      </TableDisplayContainer>
-    </section>
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
     <AddTeacherModal v-model="showAddTeacherModal" :school="school" />

@@ -86,7 +86,7 @@ class SchoolController extends Controller
         })->filter($request['filters'])
             ->orderBy('week_number')
             ->orderBy('lesson_number')
-            ->paginate(30);
+            ->paginate(15);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Schools/Show',
