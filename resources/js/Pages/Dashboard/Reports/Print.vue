@@ -141,8 +141,9 @@ export default {
       let payload = {
         link: window.location.href
       };
-      axios.post(route('dashboard.reports.generate_link'), payload)
-      //window.print();
+      axios.post(route('dashboard.reports.generate_link'), payload).then(() => {
+        window.print();
+      })
     },
     setSize(size) {
       this.fontSize = size;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Actions\PrepareReportAction;
 use App\Actions\SaveReportAction;
 use App\Http\Requests\CreateOrUpdateReportRequest;
+use App\Models\GlobalReport;
 use App\Models\Report;
 use App\Http\Controllers\Controller;
 use App\Models\School;
@@ -152,7 +153,14 @@ class ReportController extends Controller
     {
         $link = $request['link'];
         $globalLink = str_replace('dashboard/print-reports-preview', 'global-reports', $link);
-        dd($globalLink);
+        $foundInDatabase = GlobalReport::where('link', $globalLink)->first();
+        if (!$foundInDatabase) {
+            GlobalReport::create([
+                'link' => $globalLink,
+                'creator_id' => Auth::id()
+            ]);
+        }
+        return response()->json($globalLink);
     }
 
     public function globalReports(Request $request)
