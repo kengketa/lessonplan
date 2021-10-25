@@ -30,15 +30,15 @@
             <p>Lesson: {{ report.lesson_number }}</p>
             <p>Date: {{ report.date }}</p>
           </div>
-          <div v-for="(plan,planIndex) in report.plans" :key="planIndex" class="grid grid-cols-2 gap-0 mt-1">
-            <div class="border-t border-b border-l">
+          <div v-for="(plan,planIndex) in report.plans" :key="planIndex" class="grid grid-cols-3 gap-0 mt-1">
+            <div class="col-span-2 border-t border-b border-l">
               <p class="text-sm py-0.5 px-2 bg-indigo-100">{{ plan.type }}: {{ plan.topic }}</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 <p v-html="plan.details"></p>
               </div>
             </div>
             <div class="border">
-              <p class="text-sm py-0.5 px-2 bg-yellow-100">Vocabularies</p>
+              <p class="text-sm py-0.5 px-2 bg-indigo-100">Vocabularies</p>
               <div class="border-t flex flex-wrap px-2 py-1" :class="fontSize">
                 <p v-for="(vocab,vocabIndex) in plan.vocabs" :key="vocabIndex"
                    class="border rounded-md px-0.5 py-0.5 mx-0.5 my-0.5">
@@ -49,13 +49,13 @@
           </div>
           <div class="grid grid-cols-2 gap-0 mt-1">
             <div class="border-t border-b border-l">
-              <p class="text-sm py-0.5 px-2 bg-pink-100">Teaching Materials</p>
+              <p class="text-sm py-0.5 px-2 bg-yellow-100">Teaching Materials</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.teaching_materials }}
               </div>
             </div>
             <div class="border">
-              <p class="text-sm py-0.5 px-2 bg-pink-100">Activities</p>
+              <p class="text-sm py-0.5 px-2 bg-yellow-100">Activities</p>
               <div class="border-t px-2 py-1" :class="fontSize">
                 {{ report.activities }}
               </div>
@@ -91,6 +91,27 @@
 
       </div>
     </div>
+    <div class="fixed top-4 right-4 z-100">
+      <button type="button"
+              @click="print()"
+              class="no-print button button-primary z-100 shadow-md transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+        Print
+      </button>
+      <div class="flex justify-between mt-1 no-print">
+        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-2xs')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+          </svg>
+        </button>
+        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-xs')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -101,19 +122,25 @@ export default {
   name: 'ReportPrint',
   components: {},
   props: {
-    fontSize: {
-      type: String,
-      default: 'text-2xs'
-    },
+
     pages: {
       type: Object,
       required: true
     }
   },
   data() {
-    return {};
+    return {
+      fontSize: 'text-xs'
+    };
   },
-  methods: {},
+  methods: {
+    print() {
+      window.print();
+    },
+    setSize(size) {
+      this.fontSize = size;
+    }
+  },
   mounted() {
   }
 };
@@ -131,6 +158,10 @@ export default {
 
   .page-break {
     page-break-after: always;
+  }
+
+  .no-print, .no-print * {
+    display: none !important;
   }
 }
 </style>

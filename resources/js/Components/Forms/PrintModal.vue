@@ -58,7 +58,7 @@
               <button type="button"
                       class="button button-primary button-small"
                       @click="submit()">
-                Submit
+                Preview
               </button>
             </div>
           </div>
