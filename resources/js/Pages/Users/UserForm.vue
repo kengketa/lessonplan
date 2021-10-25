@@ -46,13 +46,14 @@
 
 
 <script>
-import { useForm } from "@inertiajs/inertia-vue3";
+import {useForm} from "@inertiajs/inertia-vue3";
 import Card from "@/Components/Card";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
 import SubmitButton from "@/Components/SubmitButton";
 import SearchSelectInput from "@/Components/SearchSelectInput";
 import Form from "@/Components/Form";
+
 export default {
   name: "UserForm.vue",
   components: {
@@ -98,9 +99,9 @@ export default {
         this.form.company_id = null;
       }
       if (this.type === "create") {
-        this.form.post(route("users.store"), {});
+        this.form.post(route("dashboard.users.store"), {});
       } else {
-        this.form.put(route("users.update", { user: this.user.id }), {});
+        this.form.put(route("dashboard.users.update", {user: this.user.id}), {});
       }
     },
   },

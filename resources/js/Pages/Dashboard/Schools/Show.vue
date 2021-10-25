@@ -112,6 +112,7 @@
         <template #body>
           <tr
             class="cursor-pointer transition ease-in-out duration-200 hover:bg-gray-200"
+            @click="openReportEdit(item)"
             v-for="(item, itemIndex) in reports.data"
             :key="item"
             :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
@@ -400,6 +401,9 @@ export default {
     },
   },
   methods: {
+    openReportEdit(report) {
+      this.$inertia.visit(route('dashboard.reports.edit', report.id))
+    },
     print() {
       this.reports.data.forEach(report => {
         let newPrintList = {
