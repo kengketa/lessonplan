@@ -127,7 +127,7 @@
                   <p>Lesson plan details</p>
                   <Editor
                     v-model="form.report.plans[planIndex].details"
-                    api-key="qim61prn7zxz2okj6r41dsv2xyfrdew8z6uzxvfck7fgnsdn"
+                    api-key="8otka707t8tlcqakojbi97f3ptko4wrduwmf36zfyi3yh6wx"
                     :init="customEditor"
                   />
                 </div>
