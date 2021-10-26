@@ -7,11 +7,21 @@
     <PageHeading>
       <div class="flex sm:justify-between">
         <p>Edit Lesson Plan</p>
-        <button @click="next()" type="button" class="button button-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+        <div>
+          <button @click="previous()" type="button" class="button button-primary mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button @click="next()" type="button" class="button button-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
       </div>
     </PageHeading>
     <div>
@@ -49,7 +59,11 @@ export default {
     next() {
       let url = route('dashboard.reports.next', this.report.id);
       this.$inertia.post(url);
-    }
+    },
+    previous() {
+      let url = route('dashboard.reports.previous', this.report.id);
+      this.$inertia.post(url);
+    },
   },
   mounted() {
   }

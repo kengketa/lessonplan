@@ -16,7 +16,7 @@
         <span class="inline-block w-full rounded-md shadow-sm">
           <button
             type="button"
-            class="relative z-0 w-full py-2 pl-3 pr-10 text-left transition cursor-pointer duration-150 ease-in-out bg-white border border-gray-300 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="relative z-0 w-full py-2.5 pl-3 pr-10 text-left transition cursor-pointer duration-150 ease-in-out bg-white border border-gray-300 rounded-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
             @click="open"
           >
             <span class="block truncate">{{

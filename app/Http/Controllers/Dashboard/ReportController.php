@@ -121,6 +121,36 @@ class ReportController extends Controller
         return redirect()->route("dashboard.reports.edit", $nextReport->id);
     }
 
+    public function previous(Report $report)
+    {
+        $schoolId = $report->grade->school->id;
+        $nextReport = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+            $q->where('id', $schoolId);
+        })
+            ->where('academic_year', $report->academic_year)
+            ->where('semester', $report->semester)
+            ->where('creator_id', $report->creator_id)
+            ->where('id', '<', $report->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($nextReport == null) {
+            $nextReport = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+                $q->where('id', $schoolId);
+            })
+                ->where('academic_year', $report->academic_year)
+                ->where('semester', $report->semester)
+                ->where('creator_id', $report->creator_id)
+                ->where('id', '!=', $report->id)
+                ->orderBy('id', 'desc')
+                ->first();
+        }
+        if ($nextReport == null) { // when no more report to next
+            return redirect()->route("dashboard.reports.edit", $report->id);
+        }
+        return redirect()->route("dashboard.reports.edit", $nextReport->id);
+    }
+
     public function print(Request $request)
     {
         $printLists = $request['print_list'];
