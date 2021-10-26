@@ -136,10 +136,10 @@
           <span class="sr-only">Open sidebar</span>
           <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
         </button>
-        <div class="flex-1 px-4 flex justify-between">
+        <div class="flex-1 px-4 flex justify-end">
           <div class="ml-4 flex items-center md:ml-6">
             <!-- Profile dropdown -->
-            <Menu as="div" class="ml-3 relative">
+            <Menu as="div" class="ml-3 relative flex justify-end">
               <div>
                 <MenuButton
                   class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
