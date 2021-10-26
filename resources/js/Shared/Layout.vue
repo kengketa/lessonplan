@@ -1,26 +1,10 @@
-<!--
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ]
-  }
-  ```
--->
 <template>
   <div class="h-screen flex overflow-hidden bg-gray-100">
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog
         as="div"
         static
-        class="fixed inset-0 flex z-40 md:hidden"
+        class="fixed inset-0 flex z-40 "
         @close="sidebarOpen = false"
         :open="sidebarOpen"
       >
@@ -44,34 +28,12 @@
           leave-from="translate-x-0"
           leave-to="-translate-x-full"
         >
-          <div
-            class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800"
-          >
-            <TransitionChild
-              as="template"
-              enter="ease-in-out duration-300"
-              enter-from="opacity-0"
-              enter-to="opacity-100"
-              leave="ease-in-out duration-300"
-              leave-from="opacity-100"
-              leave-to="opacity-0"
-            >
-              <div class="absolute top-0 right-0 -mr-12 pt-2">
-                <button
-                  class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                  @click="sidebarOpen = false"
-                >
-                  <span class="sr-only">Close sidebar</span>
-                  <XIcon class="h-6 w-6 text-white" aria-hidden="true" />
-                </button>
-              </div>
-            </TransitionChild>
+          <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-blue-900">
             <div class="flex-shrink-0 flex items-center px-4">
-              <img
-                class="h-8 w-auto"
-                src="/images/shell.svg"
-                alt="Shell logo"
-              />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="white">
+                <path
+                  d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              </svg>
               <span class="text-gray-100 font-bold ml-3 text-xl">Lesson Plan</span>
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
@@ -115,9 +77,8 @@
         </div>
       </Dialog>
     </TransitionRoot>
-
     <!-- Static sidebar for desktop -->
-    <div class="hidden md:flex md:flex-shrink-0">
+    <div class="hidden lg:flex lg:flex-shrink-0">
       <div class="flex flex-col w-64">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex flex-col h-0 flex-1">
@@ -169,30 +130,14 @@
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
         <button
-          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden"
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
           <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
         </button>
         <div class="flex-1 px-4 flex justify-between">
-          <div class="flex-1 flex">
-            <!--                        <form class="w-full flex md:ml-0" action="#" method="GET">-->
-            <!--                            <label for="search_field" class="sr-only">Search</label>-->
-            <!--                            <div class="relative w-full text-gray-400 focus-within:text-gray-600">-->
-            <!--                                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">-->
-            <!--                                    <SearchIcon class="h-5 w-5" aria-hidden="true" />-->
-            <!--                                </div>-->
-            <!--                                <input id="search_field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search" type="search" name="search" />-->
-            <!--                            </div>-->
-            <!--                        </form>-->
-          </div>
           <div class="ml-4 flex items-center md:ml-6">
-            <!--                        <button class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
-            <!--                            <span class="sr-only">View notifications</span>-->
-            <!--                            <BellIcon class="h-6 w-6" aria-hidden="true" />-->
-            <!--                        </button>-->
-
             <!-- Profile dropdown -->
             <Menu as="div" class="ml-3 relative">
               <div>
