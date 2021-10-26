@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DeployController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::any('/auto-git-pull', '\MichelMelo\MMAutoGitPull\MMAutoGitPullController@pull');
+Route::any("/auto-git-pull", [DeployController::class, "pull"])->name("deploy.pull");

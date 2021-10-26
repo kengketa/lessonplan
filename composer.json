@@ -1,12 +1,9 @@
 {
-    "name": "BLP",
+    "name": "brighton/blp",
+    "description": "brighton lessonplan",
     "type": "project",
-    "description": "Brighton Lessonplan",
-    "keywords": [
-        "blp",
-        "laravel"
-    ],
     "license": "proprietary",
+    "minimum-stability": "dev",
     "require": {
         "php": "^8.0",
         "enlightn/enlightn": "^1.22",
@@ -19,7 +16,6 @@
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
-        "michelmelo/mm-laravel-auto-git-pull": "^1.4",
         "spatie/browsershot": "^3.50",
         "spatie/laravel-fractal": "^5.8",
         "spatie/laravel-permission": "^4.0",
