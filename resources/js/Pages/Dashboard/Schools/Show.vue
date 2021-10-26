@@ -62,7 +62,7 @@
       </template>
     </PageHeading>
     <section class="mt-4">
-      <div class="grid grid-cols-6 gap-2">
+      <div class="md:grid md:grid-cols-6 md:gap-2">
         <SearchSelectInput
           :options="school.years"
           :is-show-line="false"
@@ -93,7 +93,7 @@
           :is-show-line="false"
           label="filter subject"
         />
-        <div class="flex items-end">
+        <div class="flex items-end mt-2 md:mt-0">
           <button @click="print()" type="button" class="button button-primary button-small mb-1">Print</button>
           <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
             Clear
