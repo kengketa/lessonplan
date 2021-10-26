@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => Session::get('error'),
             ],
             "authUser" => $user ?? null,
+            "authUserRole" => $user->roles[0]->name ?? null,
             "roleEnum" => User::ROLES,
         ]);
     }

@@ -72,9 +72,7 @@
                 src="/images/shell.svg"
                 alt="Shell logo"
               />
-              <span class="text-gray-100 font-bold ml-3 text-xl"
-                >Application</span
-              >
+              <span class="text-gray-100 font-bold ml-3 text-xl">Lesson Plan</span>
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2 space-y-1">
@@ -123,17 +121,16 @@
       <div class="flex flex-col w-64">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex flex-col h-0 flex-1">
-          <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
+          <div class="flex items-center h-16 flex-shrink-0 px-4 bg-blue-900">
             <!-- <img class="h-8 w-auto" src="/images/shell.svg" alt="Shell logo" /> -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="white">
-              <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              <path
+                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
             </svg>
-            <span class="text-gray-100 font-bold ml-3 text-lg"
-              >Application</span
-            >
+            <span class="text-gray-100 font-bold ml-3 text-lg">Lesson Plan</span>
           </div>
           <div class="flex-1 flex flex-col overflow-y-auto">
-            <nav class="flex-1 px-2 py-4 bg-gray-800 space-y-1">
+            <nav class="flex-1 px-2 py-4 bg-blue-900 space-y-1">
               <div v-for="item in navigation" :key="item.name">
                 <div
                   v-if="item.type === 'group'"
@@ -141,7 +138,7 @@
                 >
                   <h3>{{ item.name }}</h3>
                 </div>
-                <inertia-link
+                <Link
                   v-else
                   :href="item.href"
                   :class="[
@@ -162,7 +159,7 @@
                     aria-hidden="true"
                   />
                   {{ item.name }}
-                </inertia-link>
+                </Link>
               </div>
             </nav>
           </div>
@@ -253,17 +250,18 @@
                     :key="item.name"
                     v-slot="{ active }"
                   >
-                    <inertia-link
+                    <Link
                       :href="item.href"
                       :class="[
                         active ? 'bg-gray-100' : '',
                         'block px-4 py-2 text-sm text-gray-700',
                       ]"
-                      >{{ item.name }}</inertia-link
+                    >{{ item.name }}
+                    </Link
                     >
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                    <inertia-link
+                    <Link
                       href="#"
                       :class="[
                         active ? 'bg-gray-100' : '',
@@ -271,8 +269,8 @@
                       ]"
                       @click.prevent="logout"
                     >
-                      Sign out</inertia-link
-                    >
+                      Sign out
+                    </Link>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -296,7 +294,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import {ref, computed, onMounted} from "vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
 import {
   Dialog,
@@ -322,12 +320,14 @@ import {
   ChipIcon,
   FireIcon,
   QrcodeIcon,
+  AcademicCapIcon
 } from "@heroicons/vue/outline";
-import { SearchIcon } from "@heroicons/vue/solid";
-import { Inertia } from "@inertiajs/inertia";
+import {Link} from "@inertiajs/inertia-vue3";
+import {SearchIcon} from "@heroicons/vue/solid";
+import {Inertia} from "@inertiajs/inertia";
 
 const userNavigation = [
-  { name: "Settings", href: route("profile.show") },
+  {name: "Settings", href: route("profile.show")},
   // { name: 'Settings', href: '#' },
   // { name: 'Sign out', href: '#' },
 ];
@@ -344,6 +344,12 @@ const navs = {
     href: route("dashboard.users.index"),
     icon: UsersIcon,
     routeGroup: "dashboard.users.*",
+  },
+  schools: {
+    name: "Schools",
+    href: route("dashboard.schools.index"),
+    icon: AcademicCapIcon,
+    routeGroup: "dashboard.schools.*",
   },
 
   //roles: {
@@ -373,9 +379,10 @@ export default {
     ChipIcon,
     FireIcon,
     QrcodeIcon,
+    Link
   },
   data() {
-    return { sidebarOpen: false, userNavigation: userNavigation };
+    return {sidebarOpen: false, userNavigation: userNavigation};
   },
   methods: {
     logout() {
@@ -392,14 +399,18 @@ export default {
       const roles = this.$page.props.roleEnum;
       if (user.roles[0].id == roles.USER) {
         nav.push(navs.dashboard);
-
+      } else if (user.roles[0].id == roles.TEACHER) {
+        nav.push(navs.dashboard);
+        //nav.push(navs.schools);
       } else if (user.roles[0].id == roles.ADMIN) {
+        nav.push(navs.dashboard);
         nav.push(navs.users);
-
-      } else if(user.roles[0].id == roles.SUPER_ADMIN){
+        nav.push(navs.schools);
+      } else if (user.roles[0].id == roles.SUPER_ADMIN) {
+        nav.push(navs.dashboard);
         nav.push(navs.users);
-      }
-      else {
+        nav.push(navs.schools);
+      } else {
         //push nothing
       }
       return nav;

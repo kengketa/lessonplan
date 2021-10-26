@@ -1,5 +1,5 @@
 <template>
-  <inertia-link class="w-full md:w-1/2 xl:w-1/3 p-3" :href="route(link)">
+  <Link class="w-full md:w-1/2 xl:w-1/3 p-3" :href="route(link)">
     <div class="bg-white border rounded shadow p-2">
       <div class="flex flex-row items-center">
         <div class="flex-shrink pr-4">
@@ -15,20 +15,21 @@
         </div>
       </div>
     </div>
-  </inertia-link>
+  </Link>
 </template>
 <script>
-import { Inertia } from "@inertiajs/inertia";
+import {Inertia} from "@inertiajs/inertia";
+import {Link} from "@inertiajs/inertia-vue3";
 
 export default {
   name: "DashboardCard",
-  components: { Inertia },
+  components: {Inertia, Link},
   props: {
-      link:String
+    link: String
   },
   data() {
 
-    },
+  },
 }
 </script>
 

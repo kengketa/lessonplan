@@ -15,12 +15,13 @@
     <PageHeading>
       <span class="hidden lg:inline">User information:</span> {{ userModel.name }}
       <template #actions>
-        <inertia-link
+        <Link
           :href="route('dashboard.users.edit', userModel.id)"
           class="button button-primary mr-2"
         >
           <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
-          Edit</inertia-link
+          Edit
+        </Link
         >
         <form @submit.prevent="isShowDeleteDialog = true" class="inline-flex">
           <button type="submit" class="button button-danger">
@@ -64,11 +65,12 @@
           </DataDisplayRow>
           <DataDisplayRow v-show="userModel.role == 'Customer'">
             <template #label>Company</template>
-            <inertia-link
+            <Link
               v-if="userModel.company != null"
               class="link"
               :href="route('companies.show', { company: userModel.company })"
-            >{{ userModel.company.name }}</inertia-link
+            >{{ userModel.company.name }}
+            </Link
             >
             <span v-else>Undefined</span>
           </DataDisplayRow>
@@ -103,8 +105,8 @@ import PageHeading from "@/Components/PageHeading";
 import DataDisplayContainer from "@/Components/DataDisplayContainer";
 import DataDisplayRow from "@/Components/DataDisplayRow";
 import ConfirmDialog from "@/Components/ConfirmDialog";
-import { PencilIcon, TrashIcon } from "@heroicons/vue/solid";
-import { useForm } from "@inertiajs/inertia-vue3";
+import {PencilIcon, TrashIcon} from "@heroicons/vue/solid";
+import {useForm, Link} from "@inertiajs/inertia-vue3";
 import PreLoad from "@/Components/PreLoad";
 
 export default {
@@ -119,6 +121,7 @@ export default {
     DataDisplayRow,
     PencilIcon,
     TrashIcon,
+    Link
   },
   props: {
     userModel: Object,
@@ -132,8 +135,8 @@ export default {
     return {
       breadcrumbs: [
         // { name: 'Dashboard', href: '#' },
-        { name: "Users", href: route("dashboard.users.index") },
-        { name: this.userModel.name, href: "#" },
+        {name: "Users", href: route("dashboard.users.index")},
+        {name: this.userModel.name, href: "#"},
       ],
       form: useForm({
         user: this.userModel.id,
@@ -150,7 +153,7 @@ export default {
   },
   methods: {
     deleteUser() {
-      this.form.delete(route("dashboard.users.destroy", { user: this.form.user }));
+      this.form.delete(route("dashboard.users.destroy", {user: this.form.user}));
     },
     async resetPassword() {
       this.isShowEmailSend = true;

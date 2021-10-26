@@ -27,12 +27,19 @@ class UsersSeeder extends Seeder
         ]);
         $admin->assignRole(Role::where('name', \App\Models\Role::ROLE_ADMIN)->first());
 
-        for ($i = 1; $i < 30; $i++) {
-            $user = User::factory()->create([
-                'name' => 'User ' . $i,
-                'email' => 'user' . $i . '@mail.com',
+        for ($i = 1; $i < 10; $i++) {
+            $teacher = User::factory()->create([
+                'name' => 'Teacher '.$i,
+                'email' => 'teacher'.$i.'@mail.com',
             ]);
-            $user->assignRole(Role::where("name", \App\Models\Role::ROLE_USER)->first());
+            $teacher->assignRole(Role::where("name", \App\Models\Role::ROLE_TEACHER)->first());
         }
+//        for ($i = 1; $i < 30; $i++) {
+//            $user = User::factory()->create([
+//                'name' => 'User ' . $i,
+//                'email' => 'user' . $i . '@mail.com',
+//            ]);
+//            $user->assignRole(Role::where("name", \App\Models\Role::ROLE_USER)->first());
+//        }
     }
 }

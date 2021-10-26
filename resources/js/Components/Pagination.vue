@@ -40,14 +40,14 @@
           aria-label="Pagination"
         >
           <div v-for="link in data.links" :key="link.label">
-            <inertia-link
+            <Link
               v-if="link.url != null && link.label.includes('Previous')"
               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               :href="link.url"
             >
               <span class="sr-only">Previous</span>
               <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
-            </inertia-link>
+            </Link>
             <div
               v-else-if="link.url == null && link.label.includes('Previous')"
               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-300"
@@ -56,14 +56,14 @@
               <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
             </div>
 
-            <inertia-link
+            <Link
               v-else-if="link.url != null && link.label.includes('Next')"
               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               :href="link.url"
             >
               <span class="sr-only">Next</span>
               <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
-            </inertia-link>
+            </Link>
 
             <div
               v-else-if="link.url == null && link.label.includes('Next')"
@@ -73,14 +73,14 @@
               <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
             </div>
 
-            <inertia-link
+            <Link
               v-else-if="link.url != null"
               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               :href="link.url"
               :class="{ 'bg-gray-50': link.active }"
             >
               {{ link.label }}
-            </inertia-link>
+            </Link>
 
             <div
               v-else
@@ -101,14 +101,14 @@
         aria-label="Pagination"
       >
         <div v-for="link in data.links" :key="link.label">
-          <inertia-link
+          <Link
             v-if="link.url != null && link.label.includes('Previous')"
             class="relative inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
             :href="link.url"
           >
             <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
             <span class="mx-2">Previous</span>
-          </inertia-link>
+          </Link>
           <div
             v-else-if="link.url == null && link.label.includes('Previous')"
             class="relative inline-flex items-center px-3 py-2 rounded-md border border-gray-200 bg-white text-sm font-medium text-gray-300"
@@ -117,14 +117,14 @@
             <span class="mx-2">Previous</span>
           </div>
 
-          <inertia-link
+          <Link
             v-else-if="link.url != null && link.label.includes('Next')"
             class="relative inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
             :href="link.url"
           >
             <span class="mx-2">Next</span>
             <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
-          </inertia-link>
+          </Link>
 
           <div
             v-else-if="link.url == null && link.label.includes('Next')"
@@ -142,12 +142,12 @@
 </template>
 
 
-
 <script>
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/vue/solid";
+import {Link} from "@inertiajs/inertia-vue3";
 
 export default {
-  components: { ChevronLeftIcon, ChevronRightIcon },
+  components: {ChevronLeftIcon, ChevronRightIcon, Link},
   props: {
     data: Object,
   },
