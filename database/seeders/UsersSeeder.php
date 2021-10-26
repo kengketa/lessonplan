@@ -15,31 +15,26 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        $superAdmin = User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@mail.com',
-        ]);
-        $superAdmin->assignRole(Role::where('name', \App\Models\Role::ROLE_SUPER_ADMIN)->first());
-
         $admin = User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@mail.com',
+            'name' => 'Sutjapong',
+            'email' => 'kengketa@gmail.com',
         ]);
         $admin->assignRole(Role::where('name', \App\Models\Role::ROLE_ADMIN)->first());
 
-        for ($i = 1; $i < 10; $i++) {
-            $teacher = User::factory()->create([
-                'name' => 'Teacher '.$i,
-                'email' => 'teacher'.$i.'@mail.com',
-            ]);
-            $teacher->assignRole(Role::where("name", \App\Models\Role::ROLE_TEACHER)->first());
+        $admin = User::factory()->create([
+            'name' => 'Kamonlaphat',
+            'email' => 'robo_hanaba@hotmail.com',
+        ]);
+        $admin->assignRole(Role::where('name', \App\Models\Role::ROLE_ADMIN)->first());
+
+        if (config('app.env') === 'local') {
+            for ($i = 1; $i < 10; $i++) {
+                $teacher = User::factory()->create([
+                    'name' => 'Teacher '.$i,
+                    'email' => 'teacher'.$i.'@mail.com',
+                ]);
+                $teacher->assignRole(Role::where("name", \App\Models\Role::ROLE_TEACHER)->first());
+            }
         }
-//        for ($i = 1; $i < 30; $i++) {
-//            $user = User::factory()->create([
-//                'name' => 'User ' . $i,
-//                'email' => 'user' . $i . '@mail.com',
-//            ]);
-//            $user->assignRole(Role::where("name", \App\Models\Role::ROLE_USER)->first());
-//        }
     }
 }
