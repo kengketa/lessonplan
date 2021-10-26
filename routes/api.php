@@ -18,4 +18,3 @@ use App\Http\Controllers\DeployController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::any("/auto-git-pull", [DeployController::class, "pull"])->name("deploy.pull");
