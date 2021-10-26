@@ -6,13 +6,13 @@
       <PageHeading>
         Users Management
         <template #actions>
-          <inertia-link
+          <Link
             class="button button-primary"
             :href="route('dashboard.users.create')"
           >
             <UserAddIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             Create User
-          </inertia-link>
+          </Link>
         </template>
       </PageHeading>
       <div class="grid grid-cols-12 gap-2 content-center">
@@ -34,7 +34,8 @@
               >
                 {{ key }}
               </option>
-            </template></SelectInput
+            </template>
+          </SelectInput
           >
         </div>
         <div class="col-span-12 md:col-span-2 flex items-end justify-end">
@@ -50,30 +51,34 @@
       </div>
       <TableDisplayContainer>
         <template #header>
-            <TableTh v-for="column in sort.columns" :key="column"
-              :class="[sort.key === column ? 'font-bold' : '']"
-            >
-              <div class="flex">
-                <a class="hover:underline cursor-pointer flex" @click="sortBy(column)">
-                  <div v-if="sort.key == column">
+          <TableTh v-for="column in sort.columns" :key="column"
+                   :class="[sort.key === column ? 'font-bold' : '']"
+          >
+            <div class="flex">
+              <a class="hover:underline cursor-pointer flex" @click="sortBy(column)">
+                <div v-if="sort.key == column">
                     <span v-if="sort.reverse" class="flex ml-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
                       </svg>
                     </span>
-                    <span v-else class="flex ml-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                  <span v-else class="flex ml-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
                       </svg>
                     </span>
-                  </div>
-                  <span>
+                </div>
+                <span>
                     {{ column }}
                   </span>
-                </a>
-              </div>
-            </TableTh>
-            <TableTh></TableTh>
+              </a>
+            </div>
+          </TableTh>
+          <TableTh></TableTh>
         </template>
         <template #body>
           <tr
@@ -84,7 +89,7 @@
             <TableTd>
               <div class="flex items-center">
                 <div class="flex-grow-0 flex-shrink-0 mr-4">
-                  <inertia-link
+                  <Link
                     :href="route('dashboard.users.show', item.id)"
                     class="hover:underline"
                   >
@@ -92,33 +97,33 @@
                       :src="item.profile_photo_url"
                       class="rounded-full w-12 h-12"
                     />
-                  </inertia-link>
+                  </Link>
                 </div>
                 <div class="flex-grow-1">
-                  <inertia-link
+                  <Link
                     :href="route('dashboard.users.show', item.id)"
                     class="hover:underline"
                   >
                     <span class="font-medium">{{ item.name }}</span>
                     <br />
                     <span class="text-primary">{{ item.email }}</span>
-                  </inertia-link>
+                  </Link>
                 </div>
               </div>
             </TableTd>
 
             <TableTd>
-              <inertia-link
+              <Link
                 :href="route('dashboard.users.show', item.id)"
                 class="hover:underline"
               >
                 {{ item.role }}
-              </inertia-link>
+              </Link>
             </TableTd>
             <TableTd>
-              <inertia-link :href="route('dashboard.users.edit', item.id)" class="link">
+              <Link :href="route('dashboard.users.edit', item.id)" class="link">
                 Edit
-              </inertia-link>
+              </Link>
             </TableTd>
           </tr>
         </template>
@@ -141,7 +146,8 @@ import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-import { UserAddIcon } from "@heroicons/vue/solid";
+import {UserAddIcon} from "@heroicons/vue/solid";
+import {Link} from "@inertiajs/inertia-vue3";
 
 export default {
   name: "Index",
@@ -156,6 +162,7 @@ export default {
     SelectInput,
     Breadcrumbs,
     UserAddIcon,
+    Link
   },
   props: {
     roles: Object,
@@ -169,11 +176,11 @@ export default {
         search: this.filters.search ?? "",
         role: this.filters.role ?? "",
       },
-      breadcrumbs: [{ name: "Users", href: "#" }],
-      sort:{
-        columns:['name','role'],
-        reverse:false,
-        key:'name'
+      breadcrumbs: [{name: "Users", href: "#"}],
+      sort: {
+        columns: ['name', 'role'],
+        reverse: false,
+        key: 'name'
       }
     };
   },
@@ -201,7 +208,7 @@ export default {
       this.$inertia.replace(this.route("dashboard.users.index", this.form));
     },
     sortBy(sortKey) {
-      this.sort.reverse = (this.sort.key == sortKey) ? ! this.sort.reverse : false;
+      this.sort.reverse = (this.sort.key == sortKey) ? !this.sort.reverse : false;
       this.sort.key = sortKey;
       console.log(this.sort.key);
     },
@@ -214,14 +221,15 @@ export default {
       deep: true,
     },
   },
-  computed:{
-    sortedUser: function(){
-        return this.users.data.sort((p1,p2) => {
-            let modifier = 1;
-            if(this.sort.reverse) modifier = -1;
-            if(p1[this.sort.key] < p2[this.sort.key]) return -1 * modifier; if(p1[this.sort.key] > p2[this.sort.key]) return 1 * modifier;
-            return 0;
-        });
+  computed: {
+    sortedUser: function () {
+      return this.users.data.sort((p1, p2) => {
+        let modifier = 1;
+        if (this.sort.reverse) modifier = -1;
+        if (p1[this.sort.key] < p2[this.sort.key]) return -1 * modifier;
+        if (p1[this.sort.key] > p2[this.sort.key]) return 1 * modifier;
+        return 0;
+      });
     }
   }
 

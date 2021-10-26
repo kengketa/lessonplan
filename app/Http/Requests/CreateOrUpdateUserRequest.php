@@ -18,12 +18,12 @@ class CreateOrUpdateUserRequest extends FormRequest
         // base rules
         $rules = [
             "name" => ["required", "string", "max:255"],
-            "role" => ["in:" . User::ROLE_USER . "," . User::ROLE_ADMIN . "," . User::ROLE_SUPER_ADMIN],
+            "role" => ["in:".User::ROLE_USER.",".User::ROLE_ADMIN.",".User::ROLE_SUPER_ADMIN.",".User::ROLE_TEACHER],
         ];
 
         if ($this->getMethod() === "POST") { //for create
             $rules["email"] = ["required", "email", "unique:users,email", "max:255"];
-        // $rules["password"] = ["required", "min:6", "confirmed"];
+            // $rules["password"] = ["required", "min:6", "confirmed"];
         } else { //for update
             $user = $this->route("user"); //get param user
             $rules["email"] = ["required", "email", "unique:users,email,$user->id", "max:255"];
