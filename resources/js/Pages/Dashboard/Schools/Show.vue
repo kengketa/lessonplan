@@ -176,15 +176,33 @@
     </section>
     <Card>
       <div class="md:flex md:items-center md:justify-between">
-        <div class="flex">
+        <div class="w-full flex justify-between">
           <div>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
               School Information
             </h3>
           </div>
+          <div>
+            <button v-if="showSchoolInformation" @click="showSchoolInformation = false" type="button"
+                    class="text-gray-500 mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+            </button>
+            <button v-if="!showSchoolInformation" @click="showSchoolInformation = true" type="button"
+                    class="text-gray-500 mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="mt-5 border-t border-gray-200">
+      <div class="mt-5 border-t border-gray-200 transition transform translate duration-500 ease-in-out"
+           :class="!showSchoolInformation ? 'h-0':'h-100'"
+      >
         <DataDisplayContainer>
           <DataDisplayRow>
             <template #label>
@@ -367,7 +385,8 @@ export default {
       deletingGrade: null,
       deletingSubject: null,
       removingTeacher: null,
-      printList: []
+      printList: [],
+      showSchoolInformation: false,
     };
   },
   mounted() {
