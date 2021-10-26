@@ -16,13 +16,16 @@ class GradePresenter extends BasePresenter
     private function getType()
     {
         if ($this->model->type === Grade::NURSERY_TYPE) {
-            return 'ศูนย์เด็ก';
+            return 'pre';
         }
         if ($this->model->type === Grade::KINDERGATEN_TYPE) {
-            return 'อ.';
+            return 'K.';
         }
         if ($this->model->type === Grade::PRIMARY_TYPE) {
-            return 'ป.';
+            return 'P.';
+        }
+        if ($this->model->type === Grade::SECONDARY_TYPE) {
+            return 'M.';
         }
         return "";
     }
