@@ -92,13 +92,21 @@
       </div>
     </div>
     <div class="fixed top-4 right-4 z-100">
-      <button type="button"
-              @click="print()"
-              class="no-print button button-primary z-100 shadow-md transition transform ease-in-out hover:scale-105 hover:shadow-lg">
-        Print
-      </button>
-      <div class="flex justify-between mt-1 no-print">
-        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-2xs')">
+      <div class="flex flex-justify-end">
+        <button type="button"
+                @click="generate()"
+                class="mr-2 no-print button button-small button-primary z-100 shadow-md transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+          Generate
+        </button>
+
+        <button type="button"
+                @click="print()"
+                class="no-print button button-small button-primary z-100 shadow-md transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+          Print
+        </button>
+      </div>
+      <div class="flex justify-end no-print mt-1">
+        <button type="button" class="bg-blue-600 p-1 rounded-full text-white mr-1" @click="setSize('text-2xs')">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
@@ -113,14 +121,17 @@
       </div>
     </div>
   </div>
+  <GeneratedLinkModal v-model="showGeneratedLink" :link="generatedLink" />
 </template>
 
 <script>
-
+import GeneratedLinkModal from "@/Components/Forms/GeneratedLinkModal";
 
 export default {
   name: 'ReportPrint',
-  components: {},
+  components: {
+    GeneratedLinkModal
+  },
   props: {
     pages: {
       type: Object,
@@ -133,16 +144,22 @@ export default {
   },
   data() {
     return {
-      fontSize: 'text-xs'
+      fontSize: 'text-xs',
+      showGeneratedLink: false,
+      generatedLink: ""
     };
   },
   methods: {
     print() {
+      window.print();
+    },
+    generate() {
       let payload = {
         link: window.location.href
       };
-      axios.post(route('dashboard.reports.generate_link'), payload).then(() => {
-        window.print();
+      axios.post(route('dashboard.reports.generate_link'), payload).then((response) => {
+        this.generatedLink = response.data;
+        this.showGeneratedLink = true;
       })
     },
     setSize(size) {

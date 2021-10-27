@@ -287,7 +287,7 @@
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id" />
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
     <AddTeacherModal v-model="showAddTeacherModal" :school="school" />
-    <PrintModal v-model="showPrintModal" :print-list="printList" />
+    <PrintModal v-model="showPrintModal" :print-list="printList" :school-id="school.id" />
   </div>
 </template>
 
