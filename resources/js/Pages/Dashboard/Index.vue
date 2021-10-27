@@ -2,7 +2,7 @@
   <div>
     <div class="content m-1">
       <Breadcrumbs :breadcrumbs="breadcrumbs" />
-      <div class="grid grid-cols-3 gap-8 mt-4">
+      <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4 lg:gap-8 mt-4">
         <Card v-for="school in schools" :key="school.id"
               @click="visit(school)"
               class="bg-blue-200 relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg">
@@ -16,7 +16,7 @@
                     d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
             </svg>
           </p>
-          <p class="text-center py-10">{{ school.name }}</p>
+          <p class="text-center text-sm py-4 lg:text-base lg:py-4 xl:py-8">{{ school.name }}</p>
         </Card>
       </div>
     </div>
