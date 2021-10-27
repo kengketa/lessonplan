@@ -157,7 +157,10 @@ class ReportController extends Controller
         $toBePrintedReports = Arr::where($printLists, function ($report, $key) {
             return $report['print'] == true;
         });
-        //dd($toBePrintedReports);
+
+        if (count($toBePrintedReports) === 0) {
+            return redirect()->route('dashboard.schools.show', $request['school_id']);
+        }
         $reportIds = [];
         foreach ($toBePrintedReports as $report) {
             $reportIds[] = $report['id'];
@@ -195,6 +198,14 @@ class ReportController extends Controller
 
     public function globalReports(Request $request)
     {
+        $link = route('reports.global', [
+            'reportIds' => $request['reportIds']
+        ]);
+        $foundGeneratedLink = GlobalReport::where('link', $link)->first();
+        if (!$foundGeneratedLink) {
+            abort(403, 'Opps! nice tried.');
+        }
+
         $reportIds = $request['reportIds'];
         $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
         return Inertia::render(

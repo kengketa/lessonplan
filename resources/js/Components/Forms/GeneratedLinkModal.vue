@@ -18,47 +18,40 @@
                          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
           <div
             class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-            <div>
+            <div class="relative">
               <div>
                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900 text-center">
-                  Print Selection
+                  Generated Link
                 </DialogTitle>
-                <div class="mt-2">
-                  <div>
-                    <fieldset class="space-y-2">
-                      <div v-for="(report,reportIndex) in printList" :key="report.id" class="relative flex items-start">
-                        <div class="flex items-center h-5">
-                          <input :id="'report-'+report.id" aria-describedby="comments-description"
-                                 v-model="form.print_list[reportIndex].print"
-                                 :name="'report-'+report.id"
-                                 type="checkbox"
-                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                        </div>
-                        <div class="ml-3 text-sm">
-                          <label :for="'report-'+report.id" class="font-medium text-gray-700">
-                            {{ report.teacher_name }} {{ report.subject }} {{ report.grade }}
-                            week:{{ report.week_number }}/{{ report.lesson_number }}
-                          </label>
-                          <ul class="text-gray-500">
-                            <li v-for="(topic,index) in report.topics" :key="index">{{ topic }}</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </fieldset>
-                  </div>
-                </div>
               </div>
+              <div class="bg-gray-100 px-2 py-4 mt-2 text-center relative">
+                <!--                <input class="w-full h-20" :value="link" ref="linkref" v-on:focus="$event.target.select()" readonly>-->
+                <textarea class="w-full bg-gray-100 outline-none focus:outline-none border-0 text-center"
+                          rows="2"
+                          :value="link" ref="linkref"
+                          v-on:focus="$event.target.select()"></textarea>
+                <button
+                  @click="copy()"
+                  class="text-gray-700 absolute top-2 right-2 rounded-full p-1 transition ease-in-out duration-300 hover:bg-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                       stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  </svg>
+                </button>
+              </div>
+              <p
+                class="absolute -top-2 right-2 transition ease-out duration-100 text-sm bg-green-100 px-2 py-1 rounded-md"
+                :class="coppied ? 'opacity-200' : 'opacity-0'"
+              >
+                coppied!
+              </p>
             </div>
-            <div class="mt-4 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+            <div class="flex justify-center mt-2">
               <button type="button"
                       class="button button-secondary button-small mr-2"
-                      @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
-                Cancel
-              </button>
-              <button type="button"
-                      class="button button-primary button-small"
-                      @click="submit()">
-                Preview
+                      @click="close()" ref="cancelButtonRef">
+                CLose
               </button>
             </div>
           </div>
@@ -72,10 +65,10 @@
 import {ref} from 'vue'
 import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
 import {CheckIcon} from '@heroicons/vue/outline'
-import {useForm} from "@inertiajs/inertia-vue3";
+
 
 export default {
-  name: 'PrintModal',
+  name: 'GeneratedLinkModal',
   components: {
     Dialog,
     DialogOverlay,
@@ -89,21 +82,14 @@ export default {
       type: Boolean,
       default: false
     },
-    printList: {
-      type: Array,
-      required: true
-    },
-    schoolId: {
-      type: Number,
+    link: {
+      type: String,
       required: true
     }
   },
   data() {
     return {
-      form: useForm({
-        school_id: this.schoolId,
-        print_list: this.printList,
-      }),
+      coppied: false
     };
   },
   emits: ['update:modelValue'],
@@ -113,6 +99,36 @@ export default {
         onSuccess: () => this.$emit('update:modelValue', false),
       });
     },
+    copy() {
+      this.$refs.linkref.focus();
+      document.execCommand('copy');
+      this.coppied = true;
+    },
+    close() {
+      this.coppied = false;
+      this.$emit('update:modelValue', false);
+    }
   }
 }
 </script>
+<style scoped>
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
+::-moz-selection { /* Code for Firefox */
+  background: transparent;
+}
+
+::selection {
+  background: transparent;
+}
+</style>
