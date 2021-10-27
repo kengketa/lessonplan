@@ -51,7 +51,7 @@
             </div>
             <div class="mt-4 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
               <button type="button"
-                      class="button button-secondary button-small"
+                      class="button button-secondary button-small mr-2"
                       @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
                 Cancel
               </button>

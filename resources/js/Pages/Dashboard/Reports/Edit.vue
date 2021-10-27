@@ -5,7 +5,7 @@
       :back="route('dashboard.schools.show',report.school.id)"
     />
     <PageHeading>
-      <div class="flex sm:justify-between">
+      <div class="flex justify-between">
         <p>Edit Lesson Plan</p>
         <div>
           <button @click="previous()" type="button" class="button button-primary mr-2">

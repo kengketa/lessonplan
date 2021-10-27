@@ -9,11 +9,13 @@
         <div class="flex justify-between items-center">
           <h3 v-if="report.id == null" class="text-lg leading-6 text-gray-900">Create Lesson plan</h3>
           <h3 v-if="report.id != null" class="text-lg leading-6 text-gray-900">Update Lesson plan</h3>
-          <p class="text-xl text-gray-700 px-2 py-2 bg-blue-100 rounded-md">{{ report.teacher_name }}</p>
+          <p class="text-base lg:text-xl text-gray-700 px-1 py-1 lg:px-2 pg:py-2 bg-blue-100 rounded-md">
+            {{report.teacher_name }}
+          </p>
         </div>
       </div>
       <div>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid lg:grid-cols-3 gap-2">
           <SearchSelectInput
             :options="report.all_subjects"
             v-model="form.subject"
@@ -40,7 +42,7 @@
         </div>
         <div class="my-4">
           <p class="text-sm font-medium text-gray-700">Classes</p>
-          <div class="grid grid-cols-4 gap-2">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
             <div v-for="(grade,gradeIndex) in form.report.for_grades" :key="gradeIndex"
                  class="border px-4 py-4 relative">
               <SearchSelectInput
@@ -81,7 +83,7 @@
         </div>
         <div class="my-4">
           <p class="text-sm font-medium text-gray-700">Lesson Plans</p>
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <div v-for="(plan,planIndex) in form.report.plans" :key="planIndex"
                  class="border px-4 py-4 relative"
             >
@@ -156,7 +158,7 @@
           </p>
         </div>
         <div class="my-4">
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <TextareaInput
               :is-show-line="false"
               label="Teaching materials"
@@ -183,7 +185,7 @@
               rows="5"
             />
           </div>
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <TextareaInput
               :is-show-line="false"
               label="High distinction students"
