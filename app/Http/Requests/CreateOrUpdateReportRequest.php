@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 
 class CreateOrUpdateReportRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+
+    public function messages()
+    {
+        return [
+//            'report.for_grades.*.id.required' => 'class is required.',
+        ];
+    }
+
     public function rules()
     {
         $rules = [
@@ -27,7 +30,7 @@ class CreateOrUpdateReportRequest extends FormRequest
             'need_improvement_students' => ['nullable'],
             'report.for_grades' => ['required'],
             'report.for_grades.*.id' => ['required', 'exists:grades,id'],
-            'report.for_grades.*.date' => ['required', 'date'],
+            'report.for_grades.*.date' => ['nullable', 'date'],
 
             'report.plans' => ['required'],
             'report.plans.*.type' => ['required'],
