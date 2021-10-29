@@ -49,7 +49,7 @@ class PrepareReportAction
             ['id' => Report::TOPIC_LEARNING_AREA, 'name' => 'learning area'],
         ];
         $grade['id'] = $report->grade_id;
-        $grade['date'] = Carbon::parse($report->date)->format('d-m-Y');
+        $grade['date'] = $report->date ? Carbon::parse($report->date)->format('d-m-Y') : null;
         $newReport['for_grades'] = [$grade];
         foreach ($report->plans as $plan) {
             $newPlan['typing_vocab'] = null;

@@ -32,8 +32,12 @@ class SaveReportAction
             $plans[$key]['vocabs'] = $plan['vocabs'];
             $plans[$key]['details'] = $plan['details'];
         }
+        $date = null;
+        if (!empty($data['report']['for_grades'][0]['date'])) {
+            $date = Carbon::parse($data['report']['for_grades'][0]['date'])->format('Y-m-y');
+        }
         $this->report->grade_id = $data['report']['for_grades'][0]['id'];
-        $this->report->date = Carbon::parse($data['report']['for_grades'][0]['date'])->format('Y-m-d');
+        $this->report->date = $date;
         $this->report->week_number = $data['week_number'];
         $this->report->lesson_number = $data['lesson_number'];
         $this->report->plans = $plans;
@@ -64,8 +68,12 @@ class SaveReportAction
 
         $addedReports = [];
         foreach ($grades as $grade) {
+            $date = null;
+            if ($grade['date']) {
+                $date = Carbon::parse($grade['date'])->format('Y-m-y');
+            }
             $newReport['grade_id'] = $grade['id'];
-            $newReport['date'] = Carbon::parse($grade['date'])->format('Y-m-y');
+            $newReport['date'] = $date;
             $newReport['academic_year'] = getCurrentAcademicYear();
             $newReport['semester'] = getCurrentSemester();
             $newReport['week_number'] = $data['week_number'];

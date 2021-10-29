@@ -12,7 +12,10 @@ class ReportPresenter extends BasePresenter
 
     public function date()
     {
-        return Carbon::parse($this->model->date)->format('d M Y');
+        if ($this->model->date) {
+            return Carbon::parse($this->model->date)->format('d M Y');
+        }
+        return null;
     }
 
     public function plans()

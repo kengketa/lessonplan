@@ -8,13 +8,12 @@ class SchoolPresenter extends BasePresenter
 {
     protected $model;
 
-//    public function name()
-//    {
-//        if (app()->getLocale() == 'th') {
-//            return $this->model->name_th;
-//        }
-//
-//        return $this->model->name_en;
-//    }
+    public function unApprovedReportsCount()
+    {
+        $count = $this->reports->filter(function ($q) {
+            return $q->approver_id == null;
+        })->count();
+        return $count;
+    }
 
 }
