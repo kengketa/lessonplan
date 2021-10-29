@@ -10,7 +10,7 @@
           <h3 v-if="report.id == null" class="text-lg leading-6 text-gray-900">Create Lesson plan</h3>
           <h3 v-if="report.id != null" class="text-lg leading-6 text-gray-900">Update Lesson plan</h3>
           <p class="text-base lg:text-xl text-gray-700 px-1 py-1 lg:px-2 pg:py-2 bg-blue-100 rounded-md">
-            {{report.teacher_name }}
+            {{ report.teacher_name }}
           </p>
         </div>
       </div>
@@ -48,7 +48,7 @@
               <SearchSelectInput
                 :options="report.all_grades"
                 v-model="form.report.for_grades[gradeIndex].id"
-                :error="form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.id')]"
+                :error="computedGradeError(form.errors[this.getErrorKey('report.for_grades.',gradeIndex,'.id')])"
                 :is-show-line="false"
                 label="Class"
               />
@@ -313,6 +313,12 @@ export default {
     }
   },
   methods: {
+    computedGradeError(key) {
+      if (key != undefined) {
+        return 'Class is required.'
+      }
+      return null;
+    },
     approve() {
       let url = route('dashboard.reports.approve', this.report.id);
       this.$inertia.post(url);

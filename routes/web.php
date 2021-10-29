@@ -94,6 +94,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ReportController::class, "next"])->name("dashboard.reports.next");
         Route::post("reports/{report}/previous",
             [ReportController::class, "previous"])->name("dashboard.reports.previous");
+        Route::delete("reports/{report}",
+            [ReportController::class, "destroy"])->name("dashboard.reports.destroy");
 
         Route::post("print-reports", [ReportController::class, "print"])->name("dashboard.reports.print");
         Route::get("print-reports-preview",
