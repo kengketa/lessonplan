@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Browsershot\Browsershot;
+use App\Models\User;
 
 class ReportController extends Controller
 {
@@ -79,10 +80,17 @@ class ReportController extends Controller
 
     public function destroy(Report $report): RedirectResponse
     {
+        $reportId = $report->id;
+        $schoolId = $report->grade->school->id;
+        if (Auth::user()->roles[0]->name === User::ROLE_TEACHER && $report->creator_id != Auth::id()) {
+            return redirect()->route("dashboard.reports.edit", $reportId)
+                ->with("error", "You are not authorized to delete this report.");
+        }
+
         if ($report->delete()) {
-            return redirect()->route("dashboard.reports.index")->with("success", "Report has been destroy!");
+            return redirect()->route("dashboard.schools.show", $schoolId)->with("success", "Report has been deleted.");
         } else {
-            return redirect()->route("dashboard.reports.index")->with("error", "Can't delete Report");
+            return redirect()->route("dashboard.reports.edit", $reportId)->with("error", "Report can not be deleted.");
         }
     }
 
