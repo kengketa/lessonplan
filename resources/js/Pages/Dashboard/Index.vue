@@ -26,9 +26,9 @@
             {{ school.un_approved_reports_count }}
           </p>
         </div>
-
       </div>
     </div>
+    <ClockInModal v-model="showClockinModal" />
   </div>
 </template>
 
@@ -38,11 +38,13 @@ import PageHeading from "@/Components/PageHeading";
 import {Link} from "@inertiajs/inertia-vue3";
 import Breadcrumbs from "@/Components/Breadcrumbs";
 import Card from "../../Components/Card";
+import ClockInModal from "../../Components/Forms/ClockInModal";
 
 export default {
   name: "Dashboard",
   layout: Layout,
   components: {
+    ClockInModal,
     Card,
     Breadcrumbs
   },
@@ -50,20 +52,81 @@ export default {
     schools: {
       type: Object,
       required: true
+    },
+    siteCoordinates: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {
       breadcrumbs: [],
+      geoLocationOptions: {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      },
+      userCoordinates: {
+        lat: null,
+        lng: null
+      },
+      userCoordinatesLoaded: false,
+      showClockinModal: false
     };
   },
   methods: {
     visit(school) {
       this.$inertia.visit(route('dashboard.schools.show', school.id))
+    },
+    haversineDistance(pos1, pos2) {
+      const R = 3958.8 // Radius of the Earth in miles
+      const rlat1 = pos1.lat * (Math.PI / 180) // Convert degrees to radians
+      const rlat2 = pos2.lat * (Math.PI / 180) // Convert degrees to radians
+      const difflat = rlat2 - rlat1 // Radian difference (latitudes)
+      const difflon = (pos2.lng - pos1.lng) * (Math.PI / 180) // Radian difference (longitudes)
+      const distance =
+        2 *
+        R *
+        Math.asin(
+          Math.sqrt(
+            Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+            Math.cos(rlat1) *
+            Math.cos(rlat2) *
+            Math.sin(difflon / 2) *
+            Math.sin(difflon / 2)
+          )
+        )
+      let distanceInMeter = distance * 1609.34; // convert mile to meter
+      return distanceInMeter;
     }
   },
-  watch: {},
+  watch: {
+    userCoordinatesLoaded() {
+      let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
+      if (dis <= this.siteCoordinates.radius) {
+        this.showClockinModal = true;
+      }
+    }
+  }
+  ,
   computed: {}
-};
+  ,
+  mounted() {
+    if (this.$page.props.authUserRole === 'TEACHER') {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.userCoordinates.lat = position.coords.latitude;
+          this.userCoordinates.lng = position.coords.longitude;
+          this.userCoordinatesLoaded = true;
+        },
+        error => {
+
+        },
+        this.geoLocationOptions
+      );
+    }
+  }
+}
+;
 </script>
 

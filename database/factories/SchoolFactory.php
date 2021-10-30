@@ -31,7 +31,10 @@ class SchoolFactory extends Factory
                 ['id' => 4, 'name' => 'sci'],
                 ['id' => 5, 'name' => 'arts'],
                 ['id' => 6, 'name' => 'pe'],
-            ]
+            ],
+            'lat' => 19.170516088524884,
+            'lng' => 99.90557395546138,
+            'radius' => 50
         ];
     }
 }
