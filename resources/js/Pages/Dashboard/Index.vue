@@ -20,7 +20,8 @@
             <p class="text-center text-sm py-4 lg:text-base lg:py-4 xl:py-8">{{ school.name }}</p>
           </Card>
           <p
-            v-if="school.un_approved_reports_count > 0"
+            v-if="($page.props.authUserRole==='ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN')
+            && school.un_approved_reports_count > 0"
             class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-500 flex justify-center items-center text-white text-sm">
             {{ school.un_approved_reports_count }}
           </p>
