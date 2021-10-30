@@ -34,7 +34,7 @@ class SaveReportAction
         }
         $date = null;
         if (!empty($data['report']['for_grades'][0]['date'])) {
-            $date = Carbon::parse($data['report']['for_grades'][0]['date'])->format('Y-m-y');
+            $date = Carbon::parse($data['report']['for_grades'][0]['date'])->format('Y-m-d');
         }
         $this->report->grade_id = $data['report']['for_grades'][0]['id'];
         $this->report->date = $date;

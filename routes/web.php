@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\SchoolController;
 use App\Http\Controllers\Dashboard\GradeController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ClockInController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +103,12 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ReportController::class, "printPreview"])->name("dashboard.reports.print_preview");
         Route::post("print-reports-generate-link",
             [ReportController::class, "generateLink"])->name("dashboard.reports.generate_link");
+
+        //clock in
+        Route::post("clock-in",
+            [ClockInController::class, "in"])->name("dashboard.clock_ins.in");
+        Route::post("clock-out",
+            [ClockInController::class, "out"])->name("dashboard.clock_ins.out");
 
     });
 

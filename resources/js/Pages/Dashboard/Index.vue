@@ -6,7 +6,7 @@
         <div class="relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg"
              v-for="school in schools" :key="school.id">
           <Card @click="visit(school)"
-                class="bg-blue-200">
+                class="bg-blue-200 h-32 lg:h-40 flex justify-center items-center">
             <p class="text-gray-700 absolute top-1 left-1">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                    stroke="currentColor">
@@ -26,9 +26,26 @@
             {{ school.un_approved_reports_count }}
           </p>
         </div>
+        <div v-if="clockedIn && clockedIn.clock_out == null"
+             @click="showClockinModal = true"
+             class="relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+          <Card class="bg-green-200 h-32 lg:h-40 flex justify-center items-center">
+            <p class="text-gray-700 absolute top-1 left-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </p>
+            <div class="text-center">
+              <p>Clocked in at</p>
+              <p class="text-3xl font-semibold uppercase">{{ clockedIn.clock_in }}</p>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
-    <ClockInModal v-model="showClockinModal" />
+    <ClockInModal v-model="showClockinModal" :enable-clock-in-button="enableClockInButton" :clocked-in="clockedIn" />
   </div>
 </template>
 
@@ -56,6 +73,10 @@ export default {
     siteCoordinates: {
       type: Object,
       default: null
+    },
+    clockedIn: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -71,7 +92,8 @@ export default {
         lng: null
       },
       userCoordinatesLoaded: false,
-      showClockinModal: false
+      showClockinModal: false,
+      enableClockInButton: false
     };
   },
   methods: {
@@ -104,7 +126,7 @@ export default {
     userCoordinatesLoaded() {
       let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
       if (dis <= this.siteCoordinates.radius) {
-        this.showClockinModal = true;
+        this.enableClockInButton = true;
       }
     }
   }
@@ -112,7 +134,8 @@ export default {
   computed: {}
   ,
   mounted() {
-    if (this.$page.props.authUserRole === 'TEACHER') {
+    if (this.$page.props.authUserRole === 'TEACHER' && this.clockedIn == null) {
+      this.showClockinModal = true;
       navigator.geolocation.getCurrentPosition(
         position => {
           this.userCoordinates.lat = position.coords.latitude;

@@ -19,9 +19,20 @@
           <div
             class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <div>
-              <div class="text-center">
+              <div v-if="clockedIn" class="text-center">
                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                   Clock in
+                </DialogTitle>
+                <div class="mt-2 text-3xl text-green-500">
+                  <span class="uppercase">{{ clockedIn.clock_in }}</span>
+                </div>
+              </div>
+              <div class="text-center mt-2">
+                <DialogTitle v-if="!clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Clock in
+                </DialogTitle>
+                <DialogTitle v-if="clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Clock out
                 </DialogTitle>
                 <div class="mt-2 text-3xl font-gray-700">
                   {{ form.time }}
@@ -30,14 +41,31 @@
             </div>
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
               <button type="button"
-                      class="button button-secondary button-small"
+                      class="button button-secondary"
                       @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
                 Not now
               </button>
-              <button type="button"
-                      class="button button-primary button-small"
-                      @click="submit()">
+              <button v-if="clockedIn == null && enableClockInButton" type="button" class="button button-primary"
+                      @click="submitClockIn()">
                 Clock in
+              </button>
+              <button v-if="clockedIn == null && !enableClockInButton" type="button"
+                      class="button bg-yellow-500 text-white opacity-50 cursor-not-allowed"
+                      disabled>
+                <div class="flex">
+                  <svg class="animate-spin mr-2 ml-2 h-5 w-5 text-white "
+                       xmlns="http://www.w3.org/2000/svg" fill="none"
+                       viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Detecting location</span>
+                </div>
+              </button>
+              <button v-if="clockedIn != null" type="button" class="button button-primary"
+                      @click="submitClockOut()">
+                Clock out
               </button>
             </div>
           </div>
@@ -75,6 +103,14 @@ export default {
     schoolId: {
       type: Number,
       require: true
+    },
+    enableClockInButton: {
+      type: Boolean,
+      default: false
+    },
+    clockedIn: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -87,11 +123,17 @@ export default {
   },
   emits: ['update:modelValue'],
   methods: {
-    submit() {
-      this.form.post(route('dashboard.clockins.store'), {
+    submitClockIn() {
+      this.form.post(route('dashboard.clock_ins.in'), {
         onSuccess: () => this.$emit('update:modelValue', false),
       });
     },
+    submitClockOut() {
+      this.form.post(route('dashboard.clock_ins.out'), {
+        onSuccess: () => this.$emit('update:modelValue', false),
+      });
+    },
+
     close() {
       //this.$emit('update:modelValue', false);
     }
