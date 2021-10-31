@@ -3,9 +3,12 @@
     <div class="content m-1">
       <Breadcrumbs :breadcrumbs="breadcrumbs" :back="route('dashboard.schools.index')" />
       <PageHeading>
-        {{ title }}
+        Clock In Management
         <template #actions>
-
+          <button class="button button-primary opacity-50 cursor-not-allowed" disabled>
+            <ClockIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+            Clock in
+          </button>
         </template>
       </PageHeading>
       <div class="md:grid md:grid-cols-3 md:gap-2">
@@ -13,13 +16,11 @@
           v-model="form.filters.teacher_id"
           :options="allTeachers"
           :is-show-line="false"
-          label="teacher"
         />
         <SearchSelectInput
           :options="monthOptions"
           v-model="form.filters.month"
           :is-show-line="false"
-          label="month"
         />
         <div class="flex flex items-end">
           <button type="button" @click="clear()" class="button button-primary button-small mb-1 ml-1">Clear</button>
@@ -70,7 +71,7 @@ import PageHeading from "@/Components/PageHeading";
 import TableDisplayContainer from "@/Components/TableDisplayContainer";
 import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
-import {UserAddIcon, AcademicCapIcon} from "@heroicons/vue/solid";
+import {UserAddIcon, AcademicCapIcon, ClockIcon} from "@heroicons/vue/solid";
 import {Link} from "@inertiajs/inertia-vue3";
 import SearchSelectInput from "@/Components/SearchSelectInput";
 import {useForm} from '@inertiajs/inertia-vue3';
@@ -88,6 +89,7 @@ export default {
     UserAddIcon,
     AcademicCapIcon,
     Link,
+    ClockIcon,
     SearchSelectInput,
   },
   props: {

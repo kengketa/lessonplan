@@ -9,7 +9,7 @@
     <label
       v-if="label"
       :for="id"
-      class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+      class="block text-sm font-medium text-gray-700"
     >{{ label }}</label>
     <div class="mt-1 sm:mt-0 sm:col-span-2">
       <div class="relative rounded-md shadow-sm max-w-lg">

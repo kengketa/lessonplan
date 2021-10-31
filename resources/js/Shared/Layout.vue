@@ -265,7 +265,8 @@ import {
   ChipIcon,
   FireIcon,
   QrcodeIcon,
-  AcademicCapIcon
+  AcademicCapIcon,
+  ClockIcon,
 } from "@heroicons/vue/outline";
 import {Link} from "@inertiajs/inertia-vue3";
 import {SearchIcon} from "@heroicons/vue/solid";
@@ -295,6 +296,12 @@ const navs = {
     href: route("dashboard.schools.index"),
     icon: AcademicCapIcon,
     routeGroup: "dashboard.schools.*",
+  },
+  clockIns: {
+    name: "Clock-In",
+    href: route("dashboard.clock_ins.index"),
+    icon: ClockIcon,
+    routeGroup: "dashboard.clock_ins.*",
   },
 
   //roles: {
@@ -351,10 +358,12 @@ export default {
         nav.push(navs.dashboard);
         nav.push(navs.users);
         nav.push(navs.schools);
+        nav.push(navs.clockIns);
       } else if (user.roles[0].id == roles.SUPER_ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);
         nav.push(navs.schools);
+        nav.push(navs.clockIns);
       } else {
         //push nothing
       }
