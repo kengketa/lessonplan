@@ -21,8 +21,13 @@ class ClockInController extends Controller
         $filters = $request['filters'];
         $monthOptions = getClockInMonthList();
         if (!$filters) {
+            $today = Carbon::today();
+            $defaultMonthOption = [
+                'id' => $today->format('Y-m'),
+                'name' => $today->format('F - Y')
+            ];
             $filters['teacher_id'] = null;
-            $filters['month'] = $monthOptions[0]['id'];
+            $filters['month'] = count($monthOptions) > 0 ? $monthOptions[0]['id'] : $defaultMonthOption['id'];
         }
         $clokIns = ClockIn::filter($filters)->orderBy('date')->paginate(15);
         $clokInData = fractal($clokIns, new ClockInTransformer())->toArray();
