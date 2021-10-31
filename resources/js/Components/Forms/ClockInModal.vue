@@ -21,7 +21,7 @@
             <div>
               <div v-if="clockedIn" class="text-center">
                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                  Clock in
+                  Clocked in
                 </DialogTitle>
                 <div class="mt-2 text-3xl text-green-500">
                   <span class="uppercase">{{ clockedIn.clock_in }}</span>
@@ -63,7 +63,7 @@
                   <span>Detecting location</span>
                 </div>
               </button>
-              <button v-if="clockedIn != null" type="button" class="button button-primary"
+              <button v-if="clockedIn != null" type="button" class="button bg-red-500 text-white hover:bg-red-600"
                       @click="submitClockOut()">
                 Clock out
               </button>
