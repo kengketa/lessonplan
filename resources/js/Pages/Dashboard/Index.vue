@@ -145,7 +145,7 @@ export default {
   computed: {}
   ,
   mounted() {
-    if (this.$page.props.authUserRole === 'TEACHER' && this.clockedIn == null) {
+    if (this.$page.props.authUserRole === 'TEACHER' && this.siteCoordinates != null && this.clockedIn == null) {
       this.showClockinModal = true;
       navigator.geolocation.getCurrentPosition(
         position => {

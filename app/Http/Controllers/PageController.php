@@ -22,7 +22,7 @@ class PageController extends Controller
         $user = Auth::user();
         $siteCoordinates = null;
         $clockedInData = null;
-        if ($user->present()->role === Role::ROLE_TEACHER) {
+        if ($user->present()->role === Role::ROLE_TEACHER && $user->school->count() > 0) {
             $siteCoordinates['lat'] = $user->school[0]->lat;
             $siteCoordinates['lng'] = $user->school[0]->lng;
             $siteCoordinates['radius'] = $user->school[0]->radius;
