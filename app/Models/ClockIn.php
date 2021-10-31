@@ -17,11 +17,14 @@ class ClockIn extends Model
         if (count($filters) == 0) {
             return;
         }
-        if ($filters['school_id']) {
-            $query->where('school_id', $filters['school_id']);
-        }
-        if ($filters['teacher_id']) {
+        if (isset($filters['teacher_id'])) {
             $query->where('teacher_id', $filters['teacher_id']);
+        }
+        if (isset($filters['month'])) {
+            $arr = explode('-', $filters['month']);
+            $year = $arr[0];
+            $month = $arr[1];
+            $query->whereYear('date', $year)->whereMonth('date', $month);
         }
     }
 

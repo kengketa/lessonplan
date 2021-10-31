@@ -130,6 +130,9 @@ export default {
   watch: {
     userCoordinatesLoaded() {
       let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
+      console.log('-----------------');
+      console.log(parseInt(dis) + '/' + this.siteCoordinates.radius);
+      console.log('-----------------');
       if (dis <= this.siteCoordinates.radius) {
         this.enableClockInButton = true;
       }

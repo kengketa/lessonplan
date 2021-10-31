@@ -138,8 +138,8 @@ export default defineComponent({
       default: 'Select an option',
     },
     modelValue: {
-      type: Number,
-      default: 0,
+      type: [Number, String],
+      default: null,
     },
     type: {
       type: String,

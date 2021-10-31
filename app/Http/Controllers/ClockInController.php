@@ -19,20 +19,31 @@ class ClockInController extends Controller
     public function index(Request $request)
     {
         $filters = $request['filters'];
+        $monthOptions = getClockInMonthList();
         if (!$filters) {
-            $filters['school_id'] = null;
             $filters['teacher_id'] = null;
+            $filters['month'] = $monthOptions[0]['id'];
         }
-        dd(allMonths());
         $clokIns = ClockIn::filter($filters)->orderBy('date')->paginate(15);
         $clokInData = fractal($clokIns, new ClockInTransformer())->toArray();
-        $allSchools = School::all();
-        $allschoolData = fractal($allSchools, new SchoolTransformer())->toArray()['data'];
+        $allTeachers = User::role(ROLE::ROLE_TEACHER)->get();
+        $allTeacherData = fractal($allTeachers, new UserTransformer())->toArray()['data'];
+
+        if ($filters) {
+            foreach ($clokInData['meta']['pagination']['links'] as $link) {
+                if (isset($link->url)) {
+                    $link->url = $link->url.
+                        '&filters[teacher_id]='.$filters['teacher_id'].
+                        '&filters[month]='.$filters['month'];
+                }
+            }
+        }
         return Inertia::render(
             'Dashboard/ClockIns/Index',
             [
                 'filters' => $filters,
-                'allSchools' => $allschoolData,
+                'allTeachers' => $allTeacherData,
+                'monthOptions' => $monthOptions,
                 'clockIns' => $clokInData,
             ]);
     }

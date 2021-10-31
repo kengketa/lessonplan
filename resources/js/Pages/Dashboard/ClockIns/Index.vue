@@ -10,22 +10,20 @@
       </PageHeading>
       <div class="md:grid md:grid-cols-3 md:gap-2">
         <SearchSelectInput
-          v-model="form.filters.school_id"
-          :options="allSchools"
-          :is-show-line="false"
-          label="school"
-        />
-        <SearchSelectInput
           v-model="form.filters.teacher_id"
-          :options="teachersInSchool"
+          :options="allTeachers"
           :is-show-line="false"
           label="teacher"
         />
         <SearchSelectInput
-          :options="['asd','asds']"
+          :options="monthOptions"
+          v-model="form.filters.month"
           :is-show-line="false"
           label="month"
         />
+        <div class="flex flex items-end">
+          <button type="button" @click="clear()" class="button button-primary button-small mb-1 ml-1">Clear</button>
+        </div>
       </div>
       <TableDisplayContainer>
         <template #header>
@@ -96,17 +94,21 @@ export default {
     clockIns: Object,
     filters: Object,
     title: String,
-    allSchools: {
+    allTeachers: {
       type: Object,
       required: true
     },
+    monthOptions: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       form: useForm({
         filters: {
-          school_id: this.filters.school_id != null ? parseInt(this.filters.school_id) : null,
           teacher_id: this.filters.teacher_id != null ? parseInt(this.filters.teacher_id) : null,
+          month: this.filters.month
         }
       }),
       breadcrumbs: [{name: 'Schools', href: "#"}],
@@ -114,8 +116,8 @@ export default {
     };
   },
   methods: {
-    clearForm: function () {
-      this.form = mapValues(this.form, () => "");
+    clear() {
+      this.$inertia.visit(route('dashboard.clock_ins.index'))
     },
     debounceSearch() {
       clearTimeout(this.debounce);
@@ -137,20 +139,7 @@ export default {
       deep: true,
     },
   },
-  computed: {
-    teachersInSchool() {
-      if (this.form.filters.school_id == null) {
-        let emptyTeachers = [
-          {id: 0, name: "please select school"}
-        ];
-        return emptyTeachers;
-      }
-      let slectedSchool = this.allSchools.find(school => {
-        return school.id == this.form.filters.school_id
-      });
-      return slectedSchool.teachers;
-    }
-  }
+  computed: {}
 };
 </script>
 
