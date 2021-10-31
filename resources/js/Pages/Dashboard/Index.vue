@@ -45,7 +45,11 @@
         </div>
       </div>
     </div>
-    <ClockInModal v-model="showClockinModal" :enable-clock-in-button="enableClockInButton" :clocked-in="clockedIn" />
+    <ClockInModal v-model="showClockinModal"
+                  :enable-clock-in-button="enableClockInButton"
+                  :clocked-in="clockedIn"
+                  :out-distance-message="outDistanceMessage"
+    />
   </div>
 </template>
 
@@ -93,7 +97,8 @@ export default {
       },
       userCoordinatesLoaded: false,
       showClockinModal: false,
-      enableClockInButton: false
+      enableClockInButton: false,
+      outDistanceMessage: null
     };
   },
   methods: {
@@ -127,6 +132,9 @@ export default {
       let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
       if (dis <= this.siteCoordinates.radius) {
         this.enableClockInButton = true;
+      }
+      if (dis > this.siteCoordinates.radius) {
+        this.outDistanceMessage = 'Out of the school range'
       }
     }
   }
