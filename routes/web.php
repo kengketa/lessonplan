@@ -109,6 +109,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ClockInController::class, "in"])->name("dashboard.clock_ins.in");
         Route::post("clock-out",
             [ClockInController::class, "out"])->name("dashboard.clock_ins.out");
+        Route::get("clock-ins",
+            [ClockInController::class, "index"])->name("dashboard.clock_ins.index");
 
     });
 
