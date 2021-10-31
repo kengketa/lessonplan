@@ -20,28 +20,28 @@
             class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <div>
               <div v-if="clockedIn" class="text-center">
-                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                <div as="h3" class="text-lg leading-6 font-medium text-gray-900">
                   Clocked in
-                </DialogTitle>
+                </div>
                 <div class="mt-2 text-3xl text-green-500">
                   <span class="uppercase">{{ clockedIn.clock_in }}</span>
                 </div>
               </div>
               <div class="text-center mt-2">
-                <DialogTitle v-if="!clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                <div v-if="!clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
                   Clock in
-                </DialogTitle>
-                <DialogTitle v-if="clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                </div>
+                <div v-if="clockedIn" as="h3" class="text-lg leading-6 font-medium text-gray-900">
                   Clock out
-                </DialogTitle>
-                <div class="mt-2 text-3xl font-gray-700">
-                  {{ form.time }}
+                </div>
+                <div class="mt-2 text-4xl font-gray-700 mx-10 xs:mx-20">
+                  <span>{{ form.time }}</span>
                 </div>
               </div>
             </div>
-            <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+            <div class="mt-5 w-full flex flex-col md:flex-row md:justify-between">
               <button type="button"
-                      class="button button-secondary"
+                      class="button button-secondary mb-2 md:mb-0"
                       @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
                 Not now
               </button>
