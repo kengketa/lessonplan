@@ -92,4 +92,9 @@ class User extends Authenticatable
             $query->role($filters['role']);
         }
     }
+
+    public function school()
+    {
+        return $this->belongsToMany(School::class, 'school_teachers', 'teacher_id', 'school_id');
+    }
 }

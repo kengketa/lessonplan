@@ -3,7 +3,7 @@
     <div class="content m-1">
       <Breadcrumbs :breadcrumbs="breadcrumbs" :back="route('dashboard.schools.index')" />
       <PageHeading>
-        {{ title }}
+        School Management
         <template #actions>
           <Link
             v-if="$page.props.authUserRole==='SUPER_ADMIN' || $page.props.authUserRole==='ADMIN'"
