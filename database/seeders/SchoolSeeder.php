@@ -23,13 +23,19 @@ class SchoolSeeder extends Seeder
                 'name' => 'โรงเรียนเทศบาลตำบลงิม (คือเวียงจำ)',
                 'subjects' => [
                     ['id' => 1, 'name' => 'Phonics'],
-                ]
+                ],
+                'lat' => 19.268215614863088,
+                'lng' => 100.36667601784593,
+                'radius' => 100
             ],
             [
                 'name' => 'โรงเรียนอนุบาล เทศบาลตำบลจุน',
                 'subjects' => [
                     ['id' => 1, 'name' => 'Phonics'],
-                ]
+                ],
+                'lat' => 19.322821504714376,
+                'lng' => 100.14763174247288,
+                'radius' => 50
             ],
             [
                 'name' => 'Tessaban 5',
@@ -39,25 +45,37 @@ class SchoolSeeder extends Seeder
                     ['id' => 4, 'name' => 'Sci'],
                     ['id' => 5, 'name' => 'Arts'],
                     ['id' => 6, 'name' => 'Pe'],
-                ]
+                ],
+                'lat' => 19.17920454012667,
+                'lng' => 99.89263306186193,
+                'radius' => 50
             ],
             [
                 'name' => 'Tessaban 4',
                 'subjects' => [
                     ['id' => 1, 'name' => 'Phonics'],
-                ]
+                ],
+                'lat' => 19.144656507192565,
+                'lng' => 99.90755073014793,
+                'radius' => 50
             ],
             [
                 'name' => 'Fakkwan wittayakhom',
                 'subjects' => [
                     ['id' => 1, 'name' => 'English conversation'],
-                ]
+                ],
+                'lat' => 19.131614186054755,
+                'lng' => 99.8228504357287,
+                'radius' => 100
             ],
         ];
         foreach ($schools as $school) {
             School::factory()->create([
                 'name' => $school['name'],
-                'subjects' => $school['subjects']
+                'subjects' => $school['subjects'],
+                'lat' => $school['lat'],
+                'lng' => $school['lng'],
+                'radius' => $school['radius']
             ]);
         }
         $schools = School::all();

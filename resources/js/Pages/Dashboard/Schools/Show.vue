@@ -353,10 +353,7 @@ export default {
   },
   data() {
     return {
-      breadcrumbs: [
-        {name: 'Schools', href: route('dashboard.schools.index')},
-        {name: this.school.name, href: '#'},
-      ],
+      breadcrumbs: [],
       columns: ['teacher', 'grade', 'subject', 'week', 'lesson', 'teaching date', 'topic'],
       deleteForm: useForm({}),
       subjectForm: useForm({
@@ -392,6 +389,16 @@ export default {
   mounted() {
     if (this.$page.props.authUserRole === 'TEACHER' && this.filterForm.filters.teacher === 0) {
       this.filterForm.filters.teacher = this.$page.props.authUser.id;
+    }
+    if (this.$page.props.authUserRole === 'TEACHER') {
+      let breadcrumb = {name: this.school.name, href: '#'};
+      this.breadcrumbs.push(breadcrumb);
+    }
+    if (this.$page.props.authUserRole === 'ADMIN' || this.$page.props.authUserRole === 'SUPER_ADMIN') {
+      let breadcrumb = {name: 'Schools', href: route('dashboard.schools.index')};
+      this.breadcrumbs.push(breadcrumb);
+      breadcrumb = {name: this.school.name, href: '#'};
+      this.breadcrumbs.push(breadcrumb);
     }
   },
   computed: {},

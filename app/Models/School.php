@@ -26,7 +26,10 @@ class School extends Model
     protected $fillable = [
         'name',
         'address',
-        'subjects'
+        'subjects',
+        'lat',
+        'lng',
+        'radius'
     ];
 
     /**

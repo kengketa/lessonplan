@@ -6,7 +6,7 @@
         <div class="relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg"
              v-for="school in schools" :key="school.id">
           <Card @click="visit(school)"
-                class="bg-blue-200">
+                class="bg-blue-200 h-32 lg:h-40 flex justify-center items-center">
             <p class="text-gray-700 absolute top-1 left-1">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                    stroke="currentColor">
@@ -26,9 +26,30 @@
             {{ school.un_approved_reports_count }}
           </p>
         </div>
-
+        <div v-if="clockedIn && clockedIn.clock_out == null"
+             @click="showClockinModal = true"
+             class="relative cursor-pointer transition transform ease-in-out hover:scale-105 hover:shadow-lg">
+          <Card class="bg-green-200 h-32 lg:h-40 flex justify-center items-center">
+            <p class="text-gray-700 absolute top-1 left-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </p>
+            <div class="text-center">
+              <p>Clocked in at</p>
+              <p class="text-3xl font-semibold uppercase">{{ clockedIn.clock_in }}</p>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
+    <ClockInModal v-model="showClockinModal"
+                  :enable-clock-in-button="enableClockInButton"
+                  :clocked-in="clockedIn"
+                  :out-distance-message="outDistanceMessage"
+    />
   </div>
 </template>
 
@@ -38,11 +59,13 @@ import PageHeading from "@/Components/PageHeading";
 import {Link} from "@inertiajs/inertia-vue3";
 import Breadcrumbs from "@/Components/Breadcrumbs";
 import Card from "../../Components/Card";
+import ClockInModal from "../../Components/Forms/ClockInModal";
 
 export default {
   name: "Dashboard",
   layout: Layout,
   components: {
+    ClockInModal,
     Card,
     Breadcrumbs
   },
@@ -50,20 +73,94 @@ export default {
     schools: {
       type: Object,
       required: true
+    },
+    siteCoordinates: {
+      type: Object,
+      default: null
+    },
+    clockedIn: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {
       breadcrumbs: [],
+      geoLocationOptions: {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      },
+      userCoordinates: {
+        lat: null,
+        lng: null
+      },
+      userCoordinatesLoaded: false,
+      showClockinModal: false,
+      enableClockInButton: false,
+      outDistanceMessage: null
     };
   },
   methods: {
     visit(school) {
       this.$inertia.visit(route('dashboard.schools.show', school.id))
+    },
+    haversineDistance(pos1, pos2) {
+      const R = 3958.8 // Radius of the Earth in miles
+      const rlat1 = pos1.lat * (Math.PI / 180) // Convert degrees to radians
+      const rlat2 = pos2.lat * (Math.PI / 180) // Convert degrees to radians
+      const difflat = rlat2 - rlat1 // Radian difference (latitudes)
+      const difflon = (pos2.lng - pos1.lng) * (Math.PI / 180) // Radian difference (longitudes)
+      const distance =
+        2 *
+        R *
+        Math.asin(
+          Math.sqrt(
+            Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+            Math.cos(rlat1) *
+            Math.cos(rlat2) *
+            Math.sin(difflon / 2) *
+            Math.sin(difflon / 2)
+          )
+        )
+      let distanceInMeter = distance * 1609.34; // convert mile to meter
+      return distanceInMeter;
     }
   },
-  watch: {},
+  watch: {
+    userCoordinatesLoaded() {
+      let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
+      console.log('-----------------');
+      console.log(parseInt(dis) + '/' + this.siteCoordinates.radius);
+      console.log('-----------------');
+      if (dis <= this.siteCoordinates.radius) {
+        this.enableClockInButton = true;
+      }
+      if (dis > this.siteCoordinates.radius) {
+        this.outDistanceMessage = 'Out of the school range'
+      }
+    }
+  }
+  ,
   computed: {}
-};
+  ,
+  mounted() {
+    if (this.$page.props.authUserRole === 'TEACHER' && this.clockedIn == null) {
+      this.showClockinModal = true;
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          this.userCoordinates.lat = position.coords.latitude;
+          this.userCoordinates.lng = position.coords.longitude;
+          this.userCoordinatesLoaded = true;
+        },
+        error => {
+
+        },
+        this.geoLocationOptions
+      );
+    }
+  }
+}
+;
 </script>
 

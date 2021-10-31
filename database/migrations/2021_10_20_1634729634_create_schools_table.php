@@ -15,6 +15,9 @@ class CreateSchoolsTable extends Migration
             $table->string("name");
             $table->text("address")->nullable();
             $table->json('subjects')->nullable();
+            $table->unsignedDecimal('lat', 11, 8)->nullable();
+            $table->unsignedDecimal('lng', 11, 8)->nullable();
+            $table->unsignedInteger('radius')->nullable();
             $table->timestamps();
         });
     }

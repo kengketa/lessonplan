@@ -11,15 +11,12 @@ class UserPresenter extends BasePresenter
      */
     protected $model;
 
-    public function role(): string
+    public function role(): string|null
     {
         $roles = $this->model->roles;
         if (count($roles) > 0) {
-            return implode(', ', $roles->pluck('name')->map(function ($item) {
-                return ucfirst(snakeCaseToText(strtolower($item)));
-            })->all());
+            return $roles[0]->name;
         }
-
-        return '';
+        return null;
     }
 }

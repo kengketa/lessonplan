@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\DailyReport;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Models\ClockIn;
+
 function snakeCaseToText($text)
 {
     return implode(' ', explode('_', $text));
@@ -23,6 +28,32 @@ function getYears()
         ['id' => 20230, 'name' => '2030'],
     ];
     return $years;
+}
+
+function getClockInMonthList()
+{
+    $monthOptions = [];
+    $clockIns = ClockIn::count();
+    if ($clockIns == 0) {
+        return $monthOptions;
+    }
+
+    $clockInGroupByMonthYear = DB::table('clock_ins')
+        ->select(
+            DB::raw('count(id) as total'),
+            DB::raw('year(date) as year'),
+            DB::raw('month(date) as month'))
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'desc')
+        ->orderBy('month', 'desc')
+        ->get();
+
+
+    foreach ($clockInGroupByMonthYear as $index => $clockIn) {
+        $monthOptions[$index]['id'] = Carbon::parse($clockIn->year.'-'.$clockIn->month.'-'.'1')->format('Y-m');
+        $monthOptions[$index]['name'] = Carbon::parse($clockIn->year.'-'.$clockIn->month.'-'.'1')->format('F - Y');
+    }
+    return $monthOptions;
 }
 
 function getSemesters()
