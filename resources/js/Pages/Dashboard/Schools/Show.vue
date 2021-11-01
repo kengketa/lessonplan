@@ -30,7 +30,7 @@
     />
     <Breadcrumbs
       :breadcrumbs="breadcrumbs"
-      :back="route('dashboard.schools.index')"
+      :back="route('dashboard')"
     />
     <PageHeading>
     <span class="hidden lg:inline">
