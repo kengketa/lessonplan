@@ -15,11 +15,12 @@ class CreateOrUpdateSchoolRequest extends FormRequest
     public function rules()
     {
 
-        $rules=[
-
-            'name'	=>	['required', 'string', ],
-			'address'	=>	['nullable', 'string', ],
-			
+        $rules = [
+            'name' => ['required', 'string'],
+            'address' => ['nullable', 'string'],
+            'lat' => ['nullable', 'numeric'],
+            'lng' => ['nullable', 'numeric'],
+            'radius' => ['nullable', 'numeric'],
         ];
 
         return $rules;

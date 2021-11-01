@@ -1,100 +1,121 @@
 <template>
-    <Card>
-        <Form
-            form-class="space-y-8 divide-y divide-gray-200"
-            :submit-event="submit"
-        >
-            <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-                <div class="space-y-6 sm:space-y-5">
-                    <div>
-                        <h3 v-if="school.id == null" class="text-lg leading-6 text-gray-900">
-                            Create new School
-                        </h3>
-                        <h3 v-else class="text-lg leading-6 text-gray-900">
-                            Update School
-                        </h3>
-                    </div>
-                    <div class="space-y-6 sm:space-y-5">
-                        <TextInput
-v-model="form.name"
-:errors="form.errors.name"
-label="Name"
-placeholder="name"
-/>
-<TextInput
-v-model="form.address"
-:errors="form.errors.address"
-label="Address"
-placeholder="address"
-/>
-
-                    </div>
-                </div>
-            </div>
-        </Form>
-    </Card>
+  <Card>
+    <Form
+      form-class="space-y-8 divide-y divide-gray-200"
+      :submit-event="submit"
+    >
+      <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+        <div class="space-y-6 sm:space-y-5">
+          <div>
+            <h3 v-if="school.id == null" class="text-lg leading-6 text-gray-900">
+              Create new School
+            </h3>
+            <h3 v-else class="text-lg leading-6 text-gray-900">
+              Update School
+            </h3>
+          </div>
+          <div class="space-y-6 sm:space-y-5">
+            <TextInput
+              v-model="form.name"
+              :errors="form.errors.name"
+              label="Name"
+              placeholder="name"
+            />
+            <TextInput
+              v-model="form.address"
+              :errors="form.errors.address"
+              label="Address"
+              placeholder="address"
+            />
+            <TextInput
+              v-model="form.lat"
+              :errors="form.errors.lat"
+              label="Latitude"
+              placeholder="Latitude"
+            />
+            <TextInput
+              v-model="form.lng"
+              :errors="form.errors.lng"
+              label="Longitude"
+              placeholder="Longitude"
+            />
+            <TextInput
+              v-model="form.radius"
+              :errors="form.errors.radius"
+              type="number"
+              label="Radius"
+              placeholder="Radius"
+            />
+          </div>
+        </div>
+      </div>
+    </Form>
+  </Card>
 </template>
 
 
 <script>
-    import {useForm} from '@inertiajs/inertia-vue3';
-    import Card from '@/Components/Card';
-    import TextInput from '@/Components/TextInput';
-    import TextareaInput from '@/Components/TextareaInput';
-    import {PlusSmIcon, TrashIcon} from '@heroicons/vue/solid';
-    import Form from '@/Components/Form';
-    export default {
-        name: 'SchoolForm',
-        components: {
-            Card,
-            TextInput,
-            TextareaInput,
-            PlusSmIcon,
-            TrashIcon,
-            Form,
-        },
-        props: {
-            type: {
-                default: 'create',
-                type: String,
-            },
-            school: Object,
-            errors: Object,
-        },
-        data() {
-            return {
-                form: useForm({
-                    id: this.school.id,
-                    name: this.school.name,
-address: this.school.address,
+import {useForm} from '@inertiajs/inertia-vue3';
+import Card from '@/Components/Card';
+import TextInput from '@/Components/TextInput';
+import TextareaInput from '@/Components/TextareaInput';
+import {PlusSmIcon, TrashIcon} from '@heroicons/vue/solid';
+import Form from '@/Components/Form';
 
-                }),
-            };
-        },
-        mounted() {
-
-        },
-        methods: {
-            submit() {
-                if (this.type === 'create') {
-                    this.form.post(route('dashboard.schools.store'));
-                } else {
-                    this.form.put(route('dashboard.schools.update', this.school.id));
-                }
-            },
-            makeid(length) {
-                let result = '';
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-                const charactersLength = characters.length;
-                for (let i = 0; i < length; i++) {
-                    result += characters.charAt(
-                        Math.floor(Math.random() * charactersLength)
-                    );
-                }
-                return result;
-            },
-        },
+export default {
+  name: 'SchoolForm',
+  components: {
+    Card,
+    TextInput,
+    TextareaInput,
+    PlusSmIcon,
+    TrashIcon,
+    Form,
+  },
+  props: {
+    type: {
+      default: 'create',
+      type: String,
+    },
+    school: Object,
+    errors: Object,
+  },
+  data() {
+    return {
+      form: useForm({
+        id: this.school.id,
+        name: this.school.name,
+        address: this.school.address,
+        lat: this.school.lat,
+        lng: this.school.lng,
+        radius: this.school.radius,
+      }),
     };
+  },
+  mounted() {
+
+  },
+  methods: {
+    submit() {
+      if (this.type === 'create') {
+        this.form.post(route('dashboard.schools.store'));
+      } else {
+        this.form.put(route('dashboard.schools.update', this.school.id));
+      }
+    },
+    makeid(length) {
+      let result = '';
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
+  },
+};
 </script>
 
 <style scoped>
