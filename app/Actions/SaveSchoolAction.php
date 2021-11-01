@@ -13,7 +13,7 @@ class SaveSchoolAction
     {
         $this->school = $school;
 
-        if (! empty($this->school->id)) {
+        if (!empty($this->school->id)) {
             $this->school->update($data);
             return $this->school;
         }
