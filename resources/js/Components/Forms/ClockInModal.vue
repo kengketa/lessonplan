@@ -17,7 +17,7 @@
                          leave-from="opacity-100 translate-y-0 sm:scale-100"
                          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
           <div
-            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <div>
               <div v-if="clockedIn" class="text-center">
                 <div as="h3" class="text-lg leading-6 font-medium text-gray-900">
@@ -42,7 +42,7 @@
             <div class="mt-5 w-full flex flex-col md:flex-row md:justify-between">
               <button type="button"
                       class="button button-secondary mb-2 md:mb-0"
-                      @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
+                      @click="close()" ref="cancelButtonRef">
                 Not now
               </button>
               <button v-if="clockedIn == null && enableClockInButton" type="button" class="button button-primary"
@@ -69,6 +69,9 @@
                       @click="submitClockOut()">
                 Clock out
               </button>
+            </div>
+            <div class="absolute top-2 right-2">
+              <span class="text-2xs text-gray-500">{{ displayCurrentPosition }}</span>
             </div>
           </div>
         </TransitionChild>
@@ -102,22 +105,14 @@ export default {
       type: Boolean,
       default: false
     },
-    schoolId: {
-      type: Number,
-      require: true
-    },
-    enableClockInButton: {
-      type: Boolean,
-      default: false
-    },
     clockedIn: {
       type: Object,
       default: null
     },
-    outDistanceMessage: {
-      type: String,
+    siteCoordinates: {
+      type: Object,
       default: null
-    }
+    },
   },
   data() {
     return {
@@ -125,10 +120,58 @@ export default {
         time: null
       }),
       interval: null,
+      geoLocationOptions: {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      },
+      userCoordinates: {
+        lat: null,
+        lng: null
+      },
+      outDistanceMessage: null,
+      enableClockInButton: false,
+      displayCurrentPosition: "",
+      geolocationId: null
     };
   },
   emits: ['update:modelValue'],
+  mounted() {
+    this.reloadLocation()
+  },
+  watch: {
+    userCoordinates: {
+      handler: function () {
+        let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
+        this.displayCurrentPosition = parseInt(dis) + '/' + this.siteCoordinates.radius
+        console.log('-----------------');
+        console.log(this.displayCurrentPosition);
+        console.log('-----------------');
+        if (dis <= this.siteCoordinates.radius) {
+          this.enableClockInButton = true;
+          this.outDistanceMessage = null;
+        }
+        if (dis > this.siteCoordinates.radius) {
+          this.outDistanceMessage = 'Out of the school range'
+        }
+      },
+      deep: true,
+    }
+  },
   methods: {
+    reloadLocation() {
+      this.geolocationId = navigator.geolocation.watchPosition(
+        position => {
+          this.userCoordinates.lat = position.coords.latitude;
+          this.userCoordinates.lng = position.coords.longitude;
+          this.detectingLocation = false;
+        },
+        error => {
+
+        },
+        this.geoLocationOptions
+      );
+    },
     submitClockIn() {
       this.form.post(route('dashboard.clock_ins.in'), {
         onSuccess: () => this.$emit('update:modelValue', false),
@@ -141,12 +184,34 @@ export default {
     },
 
     close() {
-      //this.$emit('update:modelValue', false);
+      
+      this.$emit('update:modelValue', false);
+    },
+    haversineDistance(pos1, pos2) {
+      const R = 3958.8 // Radius of the Earth in miles
+      const rlat1 = pos1.lat * (Math.PI / 180) // Convert degrees to radians
+      const rlat2 = pos2.lat * (Math.PI / 180) // Convert degrees to radians
+      const difflat = rlat2 - rlat1 // Radian difference (latitudes)
+      const difflon = (pos2.lng - pos1.lng) * (Math.PI / 180) // Radian difference (longitudes)
+      const distance =
+        2 *
+        R *
+        Math.asin(
+          Math.sqrt(
+            Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+            Math.cos(rlat1) *
+            Math.cos(rlat2) *
+            Math.sin(difflon / 2) *
+            Math.sin(difflon / 2)
+          )
+        )
+      let distanceInMeter = distance * 1609.34; // convert mile to meter
+      return distanceInMeter;
     }
   },
   beforeDestroy() {
     // prevent memory leak
-    clearInterval(this.interval)
+    clearInterval(this.interval);
   },
   computed: {},
   created() {

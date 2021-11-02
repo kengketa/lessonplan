@@ -45,11 +45,7 @@
         </div>
       </div>
     </div>
-    <ClockInModal v-model="showClockinModal"
-                  :enable-clock-in-button="enableClockInButton"
-                  :clocked-in="clockedIn"
-                  :out-distance-message="outDistanceMessage"
-    />
+    <ClockInModal v-model="showClockinModal" :site-coordinates="siteCoordinates" :clocked-in="clockedIn" />
   </div>
 </template>
 
@@ -86,78 +82,22 @@ export default {
   data() {
     return {
       breadcrumbs: [],
-      geoLocationOptions: {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      },
-      userCoordinates: {
-        lat: null,
-        lng: null
-      },
-      userCoordinatesLoaded: false,
-      showClockinModal: false,
-      enableClockInButton: false,
-      outDistanceMessage: null
+      showClockinModal: false
     };
   },
   methods: {
     visit(school) {
       this.$inertia.visit(route('dashboard.schools.show', school.id))
     },
-    haversineDistance(pos1, pos2) {
-      const R = 3958.8 // Radius of the Earth in miles
-      const rlat1 = pos1.lat * (Math.PI / 180) // Convert degrees to radians
-      const rlat2 = pos2.lat * (Math.PI / 180) // Convert degrees to radians
-      const difflat = rlat2 - rlat1 // Radian difference (latitudes)
-      const difflon = (pos2.lng - pos1.lng) * (Math.PI / 180) // Radian difference (longitudes)
-      const distance =
-        2 *
-        R *
-        Math.asin(
-          Math.sqrt(
-            Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-            Math.cos(rlat1) *
-            Math.cos(rlat2) *
-            Math.sin(difflon / 2) *
-            Math.sin(difflon / 2)
-          )
-        )
-      let distanceInMeter = distance * 1609.34; // convert mile to meter
-      return distanceInMeter;
-    }
+
   },
-  watch: {
-    userCoordinatesLoaded() {
-      let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
-      console.log('-----------------');
-      console.log(parseInt(dis) + '/' + this.siteCoordinates.radius);
-      console.log('-----------------');
-      if (dis <= this.siteCoordinates.radius) {
-        this.enableClockInButton = true;
-      }
-      if (dis > this.siteCoordinates.radius) {
-        this.outDistanceMessage = 'Out of the school range'
-      }
-    }
-  }
+  watch: {}
   ,
   computed: {}
   ,
   mounted() {
     if (this.$page.props.authUserRole === 'TEACHER' && this.siteCoordinates != null && this.clockedIn == null) {
       this.showClockinModal = true;
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          this.userCoordinates.lat = position.coords.latitude;
-          this.userCoordinates.lng = position.coords.longitude;
-          this.userCoordinatesLoaded = true;
-        },
-        error => {
-
-        },
-        this.geoLocationOptions
-      );
     }
   }
 }
