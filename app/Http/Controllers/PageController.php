@@ -26,6 +26,8 @@ class PageController extends Controller
             $siteCoordinates['lat'] = $user->school[0]->lat;
             $siteCoordinates['lng'] = $user->school[0]->lng;
             $siteCoordinates['radius'] = $user->school[0]->radius;
+            $siteCoordinates['school_id'] = $user->school[0]->id;
+            $siteCoordinates['school_name'] = $user->school[0]->name;
 
             $now = Carbon::now();
             $clockedIn = ClockIn::where('teacher_id', $user->id)

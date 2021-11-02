@@ -68,6 +68,15 @@ class SchoolSeeder extends Seeder
                 'lng' => 99.8228504357287,
                 'radius' => 100
             ],
+            [
+                'name' => 'Brighton',
+                'subjects' => [
+                    ['id' => 1, 'name' => 'English'],
+                ],
+                'lat' => 19.170527444964296,
+                'lng' => 99.90555761746296,
+                'radius' => 50
+            ],
         ];
         foreach ($schools as $school) {
             School::factory()->create([
