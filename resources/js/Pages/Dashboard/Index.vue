@@ -45,8 +45,7 @@
         </div>
       </div>
     </div>
-    <ClockInModal v-if="showClockinModal"
-                  v-model="showClockinModal"
+    <ClockInModal v-model="showClockinModal"
                   :site-coordinates="siteCoordinates"
                   :clocked-in="clockedIn"
     />
