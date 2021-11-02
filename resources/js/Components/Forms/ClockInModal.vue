@@ -71,7 +71,7 @@
               </button>
             </div>
             <div class="absolute top-2 right-2">
-              <span class="text-2xs text-gray-500">{{ displayCurrentPosition }}</span>
+              <span v-if="displayCurrentPosition" class="text-2xs text-gray-500">{{ displayCurrentPosition }}</span>
             </div>
           </div>
         </TransitionChild>
@@ -131,13 +131,15 @@ export default {
       },
       outDistanceMessage: null,
       enableClockInButton: false,
-      displayCurrentPosition: "",
+      displayCurrentPosition: "00/00",
       geolocationId: null
     };
   },
   emits: ['update:modelValue'],
   mounted() {
-    this.reloadLocation()
+    if (this.clockedIn == null) {
+      this.reloadLocation()
+    }
   },
   watch: {
     userCoordinates: {
@@ -184,7 +186,7 @@ export default {
     },
 
     close() {
-      
+
       this.$emit('update:modelValue', false);
     },
     haversineDistance(pos1, pos2) {
