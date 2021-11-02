@@ -107,15 +107,14 @@
               <span>{{ column }}</span>
             </div>
           </TableTh>
-          <TableTh>Actions</TableTh>
         </template>
         <template #body>
           <tr
-            class="cursor-pointer transition ease-in-out duration-200 hover:bg-gray-200"
+            class="cursor-pointer transition ease-in-out duration-200"
             @click="openReportEdit(item)"
             v-for="(item, itemIndex) in reports.data"
-            :key="item"
-            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+            :key="itemIndex"
+            :class="computedRowColour(itemIndex,item)"
           >
             <TableTd>
               <div>
@@ -134,12 +133,7 @@
             </TableTd>
             <TableTd>
               <div>
-                {{ item.week_number }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.lesson_number }}
+                {{ item.week_number }}/{{ item.lesson_number }}
               </div>
             </TableTd>
             <TableTd>
@@ -157,15 +151,6 @@
                   </li>
                 </ul>
               </div>
-            </TableTd>
-            <TableTd>
-              <p v-if="item.approver != null" class="text-green-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </p>
             </TableTd>
           </tr>
         </template>
@@ -354,7 +339,7 @@ export default {
   data() {
     return {
       breadcrumbs: [],
-      columns: ['teacher', 'grade', 'subject', 'week', 'lesson', 'teaching date', 'topic'],
+      columns: ['teacher', 'grade', 'subject', 'W/L', 'teaching date', 'topic'],
       deleteForm: useForm({}),
       subjectForm: useForm({
         id: null
@@ -427,6 +412,12 @@ export default {
     },
   },
   methods: {
+    computedRowColour(index, item) {
+      if (item.approver) {
+        return index % 2 === 0 ? 'bg-green-50 hover:bg-green-200' : 'bg-green-100 hover:bg-green-200'
+      }
+      return index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-gray-50 hover:bg-gray-200'
+    },
     openReportEdit(report) {
       this.$inertia.visit(route('dashboard.reports.edit', report.id))
     },
