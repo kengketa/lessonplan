@@ -39,7 +39,7 @@
             </p>
             <div class="text-center">
               <p>Clocked in at</p>
-              <p class="text-xl md:text-2xl lg:text-3xl font-semibold uppercase">{{ clockedIn.clock_in }}</p>
+              <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold uppercase">{{ clockedIn.clock_in }}</p>
             </div>
           </Card>
         </div>
