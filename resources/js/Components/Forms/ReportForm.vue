@@ -309,6 +309,11 @@ export default {
       this.form.week_number = this.report.week_number ?? null;
       this.form.lesson_number = this.report.lesson_number ?? null;
       this.form.subject = this.report.subject ?? 1;
+      this.form.teaching_materials = this.report.teaching_materials;
+      this.form.activities = this.report.activities;
+      this.form.outcome = this.report.outcome;
+      this.form.outstanding_students = this.report.outstanding_students;
+      this.form.need_improvement_students = this.report.need_improvement_students;
       this.form.report = this.report;
     }
   },
