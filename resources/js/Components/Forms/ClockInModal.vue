@@ -217,6 +217,7 @@ export default {
   beforeDestroy() {
     // prevent memory leak
     clearInterval(this.interval);
+    navigator.geolocation.clearWatch(this.geolocationId);
   },
   computed: {},
   created() {
