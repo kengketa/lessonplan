@@ -1,8 +1,8 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="modelValue">
-    <Dialog as="div" class="fixed z-30 inset-0 overflow-y-auto" @close="close()">
-      <div class="flex items-end justify-center mt-40 text-center sm:block sm:p-0">
+    <Dialog as="div" class="fixed z-30 inset-0 overflow-y-hidden" @close="close()">
+      <div class="flex items-end justify-center mt-80 md:mt-0 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
                          enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
                          leave-to="opacity-0">
@@ -71,7 +71,7 @@
               </button>
             </div>
             <div class="absolute top-2 right-2">
-              <span class="text-2xs text-gray-500">{{ displayCurrentPosition }}</span>
+              <span v-if="displayCurrentPosition" class="text-2xs text-gray-500">{{ displayCurrentPosition }}</span>
             </div>
           </div>
         </TransitionChild>
@@ -131,17 +131,22 @@ export default {
       },
       outDistanceMessage: null,
       enableClockInButton: false,
-      displayCurrentPosition: "",
+      displayCurrentPosition: "00/00",
       geolocationId: null
     };
   },
   emits: ['update:modelValue'],
   mounted() {
-    this.reloadLocation()
+    if (this.clockedIn == null) {
+      this.reloadLocation()
+    }
   },
   watch: {
     userCoordinates: {
       handler: function () {
+        if (!this.siteCoordinates) {
+          return;
+        }
         let dis = this.haversineDistance(this.userCoordinates, this.siteCoordinates);
         this.displayCurrentPosition = parseInt(dis) + '/' + this.siteCoordinates.radius
         console.log('-----------------');
@@ -184,7 +189,7 @@ export default {
     },
 
     close() {
-      
+      navigator.geolocation.clearWatch(this.geolocationId);
       this.$emit('update:modelValue', false);
     },
     haversineDistance(pos1, pos2) {
@@ -212,6 +217,7 @@ export default {
   beforeDestroy() {
     // prevent memory leak
     clearInterval(this.interval);
+    navigator.geolocation.clearWatch(this.geolocationId);
   },
   computed: {},
   created() {
