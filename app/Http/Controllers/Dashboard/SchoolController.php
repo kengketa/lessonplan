@@ -143,7 +143,10 @@ class SchoolController extends Controller
     {
         $request->validate(['subject' => 'required']);
         $subjects = $school->subjects;
-        $lastId = $subjects[count($subjects) - 1]['id'];
+        $lastId = 1;
+        if (count($subjects) > 0) {
+            $lastId = $subjects[count($subjects) - 1]['id'];
+        }
         $newSubject = ['id' => $lastId + 1, 'name' => $request['subject']];
         $subjects[] = $newSubject;
         $school->subjects = $subjects;
