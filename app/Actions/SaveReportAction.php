@@ -70,7 +70,7 @@ class SaveReportAction
         foreach ($grades as $grade) {
             $date = null;
             if ($grade['date']) {
-                $date = Carbon::parse($grade['date'])->format('Y-m-y');
+                $date = Carbon::parse($grade['date'])->format('Y-m-d');
             }
             $newReport['grade_id'] = $grade['id'];
             $newReport['date'] = $date;
