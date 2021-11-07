@@ -278,9 +278,10 @@ export default {
           'paste code help wordcount table'
         ],
         toolbar:
-          'undo redo | formatselect | bold italic | \
-          alignleft aligncenter alignright | \
-          bullist numlist outdent indent | help'
+          'undo redo | bold italic | \
+          forecolor backcolor | \
+          bullist numlist | \
+          alignleft aligncenter alignright outdent indent | help'
       }
     };
   },
