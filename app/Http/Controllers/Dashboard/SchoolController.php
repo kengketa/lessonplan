@@ -84,7 +84,7 @@ class SchoolController extends Controller
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);
         })->filter($request['filters'])
-            ->orderBy('week_number')
+            ->orderBy('week_number', 'desc')
             ->orderBy('lesson_number')
             ->paginate(15);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
