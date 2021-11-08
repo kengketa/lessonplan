@@ -93,6 +93,12 @@
           :is-show-line="false"
           label="filter subject"
         />
+        <SearchSelectInput
+          :options="school.weeks"
+          v-model="filterForm.filters.week"
+          :is-show-line="false"
+          label="week"
+        />
         <div class="flex items-end mt-2 md:mt-0">
           <button @click="print()" type="button" class="button button-primary button-small mb-1">Print</button>
           <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
@@ -353,7 +359,8 @@ export default {
           semester: this.filters ? parseInt(this.filters.semester) : 0,
           grade: this.filters ? parseInt(this.filters.grade) : 0,
           subject: this.filters ? parseInt(this.filters.subject) : 0,
-          teacher: this.filters ? parseInt(this.filters.teacher) : 0
+          teacher: this.filters ? parseInt(this.filters.teacher) : 0,
+          week: this.filters ? parseInt(this.filters.week) : 0
         }
       }),
       isShowDeleteDialog: false,
@@ -408,6 +415,9 @@ export default {
       this.submitSearch()
     },
     'filterForm.filters.teacher': function () {
+      this.submitSearch()
+    },
+    'filterForm.filters.week': function () {
       this.submitSearch()
     },
   },

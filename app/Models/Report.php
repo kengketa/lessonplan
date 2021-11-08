@@ -94,6 +94,9 @@ class Report extends Model
         if ($filters['teacher'] != 0) {
             $query->where('creator_id', $filters['teacher']);
         }
+        if ($filters['week'] != 0) {
+            $query->where('week_number', (int)$filters['week']);
+        }
     }
 
     public function grade()

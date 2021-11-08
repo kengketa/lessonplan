@@ -80,6 +80,7 @@ class SchoolController extends Controller
         $schoolData['semesters'] = $semesters;
         $schoolData['current_academic_year'] = getCurrentAcademicYear();
         $schoolData['current_semester'] = getCurrentSemester();
+        $schoolData['weeks'] = getWeeks();
         $schoolId = $school->id;
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);
