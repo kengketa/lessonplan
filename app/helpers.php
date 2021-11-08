@@ -30,6 +30,27 @@ function getYears()
     return $years;
 }
 
+function getWeeks()
+{
+    $weeks = [];
+    $start = 1;
+    $end = 40;
+    if (getCurrentSemester() == 1) {
+        $start = 1;
+        $end = 20;
+    }
+    if (getCurrentSemester() == 2) {
+        $start = 21;
+        $end = 40;
+    }
+    for ($i = $start; $i <= $end; $i++) {
+        $newWeek['id'] = $i;
+        $newWeek['name'] = (string)$i;
+        $weeks[] = $newWeek;
+    }
+    return $weeks;
+}
+
 function getClockInMonthList()
 {
     $monthOptions = [];
