@@ -429,7 +429,9 @@ export default {
       return index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-gray-50 hover:bg-gray-200'
     },
     openReportEdit(report) {
-      this.$inertia.visit(route('dashboard.reports.edit', report.id))
+      //this.$inertia.visit(route('dashboard.reports.edit', report.id))
+      let url = route('dashboard.reports.edit', report.id);
+      window.open(url, '_blank');
     },
     print() {
       this.reports.data.forEach(report => {
