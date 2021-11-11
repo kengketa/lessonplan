@@ -225,7 +225,11 @@ class ReportController extends Controller
 
     private function prepareReportGroupByPage(array $reportIds)
     {
-        $reports = Report::find($reportIds);
+        $reports = Report::find($reportIds)->sortBy([
+            ['grade_id', 'asc'],
+            ['week_number', 'asc'],
+            ['lesson_number', 'asc'],
+        ]);
         $reportData = fractal($reports, new ReportTransformer())->toArray()['data'];
 
         $page = 1;
