@@ -30,7 +30,6 @@ class TeacherController extends Controller
             $lastYear = $thisYear - 1;
         }
         $clockInData['lastMonth'] = $timeSheet->execute($user, $lastMonth, $lastYear);
-//        dd($clockInData);
         return Inertia::render(
             'Dashboard/Teachers/MyTimeSheet',
             [

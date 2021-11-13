@@ -18,9 +18,11 @@ class GetTimeSheetAction
             ->orderBy('date')
             ->get();
         $lastDayOfTheMonth = Carbon::parse($year.'-'.$month.'-'.'1')->daysInMonth;
+        $today = Carbon::today();
         $clockInData = [];
         for ($i = 1; $i <= $lastDayOfTheMonth; $i++) {
             $date = $year.'-'.$month.'-'.$i;
+            $carbonDate = Carbon::parse($date);
             $clockedIn = $clockIns->filter(function ($q) use ($i) {
                 return (int)Carbon::parse($q->date)->format('d') == $i;
             });
@@ -30,6 +32,7 @@ class GetTimeSheetAction
             $clockInData[$i]['day'] = Carbon::parse($date)->format('D');
             $clockInData[$i]['displayDate'] = Carbon::parse($date)->format('D d M Y');
             $clockInData[$i]['clockedIn'] = null;
+            $clockInData[$i]['past'] = $carbonDate->lt($today);
 
             if (count($clockedIn) > 0) {
                 $clockInData[$i]['clockedIn'] = fractal($clockedIn, new ClockInTransformer())->toArray()['data'][0];

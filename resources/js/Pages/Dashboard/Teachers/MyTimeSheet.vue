@@ -39,7 +39,7 @@
           <tr
             v-for="(item, itemIndex) in selectedMonth=='thisMonth' ? clockIn.thisMonth : clockIn.lastMonth"
             :key="item"
-            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+            :class="rowStyleComputed(itemIndex,item)"
           >
 
             <TableTd>
@@ -110,6 +110,19 @@ export default {
     };
   },
   methods: {
+    rowStyleComputed(itemIndex, item) {
+      let rowColour = itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+      if ((item.day === 'Sat' || item.day === 'Sun') && item.clockedIn == null) {
+        rowColour = 'bg-gray-300 hidden';
+      }
+      if ((item.day !== 'Sat' && item.day !== 'Sun') && item.clockedIn == null && item.past === true) {
+        rowColour = itemIndex % 2 === 0 ? 'bg-red-50' : 'bg-red-100';
+      }
+      if (item.clockedIn != null) {
+        rowColour = itemIndex % 2 === 0 ? 'bg-green-50' : 'bg-green-100';
+      }
+      return rowColour;
+    },
     selectTimeSheet(month) {
       this.selectedMonth = month;
     },

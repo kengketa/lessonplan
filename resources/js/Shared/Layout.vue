@@ -304,7 +304,7 @@ const navs = {
     routeGroup: "dashboard.clock_ins.*",
   },
   timeSheets: {
-    name: "Timesheet",
+    name: "My Timesheet",
     href: route("dashboard.my_time_sheet"),
     icon: ClockIcon,
     routeGroup: "dashboard.my_time_sheet",
