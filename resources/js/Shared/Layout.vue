@@ -303,6 +303,12 @@ const navs = {
     icon: ClockIcon,
     routeGroup: "dashboard.clock_ins.*",
   },
+  timeSheets: {
+    name: "Timesheet",
+    href: route("dashboard.my_time_sheet"),
+    icon: ClockIcon,
+    routeGroup: "dashboard.my_time_sheet",
+  },
 
   //roles: {
   //   name: "Roles",
@@ -353,6 +359,7 @@ export default {
         nav.push(navs.dashboard);
       } else if (user.roles[0].id == roles.TEACHER) {
         nav.push(navs.dashboard);
+        nav.push(navs.timeSheets);
         //nav.push(navs.schools);
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.dashboard);
