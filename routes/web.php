@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\GradeController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ClockInController;
+use App\Http\Controllers\TeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ClockInController::class, "in"])->name("dashboard.clock_ins.in");
         Route::post("clock-out",
             [ClockInController::class, "out"])->name("dashboard.clock_ins.out");
+
+        //my time sheet
+        Route::get("my-time-sheets", [TeacherController::class, "myTimeSheet"])->name("dashboard.my_time_sheet");
 
     });
 
