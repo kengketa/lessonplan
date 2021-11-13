@@ -39,6 +39,8 @@ Route::get("posts", [PostController::class, "index"])->name("posts.index");
 // reset, setup password, pin for user
 Route::get("setup-password/{token}/{key}", [UserSetupController::class, "setup"])->name("user-setup.show");
 Route::post("do-setup", [UserSetupController::class, "doSetup"])->name("user-setup.save");
+Route::post('send-reset-password-request',
+    [UserSetupController::class, 'sentResetPassword'])->name('reset-password.sent');
 
 Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(function () {
 
