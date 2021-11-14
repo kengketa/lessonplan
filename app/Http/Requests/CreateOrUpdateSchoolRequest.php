@@ -18,6 +18,7 @@ class CreateOrUpdateSchoolRequest extends FormRequest
         $rules = [
             'name' => ['required', 'string'],
             'address' => ['nullable', 'string'],
+            'subjects' => ['nullable'],
             'lat' => ['nullable', 'numeric'],
             'lng' => ['nullable', 'numeric'],
             'radius' => ['nullable', 'numeric'],
