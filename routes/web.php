@@ -27,15 +27,6 @@ use App\Http\Controllers\TeacherController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
-Route::get('/test', function () {
-    return Inertia::render('Dashboard/Reports/Print');
-});
-
-Route::get("posts", [PostController::class, "index"])->name("posts.index");
-
-//Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-//    return Inertia::render('Dashboard');
-//})->name('dashboard');
 
 // reset, setup password, pin for user
 Route::get("setup-password/{token}/{key}", [UserSetupController::class, "setup"])->name("user-setup.show");
