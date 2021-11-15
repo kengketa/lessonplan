@@ -64,5 +64,4 @@ class ClockInTest extends TestCase
         $this->assertEquals('/dashboard/my-time-sheets', $pageUrl);
     }
 
-
 }

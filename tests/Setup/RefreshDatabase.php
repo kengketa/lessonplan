@@ -15,5 +15,6 @@ trait RefreshDatabase
     {
         $this->baseRefreshDatabase();
         $this->artisan('db:seed --class=RolePermissionSeeder');
+        $this->artisan('db:seed --class=SettingSeeder');
     }
 }

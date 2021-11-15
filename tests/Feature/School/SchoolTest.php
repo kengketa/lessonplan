@@ -47,6 +47,17 @@ class SchoolTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_school_show_page_can_be_accessed()
+    {
+        $this->signInAdmin();
+        $school = School::factory()->create();
+        $response = $this->get(route('dashboard.schools.show', $school->id));
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(200);
+        $pageUrl = $response->getOriginalContent()->getData()['page']['url'];
+        $this->assertEquals('/dashboard/schools/'.$school->id, $pageUrl);
+    }
+
     public function test_school_can_be_created()
     {
         $this->signInAdmin();
