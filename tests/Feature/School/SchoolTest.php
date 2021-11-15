@@ -15,7 +15,7 @@ class SchoolTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_viewing_users_index_required_authenication()
+    public function test_viewing_school_index_required_authenication()
     {
         $response = $this->get(route('dashboard.schools.index'));
         $response->assertSessionHasNoErrors();
