@@ -23,7 +23,7 @@ class GradeFactory extends Factory
     public function definition()
     {
         return [
-            'school_id' => School::inRandomOrder()->id ?? School::factory(),
+            'school_id' => School::inRandomOrder()->first()->id ?? School::factory(),
             'type' => $this->faker->numberBetween(1, 100),
             'level' => $this->faker->numberBetween(1, 100),
             'room_number' => $this->faker->numberBetween(1, 100),
