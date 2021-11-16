@@ -75,6 +75,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         //clockins
         Route::get("clock-ins",
             [ClockInController::class, "index"])->name("dashboard.clock_ins.index");
+        Route::get("clock-ins/generate-report",
+            [ClockInController::class, "generateReport"])->name("dashboard.clock_ins.generate_report");
 
     });
 

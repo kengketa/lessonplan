@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetTimeSheetAction;
 use App\Models\ClockIn;
 use App\Models\Role;
 use App\Models\School;
@@ -91,5 +92,44 @@ class ClockInController extends Controller
         $message = 'You have clocked out at '.$now->format('h:i:sa');
         return redirect()->route('dashboard')->with('success', $message);
 
+    }
+
+    public function generateReport(Request $request)
+    {
+        if (!isset($request['month'])) {
+            return redirect()->back()->with('error', 'generate clock-in report error.');
+        }
+
+        $arr = explode('-', $request['month']);
+        $year = (int)$arr[0];
+        $month = (int)$arr[1];
+
+        $teachers = [];
+        if (!isset($request['teacher'])) {
+            $teachers = User::role(Role::ROLE_TEACHER)->get();
+        }
+
+        if (isset($request['teacher'])) {
+            $teachers[] = User::find($request['teacher']);
+        }
+        if (!$teachers) {
+            return redirect()->back()->with('error', 'generate clock-in report error.');
+        }
+
+        $timeSheetData = [];
+        $timeSheet = new GetTimeSheetAction();
+        foreach ($teachers as $teacher) {
+            $timeSheetData[$teacher->id]['teacher_name'] = $teacher->name;
+            $timeSheetData[$teacher->id]['school_name'] = $teacher->school[0]->name;
+            $timeSheetData[$teacher->id]['month'] = Carbon::parse($year.'-'.$month.'-1')->format('F');
+            $timeSheetData[$teacher->id]['year'] = Carbon::parse($year.'-'.$month.'-1')->format('Y');
+            $timeSheetData[$teacher->id]['data'] = $timeSheet->execute($teacher, $month, $year);
+        }
+//        dd($timeSheetData);
+        return Inertia::render(
+            'Dashboard/ClockIns/PrintPreview',
+            [
+                'timeSheets' => $timeSheetData
+            ]);
     }
 }
