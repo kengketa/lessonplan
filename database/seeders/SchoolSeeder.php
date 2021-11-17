@@ -46,9 +46,9 @@ class SchoolSeeder extends Seeder
                     ['id' => 5, 'name' => 'Arts'],
                     ['id' => 6, 'name' => 'Pe'],
                 ],
-                'lat' => 19.17920454012667,
-                'lng' => 99.89263306186193,
-                'radius' => 50
+                'lat' => 19.17818435,
+                'lng' => 99.89259034,
+                'radius' => 150
             ],
             [
                 'name' => 'Tessaban 4',

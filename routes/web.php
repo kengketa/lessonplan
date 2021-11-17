@@ -75,6 +75,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         //clockins
         Route::get("clock-ins",
             [ClockInController::class, "index"])->name("dashboard.clock_ins.index");
+        Route::post("clock-ins/generate-report",
+            [ClockInController::class, "generateReport"])->name("dashboard.clock_ins.generate_report");
 
     });
 
@@ -116,7 +118,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 });
 
 Route::get("global-reports", [ReportController::class, "globalReports"])->name("reports.global");
-
+Route::get("clock-ins/report-preview",
+    [ClockInController::class, "clockInPreview"])->name("dashboard.clock_ins.preview");
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
 
