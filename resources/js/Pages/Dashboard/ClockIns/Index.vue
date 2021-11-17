@@ -24,6 +24,8 @@
         />
         <div class="flex flex items-end">
           <button type="button" @click="clear()" class="button button-primary button-small mb-1 ml-1">Clear</button>
+          <button type="button" @click="generate()" class="button button-primary button-small mb-1 ml-1">Generate
+          </button>
         </div>
       </div>
       <TableDisplayContainer>
@@ -118,6 +120,13 @@ export default {
     };
   },
   methods: {
+    generate() {
+      let payload = {
+        month: this.form.filters.month,
+        teacher: this.form.filters.teacher_id ?? null
+      };
+      this.$inertia.post(route('dashboard.clock_ins.generate_report', payload))
+    },
     clear() {
       this.$inertia.visit(route('dashboard.clock_ins.index'))
     },
