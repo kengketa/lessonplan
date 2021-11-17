@@ -96,6 +96,25 @@ class ClockInController extends Controller
 
     public function generateReport(Request $request)
     {
+        $url = route('dashboard.clock_ins.preview', [
+            'month' => $request->input('month'),
+            'teacher' => isset($request['teacher']) ? $request->input('teacher') : null,
+            'encrypt' => bcrypt(env('APP_KEY'))
+        ]);
+//        Browsershot::url($url)->save('test.pdf');
+//        $file = public_path()."/test.pdf";
+//        $headers = array('Content-Type: application/pdf',);
+//        return Response::download($file, 'test.pdf', $headers);
+        //dd($url);
+        return redirect($url);
+    }
+
+    public function clockInPreview(Request $request)
+    {
+        if (!(app('hash')->check(env('APP_KEY'), $request['encrypt']))) {
+            session()->forget('encrypt');
+            abort(403, 'Opps! nice tried.');
+        }
         if (!isset($request['month'])) {
             return redirect()->back()->with('error', 'generate clock-in report error.');
         }
@@ -125,7 +144,6 @@ class ClockInController extends Controller
             $timeSheetData[$teacher->id]['year'] = Carbon::parse($year.'-'.$month.'-1')->format('Y');
             $timeSheetData[$teacher->id]['data'] = $timeSheet->execute($teacher, $month, $year);
         }
-//        dd($timeSheetData);
         return Inertia::render(
             'Dashboard/ClockIns/PrintPreview',
             [

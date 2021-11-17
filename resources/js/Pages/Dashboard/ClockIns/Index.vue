@@ -125,7 +125,7 @@ export default {
         month: this.form.filters.month,
         teacher: this.form.filters.teacher_id ?? null
       };
-      this.$inertia.visit(route('dashboard.clock_ins.generate_report', payload))
+      this.$inertia.post(route('dashboard.clock_ins.generate_report', payload))
     },
     clear() {
       this.$inertia.visit(route('dashboard.clock_ins.index'))

@@ -70,9 +70,6 @@ export default {
 };
 </script>
 <style scoped>
-.report-space-height {
-  height: 180mm;
-}
 
 @media print {
   @page {
