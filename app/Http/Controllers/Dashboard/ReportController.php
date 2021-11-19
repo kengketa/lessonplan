@@ -194,14 +194,15 @@ class ReportController extends Controller
     {
         $link = $request['link'];
         $globalLink = str_replace('dashboard/print-reports-preview', 'global-reports', $link);
-        $foundInDatabase = GlobalReport::where('link', $globalLink)->first();
-        if (!$foundInDatabase) {
-            GlobalReport::create([
+        $globalReport = GlobalReport::where('link', $globalLink)->first();
+        if (!$globalReport) {
+            $globalReport = GlobalReport::create([
                 'link' => $globalLink,
                 'creator_id' => Auth::id()
             ]);
         }
-        return response()->json($globalLink);
+        $shortenLink = route('reports.global.show', $globalReport->hashid);
+        return response()->json($shortenLink);
     }
 
     public function globalReports(Request $request)
@@ -221,6 +222,11 @@ class ReportController extends Controller
             [
                 'pages' => $reportDataGroupByPage
             ]);
+    }
+
+    public function showGlobalReports(GlobalReport $globalReport)
+    {
+        return redirect($globalReport->link);
     }
 
     private function prepareReportGroupByPage(array $reportIds)

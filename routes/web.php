@@ -118,6 +118,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 });
 
 Route::get("global-reports", [ReportController::class, "globalReports"])->name("reports.global");
+Route::get("global-reports/{globalReport}",
+    [ReportController::class, "showGlobalReports"])->name("reports.global.show");
 Route::get("clock-ins/report-preview",
     [ClockInController::class, "clockInPreview"])->name("dashboard.clock_ins.preview");
 Route::middleware(["auth"])->group(function () {

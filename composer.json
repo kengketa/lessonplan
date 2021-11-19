@@ -19,7 +19,8 @@
         "spatie/browsershot": "^3.50",
         "spatie/laravel-fractal": "^5.8",
         "spatie/laravel-permission": "^4.0",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "vinkla/hashids": "^9.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
