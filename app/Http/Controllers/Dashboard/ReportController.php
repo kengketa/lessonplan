@@ -205,7 +205,7 @@ class ReportController extends Controller
         return response()->json($shortenLink);
     }
 
-    public function globalReports(Request $request)
+    public function globalReports(Request $request) // to remove later
     {
         $link = route('reports.global', [
             'reportIds' => $request['reportIds']
@@ -226,6 +226,16 @@ class ReportController extends Controller
 
     public function showGlobalReports(GlobalReport $globalReport)
     {
+        $arr = [];
+        parse_str($globalReport->link, $arr);
+        $reportIds = $arr['reportIds'];
+        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        return Inertia::render(
+            'GlobalReports',
+            [
+                'pages' => $reportDataGroupByPage
+            ]);
+
         return redirect($globalReport->link);
     }
 
