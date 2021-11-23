@@ -1,7 +1,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="modelValue">
-    <Dialog as="div" class="fixed z-30 inset-0 overflow-y-auto" @close="$emit('update:modelValue', false)">
+    <Dialog as="div" class="fixed z-30 inset-0 overflow-y-auto" @close="cancel()">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
                          enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
@@ -26,6 +26,20 @@
                 <div class="mt-2">
                   <div>
                     <fieldset class="space-y-2">
+                      <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                          <input id="select-all" aria-describedby="comments-description"
+                                 v-model="selectAll"
+                                 name="selectAll"
+                                 type="checkbox"
+                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="select-all" class="font-medium text-gray-700">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
                       <div v-for="(report,reportIndex) in printList" :key="report.id" class="relative flex items-start">
                         <div class="flex items-center h-5">
                           <input :id="'report-'+report.id" aria-describedby="comments-description"
@@ -44,6 +58,20 @@
                           </ul>
                         </div>
                       </div>
+                      <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                          <input id="select-all" aria-describedby="comments-description"
+                                 v-model="selectAll"
+                                 name="selectAll"
+                                 type="checkbox"
+                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <label for="select-all" class="font-medium text-gray-700">
+                            Select All
+                          </label>
+                        </div>
+                      </div>
                     </fieldset>
                   </div>
                 </div>
@@ -52,7 +80,7 @@
             <div class="mt-4 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
               <button type="button"
                       class="button button-secondary button-small mr-2"
-                      @click="$emit('update:modelValue', false)" ref="cancelButtonRef">
+                      @click="cancel()" ref="cancelButtonRef">
                 Cancel
               </button>
               <button type="button"
@@ -104,6 +132,7 @@ export default {
         school_id: this.schoolId,
         print_list: this.printList,
       }),
+      selectAll: false
     };
   },
   emits: ['update:modelValue'],
@@ -113,6 +142,33 @@ export default {
         onSuccess: () => this.$emit('update:modelValue', false),
       });
     },
+    cancel() {
+      setTimeout(() => {
+        this.form.print_list.forEach((list, index) => {
+          this.form.print_list[index].print = false;
+        });
+      }, 1000);
+      this.$emit('update:modelValue', false)
+    }
+  },
+  watch: {
+    selectAll() {
+      if (this.selectAll == true) {
+        this.form.print_list.forEach((list, index) => {
+          this.form.print_list[index].print = true;
+        });
+      }
+    },
+    'form.print_list': {
+      deep: true,
+      handler(printLists) {
+        printLists.forEach(list => {
+          if (list.print == false) {
+            this.selectAll = false;
+          }
+        })
+      }
+    }
   }
 }
 </script>
