@@ -30,7 +30,7 @@ class ClockInController extends Controller
             $filters['teacher_id'] = null;
             $filters['month'] = count($monthOptions) > 0 ? $monthOptions[0]['id'] : $defaultMonthOption['id'];
         }
-        $clokIns = ClockIn::filter($filters)->orderBy('date', 'desc')->orderBy('clock_in')->paginate(20);
+        $clokIns = ClockIn::filter($filters)->orderBy('date', 'desc')->orderBy('clock_in')->paginate(50);
         $clokInData = fractal($clokIns, new ClockInTransformer())->toArray();
         $allTeachers = User::role(ROLE::ROLE_TEACHER)->get();
         $allTeacherData = fractal($allTeachers, new UserTransformer())->toArray()['data'];
