@@ -5,13 +5,13 @@
             <PageHeading>
                 {{ title }}
                 <template #actions>
-                    <inertia-link
+                    <Link
                         class="button button-primary"
                         :href="route('{{ namespace.models }}.create')"
                     >
                         <UserAddIcon class="h-5 w-5 mr-2" aria-hidden="true" />
                         Create {{ Model }}
-                    </inertia-link>
+                    </Link>
                 </template>
             </PageHeading>
             <div class="grid grid-cols-12 gap-2 content-center">
@@ -50,9 +50,9 @@
                     >
                         {{ tdFields }}
                         <TableTd>
-                            <inertia-link :href="route('{{ namespace.models }}.edit', item.id)" class="link">
+                            <Link :href="route('{{ namespace.models }}.edit', item.id)" class="link">
                                 Edit
-                            </inertia-link>
+                            </Link>
                         </TableTd>
                     </tr>
                 </template>
@@ -76,6 +76,7 @@
     import TextInput from "@/Components/TextInput";
     import SelectInput from "@/Components/SelectInput";
     import { UserAddIcon } from "@heroicons/vue/solid";
+    import {Link} from "@inertiajs/inertia-vue3";
 
     export default {
         name: "{{ Model }}Index",
