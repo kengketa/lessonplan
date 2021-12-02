@@ -34,8 +34,10 @@ class ClockInController extends Controller
         $clokInData = fractal($clokIns, new ClockInTransformer())->toArray();
         $allTeachers = User::role(ROLE::ROLE_TEACHER)->get();
         $allTeacherData = fractal($allTeachers, new UserTransformer())->toArray()['data'];
-
         if ($filters) {
+            if(!isset($filters['teacher_id'])){
+                $filters['teacher_id'] = null;
+            }
             foreach ($clokInData['meta']['pagination']['links'] as $link) {
                 if (isset($link->url)) {
                     $link->url = $link->url.
