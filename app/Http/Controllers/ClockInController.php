@@ -141,7 +141,7 @@ class ClockInController extends Controller
         $timeSheet = new GetTimeSheetAction();
         foreach ($teachers as $teacher) {
             $timeSheetData[$teacher->id]['teacher_name'] = $teacher->name;
-            $timeSheetData[$teacher->id]['school_name'] = $teacher->school[0]->name;
+            $timeSheetData[$teacher->id]['school_name'] = $teacher->school[0]->name ?? 'untitled';
             $timeSheetData[$teacher->id]['month'] = Carbon::parse($year.'-'.$month.'-1')->format('F');
             $timeSheetData[$teacher->id]['year'] = Carbon::parse($year.'-'.$month.'-1')->format('Y');
             $timeSheetData[$teacher->id]['data'] = $timeSheet->execute($teacher, $month, $year);
