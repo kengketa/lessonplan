@@ -228,7 +228,7 @@ class ReportController extends Controller
     {
         $arr = [];
         parse_str($globalReport->link, $arr);
-        $reportIds = $arr['reportIds'];
+        $reportIds = Arr::flatten($arr);
         $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
         return Inertia::render(
             'GlobalReports',
