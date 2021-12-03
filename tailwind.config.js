@@ -21,6 +21,8 @@ module.exports = {
         primary: colors.blue
       },
       fontSize: {
+        '4xs': '0.45rem',
+        '3xs': '0.55rem',
         '2xs': '0.65rem',
         'xs': '.75rem',
         'sm': '.875rem',

@@ -106,13 +106,13 @@
         </button>
       </div>
       <div class="flex justify-end no-print mt-1">
-        <button type="button" class="bg-blue-600 p-1 rounded-full text-white mr-1" @click="setSize('text-2xs')">
+        <button type="button" class="bg-blue-600 p-1 rounded-full text-white mr-1" @click="decreaseFont()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
           </svg>
         </button>
-        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="setSize('text-xs')">
+        <button type="button" class="bg-blue-600 p-1 rounded-full text-white" @click="increaseFont()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
@@ -146,7 +146,8 @@ export default {
     return {
       fontSize: 'text-xs',
       showGeneratedLink: false,
-      generatedLink: ""
+      generatedLink: "",
+      fontReduce: 1
     };
   },
   methods: {
@@ -162,14 +163,27 @@ export default {
         this.showGeneratedLink = true;
       })
     },
-    setSize(size) {
-      this.fontSize = size;
+    increaseFont() {
+      if (this.fontReduce > 1) {
+        this.fontReduce = this.fontReduce - 1;
+      }
+    },
+    decreaseFont() {
+      if (this.fontReduce < 4) {
+        this.fontReduce = this.fontReduce + 1;
+      }
+    },
+  },
+  watch: {
+    fontReduce() {
+      if (this.fontReduce == 1) {
+        this.fontSize = 'text-xs'
+      } else {
+        this.fontSize = 'text-' + this.fontReduce + 'xs';
+      }
     }
   },
   mounted() {
-    console.log('-----------------');
-    console.log(this.reportIds);
-    console.log('-----------------');
   }
 };
 </script>
