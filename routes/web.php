@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ClockInController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\Dashboard\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +113,15 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 
         //my time sheet
         Route::get("my-time-sheets", [TeacherController::class, "myTimeSheet"])->name("dashboard.my_time_sheet");
+
+        //meetings
+        Route::get("meetings", [MeetingController::class, "index"])->name("dashboard.meetings.index");
+        Route::get("meetings/create", [MeetingController::class, "create"])->name("dashboard.meetings.create");
+        Route::get("meetings/{meeting}", [MeetingController::class, "show"])->name("dashboard.meetings.show");
+        Route::post("meetings", [MeetingController::class, "store"])->name("dashboard.meetings.store");
+        Route::get("meetings/{meeting}/edit", [MeetingController::class, "edit"])->name("dashboard.meetings.edit");
+        Route::put("meetings/{meeting}", [MeetingController::class, "update"])->name("dashboard.meetings.update");
+        Route::delete("meetings/{meeting}", [MeetingController::class, "destroy"])->name("dashboard.meetings.destroy");
 
     });
 
