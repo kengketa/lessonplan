@@ -14,23 +14,21 @@
           </Link>
         </template>
       </PageHeading>
-      <div class="grid grid-cols-12 gap-2 content-center">
-        <div class="col-span-12 md:col-span-5">
-          <TextInput
-            v-model="form.search"
-            :isShowLine="false"
-            placeholder="search.."
-          ></TextInput>
-        </div>
-        <div class="col-span-12 md:col-span-2 flex items-end justify-end">
-          <div>
-            <button
-              @click="clearForm"
-              class="button button-secondary button-small"
-            >
-              Clear
-            </button>
-          </div>
+      <div class="md:grid md:grid-cols-3 md:gap-2">
+        <SearchSelectInput
+          v-model="form.school"
+          :options="schools"
+          :is-show-line="false"
+        />
+        <TextInput
+          v-model="form.search"
+          :isShowLine="false"
+          placeholder="search.."
+        ></TextInput>
+        <div class="flex flex items-end">
+          <button type="button" @click="clear()" class="button button-primary button-small mb-1 ml-1">Clear</button>
+          <!--          <button type="button" @click="generate()" class="button button-primary button-small mb-1 ml-1">Generate-->
+          <!--          </button>-->
         </div>
       </div>
       <TableDisplayContainer>
@@ -49,38 +47,17 @@
             :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
           >
             <TableTd>
-              <Link
-                :href="route('dashboard.meetings.show',item.id)"
-                class="hover:underline"
-              >
-                {{ item.school_id }}
-              </Link>
+              {{ item.school }}
             </TableTd>
             <TableTd>
-              <Link
-                :href="route('dashboard.meetings.show',item.id)"
-                class="hover:underline"
-              >
-                {{ item.title }}
-              </Link>
+              {{ item.title }}
             </TableTd>
             <TableTd>
-              <Link
-                :href="route('dashboard.meetings.show',item.id)"
-                class="hover:underline"
-              >
-                {{ item.date }}
-              </Link>
+              {{ item.date }}
             </TableTd>
             <TableTd>
-              <Link
-                :href="route('dashboard.meetings.show',item.id)"
-                class="hover:underline"
-              >
-                {{ item.status }}
-              </Link>
+              {{ item.status }}
             </TableTd>
-
             <TableTd>
               <Link :href="route('dashboard.meetings.edit', item.id)" class="link">
                 Edit
@@ -109,6 +86,7 @@ import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
 import {UserAddIcon} from "@heroicons/vue/solid";
 import {Link} from "@inertiajs/inertia-vue3";
+import SearchSelectInput from "@/Components/SearchSelectInput";
 
 export default {
   name: "MeetingIndex",
@@ -123,23 +101,29 @@ export default {
     SelectInput,
     Breadcrumbs,
     UserAddIcon,
-    Link
+    Link,
+    SearchSelectInput
   },
   props: {
     meetings: Object,
     filters: Object,
     title: String,
+    schools: Object,
   },
   data() {
     return {
       form: {
         search: this.filters.search ?? "",
+        school: this.filters.school ?? null
       },
       breadcrumbs: [{name: 'Meetings', href: "#"}],
-      columns: ['school_id', 'title', 'date', 'status',],
+      columns: ['school', 'title', 'date', 'status',],
     };
   },
   methods: {
+    clear() {
+      this.$inertia.visit(route('dashboard.meetings.index'));
+    },
     removeMeeting: function (meeting) {
       if (confirm("Are you sure to remove this meeting?")) {
         meeting._method = "DELETE";

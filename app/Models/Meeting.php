@@ -16,6 +16,9 @@ class Meeting extends Model
 
     protected $presenter = MeetingPresenter::class;
 
+    public const UP_COMMING = 1;
+    public const ACHIEVED = 2;
+
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +26,10 @@ class Meeting extends Model
      * @var array
      */
     protected $fillable = [
-        'school_id','title','date','status',
+        'school_id',
+        'title',
+        'date',
+        'status',
     ];
 
     /**
@@ -52,10 +58,18 @@ class Meeting extends Model
 
     public function scopeFilter(Builder $query, array $filters): void
     {
-        if (! empty($filters["search"])) {
+        if (!empty($filters['school'])) {
+            $query->where('school_id', $filters['school']);
+        }
+        if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("school_id", "like", "%$filters[search]%")->orWhere("title", "like", "%$filters[search]%")->orWhere("date", "like", "%$filters[search]%")->orWhere("status", "like", "%$filters[search]%");
+                $qr->where("title", "like", "%$filters[search]%");
             });
         }
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }

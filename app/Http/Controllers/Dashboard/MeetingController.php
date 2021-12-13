@@ -7,32 +7,39 @@ use App\Http\Requests\CreateOrUpdateMeetingRequest;
 use App\Models\Meeting;
 use App\Http\Controllers\Controller;
 use App\Transformers\MeetingTransformer;
+use App\Transformers\SchoolTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\School;
 
 class MeetingController extends Controller
 {
     public function index(Request $request): Response
     {
-        $filters = $request->only(["search"]);
+        $filters = $request->only(["search", "school"]);
         $meetings = Meeting::filter($filters)->orderBy('date', 'desc')->paginate(30);
-        $meetings = fractal($meetings, new MeetingTransformer())->toArray();
-
+        $meetingData = fractal($meetings, new MeetingTransformer())->toArray();
+        $schools = School::all();
+        $schoolData = fractal($schools, new SchoolTransformer())->toArray()['data'];
         return Inertia::render(
             'Dashboard/Meetings/Index',
             [
-                'meetings' => $meetings,
+                'meetings' => $meetingData,
+                'schools' => $schoolData,
                 'filters' => $filters,
             ]);
     }
 
     public function create(): Response
     {
+        $schools = School::all();
+        $schoolData = fractal($schools, new SchoolTransformer())->toArray()['data'];
         return Inertia::render(
             'Dashboard/Meetings/Create',
             [
+                'schools' => $schoolData,
                 'meeting' => new Meeting()
             ]);
     }
