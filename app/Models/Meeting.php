@@ -30,6 +30,8 @@ class Meeting extends Model
         'title',
         'date',
         'status',
+        'location',
+        'attendee'
     ];
 
     /**
@@ -47,7 +49,7 @@ class Meeting extends Model
      * @var array
      */
     protected $casts = [
-
+        'attendee' => 'json'
     ];
 
     /**

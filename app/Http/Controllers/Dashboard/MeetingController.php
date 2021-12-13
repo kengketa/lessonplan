@@ -49,8 +49,8 @@ class MeetingController extends Controller
         $meeting = new Meeting();
         $meeting = $saveMeetingAction->execute($meeting, $request->validated());
 
-        return redirect()->route('dashboard.meetings.show', ['meeting' => $meeting])->with("success",
-            ' Meeting  has been create!');
+        return redirect()->route('dashboard.meetings.show', ['meeting' => $meeting])
+            ->with("success", 'Meeting  has been created.');
     }
 
     public function show(Meeting $meeting): Response
@@ -66,10 +66,14 @@ class MeetingController extends Controller
 
     public function edit(Meeting $meeting): Response
     {
+        $meetingData = fractal($meeting, new MeetingTransformer())->toArray();
+        $schools = School::all();
+        $schoolData = fractal($schools, new SchoolTransformer())->toArray()['data'];
         return Inertia::render(
             'Dashboard/Meetings/Edit',
             [
-                'meeting' => $meeting
+                'schools' => $schoolData,
+                'meeting' => $meetingData
             ]);
     }
 

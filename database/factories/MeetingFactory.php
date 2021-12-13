@@ -26,6 +26,8 @@ class MeetingFactory extends Factory
             'school_id' => School::inRandomOrder()->first()->id ?? School::factory(),
             'title' => $this->faker->text(20),
             'date' => $this->faker->dateTime(),
+            'location' => $this->faker->address,
+            'attendee' => [$this->faker->name, $this->faker->name],
             'status' => $this->faker->numberBetween(1, 2),
         ];
     }

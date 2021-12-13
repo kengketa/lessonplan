@@ -15,6 +15,8 @@ class CreateMeetingsTable extends Migration
             $table->unsignedBigInteger("school_id");
             $table->string("title");
             $table->dateTime("date")->nullable();
+            $table->string('location')->nullable();
+            $table->json('attendee')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();
 

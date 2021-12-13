@@ -126,12 +126,7 @@
                          class="block w-full border-gray-300 focus:outline-none text-sm rounded-md focus:ring-primary-500">
                 </div>
                 <div class="mt-2">
-                  <p>Lesson plan details</p>
-                  <Editor
-                    v-model="form.report.plans[planIndex].details"
-                    api-key="8otka707t8tlcqakojbi97f3ptko4wrduwmf36zfyi3yh6wx"
-                    :init="customEditor"
-                  />
+                  <EditorInput label="Lesson plan details" v-model="form.report.plans[planIndex].details" />
                 </div>
                 <button
                   v-if="type === 'create' ||
@@ -232,6 +227,7 @@ import Form from '@/Components/Form';
 import SearchSelectInput from "../SearchSelectInput";
 import DatePickerInput from "../DatePickerInput";
 import Editor from '@tinymce/tinymce-vue'
+import EditorInput from "@/Components/EditorInput";
 
 export default {
   name: 'ReportForm',
@@ -244,7 +240,8 @@ export default {
     PlusSmIcon,
     TrashIcon,
     Form,
-    Editor
+    Editor,
+    EditorInput
   },
   props: {
     type: {

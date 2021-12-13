@@ -14,16 +14,18 @@ class CreateOrUpdateMeetingRequest extends FormRequest
      */
     public function rules()
     {
-
-        $rules=[
-
-            'school_id'	=>	['required', ],
-			'title'	=>	['required', 'string', ],
-			'date'	=>	['nullable', 'date', ],
-			'status'	=>	['nullable', ],
-			
+        $rules = [
+            'school_id' => ['required'],
+            'title' => ['required', 'string'],
+            'date' => ['nullable', 'date'],
+            'time' => ['nullable', 'date_format:H.i'],
+            'location' => ['nullable'],
+            'attendee' => ['nullable'],
+            'agendas' => ['required'],
+            'agendas.*.id' => ['nullable'],
+            'agendas.*.detail' => ['required'],
+            'agendas.*.decicion' => ['nullable'],
         ];
-
         return $rules;
     }
 }
