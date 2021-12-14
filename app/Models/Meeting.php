@@ -74,4 +74,9 @@ class Meeting extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function agendas()
+    {
+        return $this->hasMany(Agenda::class);
+    }
 }

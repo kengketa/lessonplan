@@ -5,7 +5,7 @@
       :submit-event="submit"
     >
       <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-        <div class="space-y-6 sm:space-y-5">
+        <div class="space-y-2 sm:space-y-2">
           <div>
             <h3 v-if="meeting.id == null" class="text-lg leading-6 text-gray-900">
               Create new Meeting
@@ -51,7 +51,7 @@
                 @keyup.enter="addAttendee()"
                 v-model="typingAttendee"
                 label="attendee"
-                placeholder="attendee"
+                placeholder="typing an attendee then press enter to add"
               />
             </form>
             <div class="flex flex-wrap mt-2">
@@ -84,11 +84,11 @@
                 />
               </div>
               <div class="my-4">
-                <EditorInput label="Agenda detail" height="350" v-model="form.agendas[agendaIndex].detail" />
+                <EditorInput label="Agenda detail" :height="350" v-model="form.agendas[agendaIndex].detail" />
               </div>
-              <div class="my-4">
-                <EditorInput label="Decision" height="200" v-model="form.agendas[agendaIndex].decision" />
-              </div>
+              <!--              <div class="my-4">-->
+              <!--                <EditorInput label="Decision" :height="200" v-model="form.agendas[agendaIndex].decision" />-->
+              <!--              </div>-->
               <button @click="removeAgenda(agendaIndex)" type="button"
                       class="absolute top-2 right-2 text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -98,7 +98,7 @@
                 </svg>
               </button>
             </div>
-            <button v-if="type === 'create'" type="button" @click="addAgenda()"
+            <button type="button" @click="addAgenda()"
                     class="border border-dashed h-80 px-4 py-4">
               <div class="flex justify-center items-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -169,11 +169,24 @@ export default {
         location: this.meeting.location,
         attendee: this.meeting.attendee ?? []
       }),
-      typingAttendee: null
+      typingAttendee: null,
     };
   },
   mounted() {
 
+  },
+  watch: {
+    form: {
+      deep: true,
+      handler() {
+        clearTimeout(this.debounce)
+        this.debounce = setTimeout(() => {
+          if (this.type === 'edit' && this.form.isDirty) {
+            this.submit();
+          }
+        }, 3000);
+      }
+    }
   },
   methods: {
     getErrorKey(front, index, prop) {

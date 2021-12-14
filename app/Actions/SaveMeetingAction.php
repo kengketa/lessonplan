@@ -63,7 +63,7 @@ class SaveMeetingAction
         }
         $toBeDeletedIds = array_diff($oldAgendas, $stayIds);
         if (count($toBeDeletedIds) > 0) {
-            // delete agendas
+            Agenda::whereIn('id', $toBeDeletedIds)->delete();
         }
         return;
     }

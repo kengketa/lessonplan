@@ -6,6 +6,7 @@ use App\Actions\SaveMeetingAction;
 use App\Http\Requests\CreateOrUpdateMeetingRequest;
 use App\Models\Meeting;
 use App\Http\Controllers\Controller;
+use App\Transformers\AgendaTransformer;
 use App\Transformers\MeetingTransformer;
 use App\Transformers\SchoolTransformer;
 use Illuminate\Http\RedirectResponse;
@@ -67,6 +68,7 @@ class MeetingController extends Controller
     public function edit(Meeting $meeting): Response
     {
         $meetingData = fractal($meeting, new MeetingTransformer())->toArray();
+        $meetingData['agendas'] = fractal($meeting->agendas, new AgendaTransformer())->toArray()['data'];
         $schools = School::all();
         $schoolData = fractal($schools, new SchoolTransformer())->toArray()['data'];
         return Inertia::render(
@@ -84,8 +86,8 @@ class MeetingController extends Controller
     ): RedirectResponse {
         $meeting = $saveMeetingAction->execute($meeting, $request->validated());
 
-        return redirect()->route("dashboard.meetings.show", ['meeting' => $meeting])->with("success",
-            "Meeting has been update!");
+        return redirect()->route("dashboard.meetings.edit", ['meeting' => $meeting])
+            ->with("success", "Meeting has been update!");
     }
 
     public function destroy(Meeting $meeting): RedirectResponse

@@ -17,11 +17,20 @@ class MeetingPresenter extends BasePresenter
 
     public function date()
     {
-        $date = "-";
+        $date = null;
         if ($this->model->date != null) {
-            $date = Carbon::parse($this->model->date)->format('d M Y H:i');
+            $date = Carbon::parse($this->model->date)->format('d M Y');
         }
         return $date;
+    }
+
+    public function time()
+    {
+        $time = null;
+        if ($this->model->date != null) {
+            $time = Carbon::parse($this->model->date)->format('H.i');
+        }
+        return $time;
     }
 
 }
