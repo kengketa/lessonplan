@@ -75,10 +75,19 @@
             <div v-for="(agenda,agendaIndex) in form.agendas" :key="agendaIndex"
                  class="border px-4 py-4 relative">
               <div>
+                <TextInput
+                  v-model="form.agendas[agendaIndex].topic"
+                  label="topic"
+                  placeholder="topic"
+                  :is-show-line="false"
+                  :error="form.errors[getErrorKey('agendas.',agendaIndex,'.topic')]"
+                />
+              </div>
+              <div class="my-4">
                 <EditorInput label="Agenda detail" height="350" v-model="form.agendas[agendaIndex].detail" />
               </div>
               <div class="my-4">
-                <EditorInput label="Decicion" height="200" v-model="form.agendas[agendaIndex].decicion" />
+                <EditorInput label="Decision" height="200" v-model="form.agendas[agendaIndex].decision" />
               </div>
               <button @click="removeAgenda(agendaIndex)" type="button"
                       class="absolute top-2 right-2 text-red-500">
@@ -167,6 +176,10 @@ export default {
 
   },
   methods: {
+    getErrorKey(front, index, prop) {
+      let key = front + index + prop;
+      return key;
+    },
     removeAgenda(index) {
       this.form.agendas.splice(index, 1);
     },
@@ -180,8 +193,9 @@ export default {
     addAgenda() {
       let newAgenda = {
         id: null,
-        detail: "",
-        decicion: null
+        topic: "",
+        detail: null,
+        decision: null
       }
       this.form.agendas.push(newAgenda);
     },

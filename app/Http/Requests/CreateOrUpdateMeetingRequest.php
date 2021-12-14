@@ -23,8 +23,9 @@ class CreateOrUpdateMeetingRequest extends FormRequest
             'attendee' => ['nullable'],
             'agendas' => ['required'],
             'agendas.*.id' => ['nullable'],
-            'agendas.*.detail' => ['required'],
-            'agendas.*.decicion' => ['nullable'],
+            'agendas.*.topic' => ['required'],
+            'agendas.*.detail' => ['nullable'],
+            'agendas.*.decision' => ['nullable'],
         ];
         return $rules;
     }

@@ -13,6 +13,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ClockInController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Dashboard\MeetingController;
+use App\Http\Controllers\Dashboard\AgendaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,5 +136,14 @@ Route::get("clock-ins/report-preview",
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
 
+	//agendas
+	Route::get("agendas", [AgendaController::class,"index"])->name("dashboard.agendas.index");
+	Route::get("agendas/create", [AgendaController::class,"create"])->name("dashboard.agendas.create");
+	Route::get("agendas/{agenda}", [AgendaController::class,"show"])->name("dashboard.agendas.show");
+	Route::post("agendas", [AgendaController::class,"store"])->name("dashboard.agendas.store");
+	Route::get("agendas/{agenda}/edit", [AgendaController::class,"edit"])->name("dashboard.agendas.edit");
+	Route::put("agendas/{agenda}", [AgendaController::class,"update"])->name("dashboard.agendas.update");
+	Route::delete("agendas/{agenda}", [AgendaController::class,"destroy"])->name("dashboard.agendas.destroy");
+	
 
 });
