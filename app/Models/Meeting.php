@@ -60,13 +60,17 @@ class Meeting extends Model
 
     public function scopeFilter(Builder $query, array $filters): void
     {
-        if (!empty($filters['school'])) {
-            $query->where('school_id', $filters['school']);
-        }
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("title", "like", "%$filters[search]%");
+                $qr->where("title", "like", "%$filters[search]%")->orWhereHas('agendas', function ($q) use ($filters) {
+                    $q->where("topic", "like", "%$filters[search]%")
+                        ->orWhere("detail", "like", "%$filters[search]%")
+                        ->orWhere("decision", "like", "%$filters[search]%");
+                });
             });
+        }
+        if (!empty($filters['school'])) {
+            $query->where('school_id', $filters['school']);
         }
     }
 
