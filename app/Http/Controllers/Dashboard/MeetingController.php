@@ -56,12 +56,13 @@ class MeetingController extends Controller
 
     public function show(Meeting $meeting): Response
     {
-        $meeting = fractal($meeting, new MeetingTransformer())->toArray();
+        $meetingData = fractal($meeting, new MeetingTransformer())->toArray();
+        $meetingData['agendas'] = fractal($meeting->agendas, new AgendaTransformer())->toArray()['data'];
 
         return Inertia::render(
             'Dashboard/Meetings/Show',
             [
-                'meeting' => $meeting,
+                'meeting' => $meetingData,
             ]);
     }
 

@@ -27,8 +27,6 @@
         ></TextInput>
         <div class="flex flex items-end">
           <button type="button" @click="clear()" class="button button-primary button-small mb-1 ml-1">Clear</button>
-          <!--          <button type="button" @click="generate()" class="button button-primary button-small mb-1 ml-1">Generate-->
-          <!--          </button>-->
         </div>
       </div>
       <TableDisplayContainer>
@@ -38,12 +36,13 @@
               <span>{{ column }}</span>
             </div>
           </TableTh>
-          <TableTh>Actions</TableTh>
         </template>
         <template #body>
           <tr
             v-for="(item, itemIndex) in meetings.data"
             :key="item"
+            class="hover:bg-gray-100 cursor-pointer"
+            @click="visit(item)"
             :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
           >
             <TableTd>
@@ -57,11 +56,6 @@
             </TableTd>
             <TableTd>
               {{ item.status }}
-            </TableTd>
-            <TableTd>
-              <Link :href="route('dashboard.meetings.edit', item.id)" class="link">
-                Edit
-              </Link>
             </TableTd>
           </tr>
         </template>
@@ -117,10 +111,13 @@ export default {
         school: this.filters.school ?? null
       },
       breadcrumbs: [{name: 'Meetings', href: "#"}],
-      columns: ['school', 'title', 'date', 'status',],
+      columns: ['school', 'title', 'date'],
     };
   },
   methods: {
+    visit(meeting) {
+      this.$inertia.visit(route('dashboard.meetings.show', meeting.id));
+    },
     clear() {
       this.$inertia.visit(route('dashboard.meetings.index'));
     },
