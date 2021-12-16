@@ -109,4 +109,12 @@ class MeetingController extends Controller
         }
     }
 
+    public function achieve(Meeting $meeting): RedirectResponse
+    {
+        $meeting->status = $meeting->status == Meeting::UP_COMMING ? Meeting::ACHIEVED : Meeting::UP_COMMING;
+        $meeting->save();
+        return redirect()->route("dashboard.meetings.show", $meeting->id)
+            ->with("success", "Meeting has been set to achieved.");
+    }
+
 }

@@ -86,7 +86,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::get("meetings/{meeting}/edit", [MeetingController::class, "edit"])->name("dashboard.meetings.edit");
         Route::put("meetings/{meeting}", [MeetingController::class, "update"])->name("dashboard.meetings.update");
         Route::delete("meetings/{meeting}", [MeetingController::class, "destroy"])->name("dashboard.meetings.destroy");
-
+        Route::post("meetings/{meeting}/achieve",
+            [MeetingController::class, "achieve"])->name("dashboard.meetings.achieve");
     });
 
     Route::middleware(["role:".Role::ROLE_ADMIN.'|'.Role::ROLE_SUPER_ADMIN.'|'.Role::ROLE_TEACHER])->group(function () {

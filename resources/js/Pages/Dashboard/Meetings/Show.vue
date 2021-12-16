@@ -24,12 +24,24 @@
             <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
             Edit
           </Link>
+          <div class="inline-flex">
+            <button v-if="meeting.status == 2" @click="achieve()" type="button" class="button button-primary mr-2">
+              <ArchiveIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+              Achieved
+            </button>
+            <button v-if="meeting.status == 1" @click="achieve()" type="button" class="button button-success mr-2">
+              <ArchiveIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+              Up coming
+            </button>
+          </div>
           <form class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
             <button type="submit" class="button button-danger">
               <TrashIcon class="h-5 w-5 mr-2" aria-hidden="true" />
               Delete
             </button>
           </form>
+
+
         </div>
       </template>
     </PageHeading>
@@ -81,7 +93,8 @@ import {
   PencilIcon,
   TrashIcon,
   CheckCircleIcon,
-  ExclamationCircleIcon
+  ExclamationCircleIcon,
+  ArchiveIcon
 } from '@heroicons/vue/solid';
 import {useForm} from '@inertiajs/inertia-vue3';
 import Button from '@/Jetstream/Button';
@@ -91,7 +104,7 @@ export default {
   components: {
     Card, PageHeading, Breadcrumbs, DataDisplayContainer,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
-    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link
+    ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link, ArchiveIcon
   },
   layout: Layout,
   props: {
@@ -112,6 +125,9 @@ export default {
   },
   computed: {},
   methods: {
+    achieve() {
+      this.$inertia.post(route('dashboard.meetings.achieve', this.meeting.id));
+    },
     deleteMeeting() {
       this.deleteForm.delete(route('dashboard.meetings.destroy', {meeting: this.meeting.id}));
     },
