@@ -1,20 +1,18 @@
 <?php
 
-namespace Tests\Feature\School;
+namespace Tests\Feature\Meeting;
 
 use App\Models\Agenda;
 use App\Models\Meeting;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\User;
-use App\Notifications\WelcomeEmailNotification;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\Assert;
 use Tests\Setup\RefreshDatabase;
 use Tests\TestCase;
 
-class SchoolTest extends TestCase
+class MeetingTest extends TestCase
 {
     use RefreshDatabase;
 
