@@ -6,6 +6,7 @@
         Meeting Management
         <template #actions>
           <Link
+            v-if="$page.props.authUserRole == 'SUPER_ADMIN' || $page.props.authUserRole == 'ADMIN'"
             class="button button-primary"
             :href="route('dashboard.meetings.create')"
           >
@@ -16,6 +17,7 @@
       </PageHeading>
       <div class="md:grid md:grid-cols-3 md:gap-2">
         <SearchSelectInput
+          v-if="$page.props.authUserRole == 'SUPER_ADMIN' || $page.props.authUserRole == 'ADMIN'"
           v-model="form.school"
           :options="schools"
           :is-show-line="false"
@@ -43,7 +45,7 @@
             :key="item"
             class="hover:bg-gray-100 cursor-pointer"
             @click="visit(item)"
-            :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+            :class="computedRowColor(item,itemIndex)"
           >
             <TableTd>
               {{ item.school }}
@@ -52,10 +54,7 @@
               {{ item.title }}
             </TableTd>
             <TableTd>
-              {{ item.date }}
-            </TableTd>
-            <TableTd>
-              {{ item.status }}
+              {{ item.date }} {{ item.time }}
             </TableTd>
           </tr>
         </template>
@@ -115,6 +114,12 @@ export default {
     };
   },
   methods: {
+    computedRowColor(meeting, index) {
+      if (meeting.status == 1) {
+        return 'bg-green-100'
+      }
+      return index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+    },
     visit(meeting) {
       this.$inertia.visit(route('dashboard.meetings.show', meeting.id));
     },

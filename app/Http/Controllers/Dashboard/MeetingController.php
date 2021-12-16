@@ -6,11 +6,13 @@ use App\Actions\SaveMeetingAction;
 use App\Http\Requests\CreateOrUpdateMeetingRequest;
 use App\Models\Meeting;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Transformers\AgendaTransformer;
 use App\Transformers\MeetingTransformer;
 use App\Transformers\SchoolTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\School;
@@ -20,6 +22,13 @@ class MeetingController extends Controller
     public function index(Request $request): Response
     {
         $filters = $request->only(["search", "school"]);
+        if (Auth::user()->roles[0]?->name == Role::ROLE_TEACHER) {
+            $user = Auth::user();
+            if (!$user->school) {
+                abort(403, 'Error, What school are you in? please contact your admin.');
+            }
+            $filters['school'] = $user->school[0]?->id ?? null;
+        }
         $meetings = Meeting::filter($filters)->orderBy('date', 'desc')->paginate(30);
         $meetingData = fractal($meetings, new MeetingTransformer())->toArray();
         $schools = School::all();

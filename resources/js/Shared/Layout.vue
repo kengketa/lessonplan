@@ -368,7 +368,7 @@ export default {
       } else if (user.roles[0].id == roles.TEACHER) {
         nav.push(navs.dashboard);
         nav.push(navs.timeSheets);
-        //nav.push(navs.schools);
+        nav.push(navs.meetings);
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);

@@ -16,19 +16,21 @@
       <span class="max-w-xs truncate">{{ meeting.name }}</span>
     </span>
       <template #actions>
-        <Link
-          :href="route('dashboard.meetings.edit', meeting.id)"
-          class="button button-primary mr-2"
-        >
-          <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
-          Edit
-        </Link>
-        <form class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
-          <button type="submit" class="button button-danger">
-            <TrashIcon class="h-5 w-5 mr-2" aria-hidden="true" />
-            Delete
-          </button>
-        </form>
+        <div v-if="$page.props.authUserRole == 'SUPER_ADMIN' || $page.props.authUserRole == 'ADMIN'">
+          <Link
+            :href="route('dashboard.meetings.edit', meeting.id)"
+            class="button button-primary mr-2"
+          >
+            <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+            Edit
+          </Link>
+          <form class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
+            <button type="submit" class="button button-danger">
+              <TrashIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+              Delete
+            </button>
+          </form>
+        </div>
       </template>
     </PageHeading>
 
