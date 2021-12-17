@@ -63,19 +63,19 @@ class CrudGenCommand extends Command
         //View CRUD
 
         //Index
-        $status['index_view'] = $this->indexViewHandle();
+        //$status['index_view'] = $this->indexViewHandle();
 
         //Create
-        $status['create_view'] = $this->createViewHandle();
+        //$status['create_view'] = $this->createViewHandle();
 
         //Edit
-        $status['edit'] = $this->editViewHandle();
+        //$status['edit'] = $this->editViewHandle();
 
         //Show
-        $status['show'] = $this->showViewHandle();
+        //$status['show'] = $this->showViewHandle();
 
         //Form
-        $status['form'] = $this->formHandle();
+        //$status['form'] = $this->formHandle();
 
     }
 }

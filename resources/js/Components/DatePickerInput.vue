@@ -24,7 +24,7 @@
           <div class="flex items-center rounded relative w-full">
             <input
               :value="modelValue"
-              class="block w-full p-2 border border-r-0 border-gray-300 rounded-l-md focus:outline-none focus:ring-2"
+              class="block w-full p-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2"
               :class="{
                 'pr-10 text-red-900 border-red-300 focus:ring-red-500 focus:border-red-500': error,
                 'focus:ring-primary-500': !error,
@@ -42,11 +42,7 @@
                 aria-hidden="true"
               />
             </div>
-            <button
-              type="button"
-              class="p-2 border border-l-0 border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-              @click="togglePopover()"
-            >
+            <button class="absolute top-2 right-2" type="button" @click="togglePopover()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

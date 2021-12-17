@@ -267,6 +267,7 @@ import {
   QrcodeIcon,
   AcademicCapIcon,
   ClockIcon,
+  DocumentTextIcon,
 } from "@heroicons/vue/outline";
 import {Link} from "@inertiajs/inertia-vue3";
 import {SearchIcon} from "@heroicons/vue/solid";
@@ -309,6 +310,12 @@ const navs = {
     icon: ClockIcon,
     routeGroup: "dashboard.my_time_sheet",
   },
+  meetings: {
+    name: "Meetings",
+    href: route("dashboard.meetings.index"),
+    icon: DocumentTextIcon,
+    routeGroup: "dashboard.meetings.*",
+  },
 
   //roles: {
   //   name: "Roles",
@@ -337,7 +344,8 @@ export default {
     ChipIcon,
     FireIcon,
     QrcodeIcon,
-    Link
+    Link,
+    DocumentTextIcon
   },
   data() {
     return {sidebarOpen: false, userNavigation: userNavigation};
@@ -360,17 +368,19 @@ export default {
       } else if (user.roles[0].id == roles.TEACHER) {
         nav.push(navs.dashboard);
         nav.push(navs.timeSheets);
-        //nav.push(navs.schools);
+        nav.push(navs.meetings);
       } else if (user.roles[0].id == roles.ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);
-        nav.push(navs.schools);
+        //nav.push(navs.schools);
         nav.push(navs.clockIns);
+        nav.push(navs.meetings);
       } else if (user.roles[0].id == roles.SUPER_ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);
-        nav.push(navs.schools);
+        //nav.push(navs.schools);
         nav.push(navs.clockIns);
+        nav.push(navs.meetings);
       } else {
         //push nothing
       }
