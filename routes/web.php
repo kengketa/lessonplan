@@ -12,6 +12,8 @@ use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ClockInController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\Dashboard\MeetingController;
+use App\Http\Controllers\Dashboard\AgendaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +80,14 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         Route::post("clock-ins/generate-report",
             [ClockInController::class, "generateReport"])->name("dashboard.clock_ins.generate_report");
 
+        //meetings
+        Route::get("meetings/create", [MeetingController::class, "create"])->name("dashboard.meetings.create");
+        Route::post("meetings", [MeetingController::class, "store"])->name("dashboard.meetings.store");
+        Route::get("meetings/{meeting}/edit", [MeetingController::class, "edit"])->name("dashboard.meetings.edit");
+        Route::put("meetings/{meeting}", [MeetingController::class, "update"])->name("dashboard.meetings.update");
+        Route::delete("meetings/{meeting}", [MeetingController::class, "destroy"])->name("dashboard.meetings.destroy");
+        Route::post("meetings/{meeting}/achieve",
+            [MeetingController::class, "achieve"])->name("dashboard.meetings.achieve");
     });
 
     Route::middleware(["role:".Role::ROLE_ADMIN.'|'.Role::ROLE_SUPER_ADMIN.'|'.Role::ROLE_TEACHER])->group(function () {
@@ -113,6 +123,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         //my time sheet
         Route::get("my-time-sheets", [TeacherController::class, "myTimeSheet"])->name("dashboard.my_time_sheet");
 
+        //meetings
+        Route::get("meetings", [MeetingController::class, "index"])->name("dashboard.meetings.index");
+        Route::get("meetings/{meeting}", [MeetingController::class, "show"])->name("dashboard.meetings.show");
+
     });
 
 });
@@ -124,6 +138,15 @@ Route::get("clock-ins/report-preview",
     [ClockInController::class, "clockInPreview"])->name("dashboard.clock_ins.preview");
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
+
+    //agendas
+    Route::get("agendas", [AgendaController::class, "index"])->name("dashboard.agendas.index");
+    Route::get("agendas/create", [AgendaController::class, "create"])->name("dashboard.agendas.create");
+    Route::get("agendas/{agenda}", [AgendaController::class, "show"])->name("dashboard.agendas.show");
+    Route::post("agendas", [AgendaController::class, "store"])->name("dashboard.agendas.store");
+    Route::get("agendas/{agenda}/edit", [AgendaController::class, "edit"])->name("dashboard.agendas.edit");
+    Route::put("agendas/{agenda}", [AgendaController::class, "update"])->name("dashboard.agendas.update");
+    Route::delete("agendas/{agenda}", [AgendaController::class, "destroy"])->name("dashboard.agendas.destroy");
 
 
 });
