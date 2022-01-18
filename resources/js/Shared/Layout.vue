@@ -316,13 +316,18 @@ const navs = {
     icon: DocumentTextIcon,
     routeGroup: "dashboard.meetings.*",
   },
-
-  //roles: {
-  //   name: "Roles",
-  //   href: route("roles.index"),
-  //   icon: LockClosedIcon ,
-  //   routeGroup: "roles.*",
-  // },
+  leaves: {
+    name: "Leaves",
+    href: '#',
+    icon: FireIcon,
+    routeGroup: "#",
+  },
+  visas: {
+    name: "Visas",
+    href: '#',
+    icon: DocumentTextIcon,
+    routeGroup: "#",
+  },
 };
 export default {
   name: "Layout",
@@ -375,6 +380,8 @@ export default {
         //nav.push(navs.schools);
         nav.push(navs.clockIns);
         nav.push(navs.meetings);
+        nav.push(navs.leaves);
+        nav.push(navs.visas);
       } else if (user.roles[0].id == roles.SUPER_ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);
