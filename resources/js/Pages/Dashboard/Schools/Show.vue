@@ -104,6 +104,7 @@
           <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
             Clear
           </button>
+          <button type="button" class="button button-primary button-small mb-1 ml-1 whitespace-nowrap">Super Approve</button>
         </div>
       </div>
       <TableDisplayContainer class="mt-4">

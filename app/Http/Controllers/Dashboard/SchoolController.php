@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Arr;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class SchoolController extends Controller
@@ -67,7 +69,6 @@ class SchoolController extends Controller
             return redirect()->route('dashboard.schools.index')
                 ->with("error", 'You are not authorized.');
         }
-
         $schoolData = fractal($school, new SchoolTransformer())->toArray();
         $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
         $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
