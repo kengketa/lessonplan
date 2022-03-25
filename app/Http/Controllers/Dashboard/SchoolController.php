@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Actions\BulkApproveAction;
 use App\Actions\SaveSchoolAction;
 use App\Http\Requests\CreateOrUpdateSchoolRequest;
 use App\Models\Grade;
@@ -22,8 +23,6 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Arr;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 
 class SchoolController extends Controller
@@ -204,6 +203,19 @@ class SchoolController extends Controller
         SchoolTeacher::where('school_id', $school->id)->where('teacher_id', $request['id'])->delete();
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Teacher has been removed.");
+    }
+
+    public function bulkApprove(School $school, Request $request)
+    {
+        $req = $request->only('selectedWeek');
+        $schoolId = $school->id;
+        $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+            $q->where('id', $schoolId);
+        })->where('week_number', $req['selectedWeek'])
+            ->get();
+        $bulkApproveAction = new BulkApproveAction();
+        $calculatedLinks = $bulkApproveAction->execute($reports, $req['selectedWeek']);
+        return json_encode($calculatedLinks);
     }
 
 }
