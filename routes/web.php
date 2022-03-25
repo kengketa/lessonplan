@@ -60,6 +60,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [SchoolController::class, "addTeacher"])->name("dashboard.schools.add_teacher");
         Route::post("schools/{school}/remove-teacher",
             [SchoolController::class, "removeTeacher"])->name("dashboard.schools.remove_teacher");
+        Route::post("schools/{school}/bulk-lesson-plan-approve",
+            [SchoolController::class, "bulkApprove"])->name("dashboard.schools.bulk_approve");
         Route::post("schools", [SchoolController::class, "store"])->name("dashboard.schools.store");
         Route::get("schools/{school}/edit", [SchoolController::class, "edit"])->name("dashboard.schools.edit");
         Route::put("schools/{school}", [SchoolController::class, "update"])->name("dashboard.schools.update");

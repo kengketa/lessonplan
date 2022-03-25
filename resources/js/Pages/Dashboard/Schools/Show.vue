@@ -104,7 +104,11 @@
           <button @click="clearFilter()" type="button" class="button button-primary button-small mb-1 ml-1">
             Clear
           </button>
-          <button type="button" class="button button-primary button-small mb-1 ml-1 whitespace-nowrap">Super Approve</button>
+          <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                  @click="showSuperApproveModal = true" type="button"
+                  class="button button-primary button-small mb-1 ml-1 whitespace-nowrap">
+            Super Approve
+          </button>
         </div>
       </div>
       <TableDisplayContainer class="mt-4">
@@ -280,6 +284,7 @@
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id" />
     <AddTeacherModal v-model="showAddTeacherModal" :school="school" />
     <PrintModal v-model="showPrintModal" :print-list="printList" :school-id="school.id" />
+    <SuperApproveModal v-model="showSuperApproveModal" :school="school" :week="filterForm.filters.week" />
   </div>
 </template>
 
@@ -314,10 +319,12 @@ import TextInput from "../../../Components/TextInput";
 import SearchSelectInput from "../../../Components/SearchSelectInput";
 import AddTeacherModal from "../../../Components/Forms/AddTeacherModal";
 import PrintModal from "../../../Components/Forms/PrintModal";
+import SuperApproveModal from "@/Components/Forms/SuperApproveModal";
 
 export default {
   name: 'SchoolShow',
   components: {
+    SuperApproveModal,
     PrintModal,
     AddTeacherModal,
     SearchSelectInput,
@@ -377,6 +384,7 @@ export default {
       removingTeacher: null,
       printList: [],
       showSchoolInformation: false,
+      showSuperApproveModal: false,
     };
   },
   mounted() {
