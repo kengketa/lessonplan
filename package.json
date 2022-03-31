@@ -31,6 +31,6 @@
     },
     "dependencies": {
         "@tinymce/tinymce-vue": "^4.0.4",
-        "puppeteer": "^10.4.0"
+        "puppeteer": "^13.5.2"
     }
 }
