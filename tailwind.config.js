@@ -2,23 +2,25 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: {
-    enabled: false,
-    content: [
-      './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-      './vendor/laravel/jetstream/**/*.blade.php',
-      './storage/framework/views/*.php',
-      './resources/views/**/*.blade.php',
-      './resources/js/**/*.vue',],
-  },
-
+  content: [
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+    './vendor/laravel/jetstream/**/*.blade.php',
+    './storage/framework/views/*.php',
+    './resources/views/**/*.blade.php',
+    './resources/js/**/*.vue'
+  ],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Sarabun', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.blue
+        current: 'currentColor',
+        primary: colors.blue,
+        green: colors.emerald,
+        yellow: colors.amber,
+        purple: colors.violet,
+        gray: colors.neutral,
       },
       fontSize: {
         '4xs': '0.45rem',
@@ -57,12 +59,6 @@ module.exports = {
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
     }
-  },
-
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-    },
   },
 
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],

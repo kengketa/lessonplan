@@ -29,7 +29,7 @@
         <span
           class="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
-          >&#8203;</span
+        >&#8203;</span
         >
 
         <TransitionChild
@@ -108,7 +108,8 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 
-import { ExclamationIcon } from "@heroicons/vue/outline";
+import {ExclamationIcon} from "@heroicons/vue/outline";
+
 export default {
   components: {
     Dialog,
@@ -122,10 +123,10 @@ export default {
     modelValue: {
       type: Boolean,
     },
-    title: { type: String, default: "Confirm Action" },
-    body: { type: String, default: "Are you sure to do this action?" },
-    confirmText: { type: String, default: "Confirm" },
-    cancelText: { type: String, default: "Cancel" },
+    title: {type: String, default: "Confirm Action"},
+    body: {type: String, default: "Are you sure to do this action?"},
+    confirmText: {type: String, default: "Confirm"},
+    cancelText: {type: String, default: "Cancel"},
     confirmEvent: Function,
     themeColor: {
       type: String,
@@ -139,5 +140,6 @@ export default {
       this.$emit("update:modelValue", false);
     },
   },
+  computed: {}
 };
 </script>
