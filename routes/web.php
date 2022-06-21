@@ -14,6 +14,7 @@ use App\Http\Controllers\ClockInController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Dashboard\MeetingController;
 use App\Http\Controllers\Dashboard\AgendaController;
+use App\Http\Controllers\VocabController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,13 @@ use App\Http\Controllers\Dashboard\AgendaController;
 
 Route::get('/', function () {
     return redirect()->route('login');
+})->name('baseurl');
+
+Route::prefix('tessaban5')->group(function () {
+    Route::get("/",
+        [VocabController::class, "index"])->name("vocabs.index");
+    Route::get("vocabs/{grade}",
+        [VocabController::class, "show"])->name("vocabs.show");
 });
 
 // reset, setup password, pin for user
@@ -138,6 +146,8 @@ Route::get("global-reports/{globalReport}",
     [ReportController::class, "showGlobalReports"])->name("reports.global.show");
 Route::get("clock-ins/report-preview",
     [ClockInController::class, "clockInPreview"])->name("dashboard.clock_ins.preview");
+
+
 Route::middleware(["auth"])->group(function () {
     /* auto_generate_route  (DO NOT REMOVE THIS LINE)*/
 
