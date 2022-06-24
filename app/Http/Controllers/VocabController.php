@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Grade;
 use App\Models\Report;
 use App\Models\School;
+use App\Models\Vocab;
 use App\Transformers\GradeTransformer;
 use App\Transformers\SchoolTransformer;
 use App\Transformers\VocabTransformer;
@@ -26,9 +27,9 @@ class VocabController extends Controller
         );
     }
 
-    public function show(Grade $grade)
+    public function fetchVocabs(Grade $grade)
     {
-        dd($grade);
-
+        $vocabData = $grade->vocabs->groupBy('subject_name')->toArray();
+        return response()->json($vocabData);
     }
 }

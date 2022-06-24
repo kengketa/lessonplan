@@ -115,6 +115,17 @@ class Report extends Model
         return null;
     }
 
+    public function getSubjectId()
+    {
+        $schoolSubjects = $this->grade->school->subjects;
+        foreach ($schoolSubjects as $subject) {
+            if ($subject['id'] == $this->subject) {
+                return $subject['id'];
+            }
+        }
+        return null;
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_id')->withTrashed();

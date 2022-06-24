@@ -11,12 +11,29 @@
         <button
           @click="fetchVocabs(grade)"
           v-for="(grade,index) in grades"
-          class="w-40 bg-white rounded rounded-lg shadow shadow-lg px-4 py-2 transition transform ease-in-out duration-200 hover:scale-105 hover:shadow-xl">
+          class="w-40 bg-white rounded rounded-lg shadow shadow-lg px-4 py-2 transition transform ease-in-out duration-200 hover:scale-105 hover:shadow-xl"
+          :class="selectedGradeId == grade.id ?'bg-mountain-green text-white' : 'text-gray-400'"
+        >
           {{ grade.name }}
         </button>
       </div>
-      <div>
+      <div class="w-10/12 absolute bottom-10 left-4 flex gap-2">
+        <div v-for="(subject,key) in vocabGroupedBySubject"
+             class=" w-1/3 opacity-bg shadow shadow-xl h-[500px] rounded rounded-xl p-2 overflow-y-scroll relative">
+          <div class="sticky top-0 right-0 w-full flex justify-end">
+            <div class="bg-yellow-200 px-2 py-0.5 rounded rounded-md">
+              {{ key }}
+            </div>
+          </div>
+          <div>
+            <div v-for="(vocab,index) in subject" :key="index">
+              {{ vocab.vocab_en }}
+            </div>
+          </div>
+        </div>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -38,11 +55,18 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      vocabGroupedBySubject: null,
+      selectedGradeId: null
+    };
   },
   methods: {
     fetchVocabs(grade) {
-      // Inertia.visit(route('vocabs.show', grade.id));
+      this.selectedGradeId = grade.id;
+      const url = route('vocabs.fetch', grade.id);
+      axios.get(url).then(res => {
+        this.vocabGroupedBySubject = res.data
+      })
     }
   },
   watch: {},
@@ -56,4 +80,13 @@ export default {
   }
 }
 </script>
+<style>
+.opacity-bg {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-mountain-green {
+  background-color: #84CB85;
+}
+</style>
 

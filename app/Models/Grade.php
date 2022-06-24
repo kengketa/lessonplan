@@ -55,6 +55,11 @@ class Grade extends Model
         return $this->hasMany(Report::class, 'grade_id');
     }
 
+    public function vocabs()
+    {
+        return $this->hasMany(Vocab::class, 'grade_id');
+    }
+
     public function fullName()
     {
         $prefix = "";

@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\School;
+use App\Models\Vocab;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Report;
 
 class migrateVocabsList extends Command
 {
@@ -39,20 +41,33 @@ class migrateVocabsList extends Command
      */
     public function handle()
     {
-        //        $schoolData = fractal($school, new SchoolTransformer())->toArray();
-//        $reportGroupedByGrade = Report::where('academic_year', getCurrentAcademicYear())
-//            ->where('semester', getCurrentSemester())->whereHas('grade.school', function ($q) use ($school) {
-//                $q->where('id', $school->id);
-//            })
-//            ->orderBy('grade_id', 'asc')
-//            ->get()->groupBy('grade_id');
-//
-//        foreach ($reportGroupedByGrade as $reports) {
-////            $vocabData[$reports[0]->grade->fullName()] = fractal($reports, new VocabTransformer())->toArray()['data'];
-//            $vocabData[] = [
-//                'grade' => $reports[0]->grade->toArray(),
-//                'gradeFullName' => $reports[0]->grade->fullName()
-//            ];
-//        }
+        $school = School::find(3);
+        $reports = Report::where('academic_year', getCurrentAcademicYear())
+            ->where('semester', getCurrentSemester())->whereHas('grade.school', function ($q) use ($school) {
+                $q->where('id', $school->id);
+            })
+            ->orderBy('grade_id', 'asc')
+            ->get();
+
+        foreach ($reports as $report) {
+            foreach ($report->plans as $plan) {
+                if (count($plan['vocabs']) == 0) {
+                    continue;
+                }
+                foreach ($plan['vocabs'] as $vocab) {
+                    if ($vocab == null || $vocab == "") {
+                        continue;
+                    }
+                    Vocab::create([
+                        'school_id' => $school->id,
+                        'grade_id' => $report->grade_id,
+                        'subject_id' => $report->getSubjectId(),
+                        'subject_name' => $report->getSubjectName(),
+                        'vocab_en' => $vocab
+                    ]);
+                    $this->info('added:'.$vocab);
+                }
+            }
+        }
     }
 }
