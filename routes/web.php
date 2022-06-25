@@ -36,6 +36,9 @@ Route::prefix('tessaban5')->group(function () {
         [VocabController::class, "index"])->name("vocabs.index");
     Route::get("vocabs/{grade}",
         [VocabController::class, "fetchVocabs"])->name("vocabs.fetch");
+    Route::put("vocabs/{vocab}",
+        [VocabController::class, "update"])->name("vocabs.update");
+
 });
 
 // reset, setup password, pin for user

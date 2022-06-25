@@ -9,7 +9,16 @@ class Vocab extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['school_id', 'grade_id', 'subject_id', 'subject_name', 'vocab_th', 'vocab_en'];
+    protected $fillable = [
+        'school_id',
+        'grade_id',
+        'subject_id',
+        'subject_name',
+        'vocab_th',
+        'vocab_en',
+        'academic_year',
+        'semester'
+    ];
 
     public function school()
     {

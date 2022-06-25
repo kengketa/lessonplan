@@ -58,7 +58,18 @@ class migrateVocabsList extends Command
                     if ($vocab == null || $vocab == "") {
                         continue;
                     }
+                    $duplicatedVocab = Vocab::where('school_id', $school->id)
+                        ->where('academic_year', getCurrentAcademicYear())
+                        ->where('semester', getCurrentSemester())
+                        ->where('grade_id', $report->grade_id)
+                        ->where('subject_id', $report->getSubjectId())
+                        ->where('vocab_en', $vocab)->first();
+                    if ($duplicatedVocab) {
+                        continue;
+                    }
                     Vocab::create([
+                        'academic_year' => getCurrentAcademicYear(),
+                        'semester' => getCurrentSemester(),
                         'school_id' => $school->id,
                         'grade_id' => $report->grade_id,
                         'subject_id' => $report->getSubjectId(),

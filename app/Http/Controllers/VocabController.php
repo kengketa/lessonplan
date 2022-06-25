@@ -32,4 +32,11 @@ class VocabController extends Controller
         $vocabData = $grade->vocabs->groupBy('subject_name')->toArray();
         return response()->json($vocabData);
     }
+
+    public function update(Vocab $vocab, Request $request)
+    {
+        $vocab->vocab_th = $request->thaiWord;
+        $vocab->save();
+        return response()->json($vocab);
+    }
 }

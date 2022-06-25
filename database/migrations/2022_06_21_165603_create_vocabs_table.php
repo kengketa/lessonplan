@@ -14,6 +14,8 @@ return new class extends Migration {
     {
         Schema::create('vocabs', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('academic_year');
+            $table->unsignedTinyInteger('semester');
             $table->unsignedBigInteger('school_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('subject_id');
