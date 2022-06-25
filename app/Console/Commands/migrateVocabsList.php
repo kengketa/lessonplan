@@ -55,7 +55,7 @@ class migrateVocabsList extends Command
                     continue;
                 }
                 foreach ($plan['vocabs'] as $vocab) {
-                    if ($vocab == null || $vocab == "") {
+                    if ($vocab == null || $vocab == "" || !$report->getSubjectId()) {
                         continue;
                     }
                     $duplicatedVocab = Vocab::where('school_id', $school->id)
