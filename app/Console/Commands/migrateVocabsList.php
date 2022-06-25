@@ -63,7 +63,7 @@ class migrateVocabsList extends Command
                         ->where('semester', getCurrentSemester())
                         ->where('grade_id', $report->grade_id)
                         ->where('subject_id', $report->getSubjectId())
-                        ->where('vocab_en', $vocab)->first();
+                        ->where('vocab_en', strtolower($vocab))->first();
                     if ($duplicatedVocab) {
                         continue;
                     }
@@ -74,7 +74,7 @@ class migrateVocabsList extends Command
                         'grade_id' => $report->grade_id,
                         'subject_id' => $report->getSubjectId(),
                         'subject_name' => $report->getSubjectName(),
-                        'vocab_en' => $vocab
+                        'vocab_en' => strtolower($vocab)
                     ]);
                     $this->info('added:'.$vocab);
                 }
