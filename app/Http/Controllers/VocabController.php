@@ -6,6 +6,7 @@ use App\Models\Grade;
 use App\Models\Report;
 use App\Models\School;
 use App\Models\Vocab;
+use App\Transformers\FrontEndGradeTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\SchoolTransformer;
 use App\Transformers\VocabTransformer;
@@ -18,10 +19,10 @@ class VocabController extends Controller
     {
         $school = School::find(3);
         $grades = $school->grades;
-        $gradeData = fractal($grades, new GradeTransformer())->toArray()['data'];
+        $gradeData = fractal($grades, new FrontEndGradeTransformer())->toArray()['data'];
         return Inertia::render(
             'Frontend/Index', [
-                'school' => fractal($school, new SchoolTransformer())->toArray(),
+                'school' => $school->toArray(),
                 'grades' => $gradeData
             ]
         );
