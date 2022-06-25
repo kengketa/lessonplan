@@ -25,7 +25,7 @@
               {{ key }}
             </div>
           </div>
-          <div>
+          <div class="px-4">
             <div class="cursor-pointer flex justify-between hover:text-lg"
                  v-for="(vocab,index) in subject"
                  :key="index"
