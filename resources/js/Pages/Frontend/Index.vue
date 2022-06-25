@@ -138,6 +138,10 @@ export default {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
+body {
+  background-color: #E0F8FF;
+}
+
 .bg-mountain-green {
   background-color: #84CB85;
 }
