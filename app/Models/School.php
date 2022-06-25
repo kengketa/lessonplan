@@ -74,7 +74,9 @@ class School extends Model
 
     public function grades()
     {
-        return $this->hasMany(Grade::class, 'school_id');
+        return $this->hasMany(Grade::class, 'school_id')
+            ->orderBy('type', 'asc')
+            ->orderBy('level');
     }
 
     public function reports()

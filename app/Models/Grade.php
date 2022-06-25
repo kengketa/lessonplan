@@ -55,4 +55,29 @@ class Grade extends Model
         return $this->hasMany(Report::class, 'grade_id');
     }
 
+    public function vocabs()
+    {
+        return $this->hasMany(Vocab::class, 'grade_id')->orderBy('created_at', 'desc');
+    }
+
+    public function fullName()
+    {
+        $prefix = "";
+        switch ($this->type) {
+            case Grade::NURSERY_TYPE:
+                $prefix = 'preschool';
+                break;
+            case Grade::KINDERGATEN_TYPE:
+                $prefix = 'kindergarten';
+                break;
+            case Grade::PRIMARY_TYPE:
+                $prefix = 'primary';
+                break;
+            case Grade::SECONDARY_TYPE:
+                $prefix = 'secondary';
+                break;
+        }
+        return $prefix.'-'.$this->level;
+    }
+
 }

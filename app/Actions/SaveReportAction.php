@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Report;
 use App\Models\School;
+use App\Models\Vocab;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -16,11 +17,42 @@ class SaveReportAction
     {
         $this->report = $report;
         if ($this->report->id) {
-            $updatedReports = $this->updateReport($data);
-            return $updatedReports;
+            $updatedReport = $this->updateReport($data);
+            $this->addVocabs($updatedReport['id']);
+            return $updatedReport;
         }
         $createdReports = $this->createReports($data);
+        foreach ($createdReports as $createdReport) {
+            $this->addVocabs($createdReport->id);
+        }
         return $createdReports;
+    }
+
+    private function addVocabs($reportId): void
+    {
+        $report = Report::find($reportId);
+        foreach ($report['plans'] as $plan) {
+            foreach ($plan['vocabs'] as $vocab) {
+                $duplicatedVocab = Vocab::where('school_id', $report->grade->school->id)
+                    ->where('academic_year', getCurrentAcademicYear())
+                    ->where('semester', getCurrentSemester())
+                    ->where('grade_id', $report->grade_id)
+                    ->where('subject_id', $report->getSubjectId())
+                    ->where('vocab_en', strtolower($vocab))->first();
+                if ($duplicatedVocab) {
+                    continue;
+                }
+                Vocab::create([
+                    'academic_year' => getCurrentAcademicYear(),
+                    'semester' => getCurrentSemester(),
+                    'school_id' => $report->grade->school->id,
+                    'grade_id' => $report->grade_id,
+                    'subject_id' => $report->getSubjectId(),
+                    'subject_name' => $report->getSubjectName(),
+                    'vocab_en' => strtolower($vocab)
+                ]);
+            }
+        }
     }
 
     private function updateReport($data): array
