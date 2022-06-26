@@ -22,6 +22,9 @@ class TranslationService
         if ($decodedResponse['responseStatus'] != 200) {
             return null;
         }
+        if (mb_strlen($decodedResponse['responseData']['translatedText']) > 30) {
+            return null;
+        }
         $translatedText = $decodedResponse['responseData']['translatedText'];
         return $translatedText;
     }
