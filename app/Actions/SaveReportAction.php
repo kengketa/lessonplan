@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Models\Report;
 use App\Models\School;
 use App\Models\Vocab;
+use App\Services\TranslationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -49,7 +50,8 @@ class SaveReportAction
                     'grade_id' => $report->grade_id,
                     'subject_id' => $report->getSubjectId(),
                     'subject_name' => $report->getSubjectName(),
-                    'vocab_en' => strtolower($vocab)
+                    'vocab_en' => strtolower($vocab),
+                    'vocab_th' => strtolower(TranslationService::translate($vocab))
                 ]);
             }
         }
