@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative font-mali">
     <img src="/images/t5/tessaban-5-bg.png" class="absolute top-0 -z-50 object-cover w-full h-full">
     <div class="absolute top-0 content relative">
       <div class="w-full flex justify-center mt-4">
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="px-4">
-            <div class="cursor-pointer flex justify-between hover:text-lg"
+            <div class="cursor-pointer flex justify-between text-xl text-gray-500"
                  v-for="(vocab,index) in subject"
                  :key="index"
                  @click="insertThaiVocab(vocab,key,index)"
@@ -135,7 +135,7 @@ export default {
 </script>
 <style>
 .opacity-bg {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 body {
