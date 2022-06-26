@@ -90,13 +90,13 @@ export default {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'ขอบคุณสำหรับคำแปล ' + result.value.vocab_en + ':' + result.value.vocab_th,
-            showConfirmButton: false,
-            timer: 1500
-          })
+          // Swal.fire({
+          //   position: 'center',
+          //   icon: 'success',
+          //   title: 'ขอบคุณสำหรับคำแปล ' + result.value.vocab_en + ':' + result.value.vocab_th,
+          //   showConfirmButton: false,
+          //   timer: 1500
+          // })
           this.fetchVocabs(this.selectedGrade)
         }
       })
