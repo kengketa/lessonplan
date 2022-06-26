@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Jobs\TranslateVocabAndAddToDatabase;
 use App\Models\Report;
 use App\Models\School;
 use App\Models\Vocab;
@@ -43,16 +44,7 @@ class SaveReportAction
                 if ($duplicatedVocab) {
                     continue;
                 }
-                Vocab::create([
-                    'academic_year' => getCurrentAcademicYear(),
-                    'semester' => getCurrentSemester(),
-                    'school_id' => $report->grade->school->id,
-                    'grade_id' => $report->grade_id,
-                    'subject_id' => $report->getSubjectId(),
-                    'subject_name' => $report->getSubjectName(),
-                    'vocab_en' => strtolower($vocab),
-                    'vocab_th' => strtolower(TranslationService::translate($vocab))
-                ]);
+                TranslateVocabAndAddToDatabase::dispatch($report, $vocab);
             }
         }
     }
