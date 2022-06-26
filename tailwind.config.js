@@ -13,6 +13,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Sarabun', ...defaultTheme.fontFamily.sans],
+        mali: ["Mali", "cursive"]
       },
       colors: {
         current: 'currentColor',
