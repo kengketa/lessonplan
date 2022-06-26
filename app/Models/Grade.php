@@ -57,7 +57,7 @@ class Grade extends Model
 
     public function vocabs()
     {
-        return $this->hasMany(Vocab::class, 'grade_id')->orderBy('created_at', 'desc');
+        return $this->hasMany(Vocab::class, 'grade_id')->orderBy('vocab_en', 'asc');
     }
 
     public function fullName()
