@@ -11,6 +11,7 @@ use App\Transformers\GradeTransformer;
 use App\Transformers\SchoolTransformer;
 use App\Transformers\VocabTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Inertia\Inertia;
 
 class VocabController extends Controller
@@ -23,9 +24,17 @@ class VocabController extends Controller
         return Inertia::render(
             'Frontend/Index', [
                 'school' => $school->toArray(),
-                'grades' => $gradeData
+                'grades' => $gradeData,
+                'acceptCookie' => Cookie::get('acceptCookie') ? true : false
             ]
         );
+    }
+
+    public function acceptCookie()
+    {
+        Cookie::queue('acceptCookie', true, 60 * 24 * 365);
+        $data['success'] = true;
+        return response()->json($data);
     }
 
     public function fetchVocabs(Grade $grade)

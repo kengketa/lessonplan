@@ -38,6 +38,8 @@ Route::prefix('tessaban5')->group(function () {
         [VocabController::class, "fetchVocabs"])->name("vocabs.fetch");
     Route::put("vocabs/{vocab}",
         [VocabController::class, "update"])->name("vocabs.update");
+    Route::post("accept-cookie",
+        [VocabController::class, "acceptCookie"])->name("vocabs.accept_cookie");
 
 });
 

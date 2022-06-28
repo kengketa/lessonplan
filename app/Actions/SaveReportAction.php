@@ -2,9 +2,11 @@
 
 namespace App\Actions;
 
+use App\Jobs\TranslateVocabAndAddToDatabase;
 use App\Models\Report;
 use App\Models\School;
 use App\Models\Vocab;
+use App\Services\TranslationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -42,15 +44,7 @@ class SaveReportAction
                 if ($duplicatedVocab) {
                     continue;
                 }
-                Vocab::create([
-                    'academic_year' => getCurrentAcademicYear(),
-                    'semester' => getCurrentSemester(),
-                    'school_id' => $report->grade->school->id,
-                    'grade_id' => $report->grade_id,
-                    'subject_id' => $report->getSubjectId(),
-                    'subject_name' => $report->getSubjectName(),
-                    'vocab_en' => strtolower($vocab)
-                ]);
+                TranslateVocabAndAddToDatabase::dispatch($report, $vocab);
             }
         }
     }

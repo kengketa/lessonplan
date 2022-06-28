@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\School;
 use App\Models\Vocab;
+use App\Services\TranslationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Report;
@@ -74,7 +75,8 @@ class migrateVocabsList extends Command
                         'grade_id' => $report->grade_id,
                         'subject_id' => $report->getSubjectId(),
                         'subject_name' => $report->getSubjectName(),
-                        'vocab_en' => strtolower($vocab)
+                        'vocab_en' => strtolower($vocab),
+                        'vocab_th' => strtolower(TranslationService::translate(strtolower($vocab))),
                     ]);
                     $this->info('added:'.$vocab);
                 }

@@ -58,6 +58,10 @@ export default {
     grades: {
       type: Object,
       required: true
+    },
+    acceptCookie: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -117,19 +121,32 @@ export default {
   },
   watch: {},
   computed: {
-    // computedGrid() {
-    //   if (this.vocabGroupedBySubject == null) {
-    //     return "";
-    //   }
-    //   return 'grid-cols-' + this.vocabGroupedBySubject.length;
-    // },
     computedBackground() {
       const url = route('baseurl') + '/images/t5/tessaban-5-bg.png';
       return 'background-image: url("' + url + '");background-size: 100% 100%;'
     }
   },
   mounted() {
-
+    if (this.acceptCookie == false) {
+      Swal.fire({
+        title: 'เงื่อนไขการใช้ระบบ',
+        text: "ระบบ Tessaban 5 Vocabularies list ถูกจัดทำขึ้นเพื่อช่วยเหลือให้ผู้ปกครองได้ใช้ข้อมูลคำศัพท์สำหรับทบทวนนักเรียน โดยข้อมูลดังกล่าวถูกประมวลผลจาก AI ซึ่งอาจมีความคลาดเคลื่อน หากท่านเห็นว่าการแปลไม่ถูกต้อง ท่านสามารถ ใส่คำแปลใหม่เพื่อแบ่งปันข้อมูลที่ถูกต้องให้แก่ผู้อื่นได้",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#8CD4F5',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'ยอมรับ'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const url = route('vocabs.accept_cookie');
+          axios.post(url).then(res => {
+            console.log('-----------------');
+            console.log(res);
+            console.log('-----------------');
+          })
+        }
+      })
+    }
   }
 }
 </script>
