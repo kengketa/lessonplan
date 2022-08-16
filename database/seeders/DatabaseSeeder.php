@@ -32,7 +32,6 @@ class DatabaseSeeder extends Seeder
         }
         if (config('app.env') == 'ngim-trial') {
             $this->call(RolePermissionSeeder::class);
-            $this->call(UsersSeeder::class);
             $this->call(SettingSeeder::class);
             $this->call(NgimSeeder::class);
         }

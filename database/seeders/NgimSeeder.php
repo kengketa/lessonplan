@@ -19,12 +19,15 @@ class NgimSeeder extends Seeder
      */
     public function run()
     {
-
         $schools = [
             [
                 'name' => 'โรงเรียนเทศบาลตำบลงิม (คือเวียงจำ)',
                 'subjects' => [
-                    ['id' => 1, 'name' => 'Phonics'],
+                    ['id' => 1, 'name' => 'English'],
+                    ['id' => 2, 'name' => 'วิทยาศาสตร์'],
+                    ['id' => 3, 'name' => 'คณิตศาสตร์'],
+                    ['id' => 4, 'name' => 'ภาษาไทย'],
+                    ['id' => 5, 'name' => 'สังคม'],
                 ],
                 'lat' => 19.268215614863088,
                 'lng' => 100.36667601784593,
@@ -86,6 +89,23 @@ class NgimSeeder extends Seeder
                         }
                     }
                 }
+            }
+        }
+        $path = database_path('seeders/ngim-users.json');
+        $data = json_decode(file_get_contents($path), true);
+        $users = $data['users'];
+        foreach ($users as $user) {
+            $newUser = User::factory()->create([
+                'name' => $user['name'],
+                'email' => $user['email']
+            ]);
+            if ($user['role'] == 'admin') {
+                $newUser->assignRole(\Spatie\Permission\Models\Role::where('name',
+                    \App\Models\Role::ROLE_ADMIN)->first());
+            }
+            if ($user['role'] == 'teacher') {
+                $newUser->assignRole(\Spatie\Permission\Models\Role::where('name',
+                    \App\Models\Role::ROLE_TEACHER)->first());
             }
         }
     }
