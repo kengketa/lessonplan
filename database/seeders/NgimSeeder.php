@@ -106,6 +106,10 @@ class NgimSeeder extends Seeder
             if ($user['role'] == 'teacher') {
                 $newUser->assignRole(\Spatie\Permission\Models\Role::where('name',
                     \App\Models\Role::ROLE_TEACHER)->first());
+                SchoolTeacher::create([
+                    'school_id' => $schools[0]->id,
+                    'teacher_id' => $newUser->id
+                ]);
             }
         }
     }
