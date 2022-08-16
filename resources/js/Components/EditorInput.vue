@@ -4,7 +4,7 @@
     <Editor
       class="mt-2"
       v-model="modelValue"
-      api-key="8otka707t8tlcqakojbi97f3ptko4wrduwmf36zfyi3yh6wx"
+      api-key="ecqe60fpomvdhv29uid57rf0hvbq4cpi3pq3zix4qf9gbn7y"
       :init="customEditor"
       :id="id"
     />
