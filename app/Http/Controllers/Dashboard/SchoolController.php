@@ -92,7 +92,7 @@ class SchoolController extends Controller
         })->filter($request['filters'])
             ->orderBy('week_number', 'desc')
             ->orderBy('lesson_number')
-            ->paginate(20);
+            ->paginate(60);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
         if ($request['filters']) {
             foreach ($reportData['meta']['pagination']['links'] as $link) {
