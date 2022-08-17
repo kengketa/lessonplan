@@ -19,6 +19,7 @@ use App\Transformers\UserTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -68,19 +69,23 @@ class SchoolController extends Controller
             return redirect()->route('dashboard.schools.index')
                 ->with("error", 'You are not authorized.');
         }
-        $schoolData = fractal($school, new SchoolTransformer())->toArray();
-        $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
-        $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
-        $schoolData['teachers'] = fractal($school->teachers, new UserTransformer())->toArray()['data'];
-        $teachers = User::role(Role::ROLE_TEACHER)->get();
-        $schoolData['all_teachers'] = fractal($teachers, new UserTransformer())->toArray()['data'];
-        $years = getYears();
-        $semesters = getSemesters();
-        $schoolData['years'] = $years;
-        $schoolData['semesters'] = $semesters;
-        $schoolData['current_academic_year'] = getCurrentAcademicYear();
-        $schoolData['current_semester'] = getCurrentSemester();
-        $schoolData['weeks'] = getWeeks();
+        $cacheKey = 'cache_school_id_'.$school->id;
+        Cache::remember($cacheKey, 60 * 30, function () {
+            $schoolData = fractal($school, new SchoolTransformer())->toArray();
+            $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
+            $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
+            $schoolData['teachers'] = fractal($school->teachers, new UserTransformer())->toArray()['data'];
+            $teachers = User::role(Role::ROLE_TEACHER)->get();
+            $schoolData['all_teachers'] = fractal($teachers, new UserTransformer())->toArray()['data'];
+            $years = getYears();
+            $semesters = getSemesters();
+            $schoolData['years'] = $years;
+            $schoolData['semesters'] = $semesters;
+            $schoolData['current_academic_year'] = getCurrentAcademicYear();
+            $schoolData['current_semester'] = getCurrentSemester();
+            $schoolData['weeks'] = getWeeks();
+            return $schoolData;
+        });
         $schoolId = $school->id;
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);
