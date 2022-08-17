@@ -70,7 +70,7 @@ class SchoolController extends Controller
                 ->with("error", 'You are not authorized.');
         }
         $cacheKey = 'cache_school_id_'.$school->id;
-        Cache::remember($cacheKey, 60 * 30, function () {
+        Cache::remember($cacheKey, 60 * 30, function () use ($school) {
             $schoolData = fractal($school, new SchoolTransformer())->toArray();
             $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
             $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray();
