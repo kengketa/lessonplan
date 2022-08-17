@@ -1,0 +1,54 @@
+{
+    "users": [
+        {
+            "name": "Ken",
+            "email": "kengketa@gmail.com",
+            "role": "admin"
+        },
+        {
+            "name": "Amnat",
+            "email": "amnat25079964@gmail.com",
+            "role": "admin"
+        },
+        {
+            "name": "Chanuporn",
+            "email": "chanuporn23@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Thitichaya",
+            "email": "thitichayajoy@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Philaiwan",
+            "email": "bundet@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Lamchun",
+            "email": "pan.lamchun@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Waraporn",
+            "email": "waraporn.nb4781@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Joysrilak",
+            "email": "joysrilak@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Pimchan",
+            "email": "pimchan.yai@gmail.com",
+            "role": "teacher"
+        },
+        {
+            "name": "Phirya",
+            "email": "phiryakittiwrkul@gmail.com",
+            "role": "teacher"
+        }
+    ]
+}
