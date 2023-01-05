@@ -88,9 +88,6 @@ class SaveReportAction
 
             Misbehavior::where('report_id', $this->report->id)->delete();
             foreach ($data['misbehavior_students'] as $misbehaviorStudent) {
-                if ($misbehaviorStudent['name'] == null) {
-                    continue;
-                }
                 Misbehavior::create([
                     'name' => $misbehaviorStudent['name'],
                     'behavior' => $misbehaviorStudent['behavior'],
