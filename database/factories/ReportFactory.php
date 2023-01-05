@@ -31,9 +31,11 @@ class ReportFactory extends Factory
         $school = School::find(1);
         return [
             'grade_id' => Grade::where('school_id', $school->id)->inRandomOrder()->first()->id,
-            'academic_year' => $this->faker->randomElement([2020, 2021]),
-            'semester' => $this->faker->randomElement([1, 2]),
-            'week_number' => $this->faker->numberBetween(1, 20),
+            'academic_year' => getCurrentAcademicYear(),
+            'semester' => getCurrentSemester(),
+            'week_number' => getCurrentSemester() == 1 ?
+                $this->faker->numberBetween(1, 20) :
+                $this->faker->numberBetween(21, 40),
             'lesson_number' => $this->faker->numberBetween(1, 5),
             'date' => $this->faker->date(),
             'plans' => [

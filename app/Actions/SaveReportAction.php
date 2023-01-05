@@ -3,6 +3,8 @@
 namespace App\Actions;
 
 use App\Jobs\TranslateVocabAndAddToDatabase;
+use App\Models\Grade;
+use App\Models\Misbehavior;
 use App\Models\Report;
 use App\Models\School;
 use App\Models\Vocab;
@@ -76,6 +78,30 @@ class SaveReportAction
         $this->report->outstanding_students = $data['outstanding_students'];
         $this->report->need_improvement_students = $data['need_improvement_students'];
         $this->report->save();
+        if (count($data['misbehavior_students']) > 0) {
+            $subjects = $this->report->grade->school->subjects;
+            $matchedSubject = '-';
+            foreach ($subjects as $subject) {
+                if ($subject['id'] == $this->report->subject) {
+                    $matchedSubject = $subject['name'];
+                }
+            }
+
+            Misbehavior::where('report_id', $this->report->id)->delete();
+            foreach ($data['misbehavior_students'] as $misbehaviorStudent) {
+                $gradeTypeString = $this->report->grade->type == Grade::PRIMARY_TYPE ? 'G' : 'K';
+                $gradeString = $gradeTypeString.''.$this->report->grade->level.'/'.$this->report->grade->room_number;
+                Misbehavior::create([
+                    'name' => $misbehaviorStudent['name'],
+                    'behavior' => $misbehaviorStudent['behavior'],
+                    'subject' => $matchedSubject,
+                    'grade' => $gradeString,
+                    'teacher_id' => $this->report->creator_id,
+                    'report_id' => $this->report->id,
+                ]);
+            }
+        }
+
         $updatedReport = new PrepareReportAction();
         $updatedReportData = $updatedReport->execute($this->report->grade->school, $this->report);
         return $updatedReportData;
