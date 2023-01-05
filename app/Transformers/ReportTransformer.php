@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Models\Misbehavior;
 use App\Models\Report;
 use League\Fractal\TransformerAbstract;
 
@@ -27,14 +28,26 @@ class ReportTransformer extends TransformerAbstract
             'activities' => $report->activities,
             'outcome' => $report->outcome,
             'outstanding_students' => $report->outstanding_students,
-            'need_improvement_students' => $report->need_improvement_students,
+            'need_improvement_students' => $this->getNeedImprovementStudents($report),
             'misbehavior_students' => $report->misbehaviorStudents,
             'creator' => $report->creator?->toArray(),
             'approver' => $report->approver?->toArray(),
             'created_at' => $report->present()->createdAt,
             'updated_at' => $report->present()->updatedAt,
         ];
-
         return $data;
+    }
+
+    private function getNeedImprovementStudents($report)
+    {
+        if ($report->need_improvement_students != null) {
+            return $report->need_improvement_students;
+        }
+        $misbehaviorStudents = Misbehavior::where('report_id', $report->id)->get();
+        $needImprovementStr = "";
+        foreach ($misbehaviorStudents as $student) {
+            $needImprovementStr = $needImprovementStr.''.$student->name.':'.$student->behavior."<br>";
+        }
+        return $needImprovementStr;
     }
 }
