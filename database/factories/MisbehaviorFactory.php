@@ -25,6 +25,7 @@ class MisbehaviorFactory extends Factory
             'name' => $this->faker->name,
             'behavior' => $this->faker->sentence(10),
             'subject' => 'test',
+            'grade' => $this->faker->randomElement(['1', '2', '3']),
             'teacher_id' => $teachers->random()->id
         ];
     }

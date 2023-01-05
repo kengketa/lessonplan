@@ -38,6 +38,13 @@
     </span>
       <template #actions>
         <Link
+          :href="route('dashboard.misbehaviors.index', school.id)"
+          class="button button-primary mr-2"
+        >
+          <DocumentReportIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+          MB Report
+        </Link>
+        <Link
           :href="route('dashboard.reports.create', school.id)"
           class="button button-primary mr-2"
         >

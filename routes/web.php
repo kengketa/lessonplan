@@ -15,6 +15,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Dashboard\MeetingController;
 use App\Http\Controllers\Dashboard\AgendaController;
 use App\Http\Controllers\VocabController;
+use App\Http\Controllers\MisbehaviorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,6 +142,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
         //meetings
         Route::get("meetings", [MeetingController::class, "index"])->name("dashboard.meetings.index");
         Route::get("meetings/{meeting}", [MeetingController::class, "show"])->name("dashboard.meetings.show");
+
+        //misbehavior student report
+        Route::get("schools/{school}/misbehavior-report",
+            [MisbehaviorController::class, "index"])->name('dashboard.misbehaviors.index');
 
     });
 

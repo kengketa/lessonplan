@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('behavior');
             $table->string('subject');
+            $table->string('grade');
             $table->unsignedBigInteger('teacher_id')->nullable();
 
             $table->foreign('report_id')->references('id')->on('reports')->onDelete('set null');

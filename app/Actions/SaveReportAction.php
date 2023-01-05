@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Jobs\TranslateVocabAndAddToDatabase;
+use App\Models\Grade;
 use App\Models\Misbehavior;
 use App\Models\Report;
 use App\Models\School;
@@ -88,10 +89,13 @@ class SaveReportAction
 
             Misbehavior::where('report_id', $this->report->id)->delete();
             foreach ($data['misbehavior_students'] as $misbehaviorStudent) {
+                $gradeTypeString = $this->report->grade->type == Grade::PRIMARY_TYPE ? 'G' : 'K';
+                $gradeString = $gradeTypeString.''.$this->report->grade->level.'/'.$this->report->grade->room_number;
                 Misbehavior::create([
                     'name' => $misbehaviorStudent['name'],
                     'behavior' => $misbehaviorStudent['behavior'],
                     'subject' => $matchedSubject,
+                    'grade' => $gradeString,
                     'teacher_id' => $this->report->creator_id,
                     'report_id' => $this->report->id,
                 ]);

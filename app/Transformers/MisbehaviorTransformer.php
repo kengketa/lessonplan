@@ -15,7 +15,10 @@ class MisbehaviorTransformer extends TransformerAbstract
             'name' => $misbehavior->name,
             'behavior' => $misbehavior->behavior,
             'subject' => $misbehavior->subject,
-            'teacher' => fractal($misbehavior->teacher, new UserTransformer())->toArray()
+            'grade' => $misbehavior->grade,
+            'teacher' => fractal($misbehavior->teacher, new UserTransformer())->toArray(),
+            'created_at' => $misbehavior->present()->createdAt,
+            'updated_at' => $misbehavior->present()->updatedAt,
         ];
 
         return $data;
