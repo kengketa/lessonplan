@@ -135,4 +135,9 @@ class Report extends Model
     {
         return $this->belongsTo(User::class, 'approver_id')->withTrashed();
     }
+
+    public function misbehaviorStudents()
+    {
+        return $this->hasMany(Misbehavior::class, 'report_id');
+    }
 }

@@ -192,13 +192,37 @@
               :error="form.errors.outstanding_students"
               rows="5"
             />
-            <TextareaInput
-              :is-show-line="false"
-              label="Need improvment students"
-              v-model="form.need_improvement_students"
-              :error="form.errors.need_improvement_students"
-              rows="5"
-            />
+            <!--            <TextareaInput-->
+            <!--              :is-show-line="false"-->
+            <!--              label="Need improvment students"-->
+            <!--              v-model="form.need_improvement_students"-->
+            <!--              :error="form.errors.need_improvement_students"-->
+            <!--              rows="5"-->
+            <!--            />-->
+            <div class="mt-2">
+              <p class="text-sm font-medium text-gray-700">Misbehavior Students</p>
+              <div class="grid grid-cols-12 gap-2 my-1" v-for="(record,index) in form.misbehavior_students"
+                   :key="index">
+                <div class="col-span-4">
+                  <input
+                    v-model="form.misbehavior_students[index].name"
+                    id="student-name"
+                    name="studentName"
+                    placeholder="Name"
+                    class="w-full border border-gray-300 sm:text-sm rounded-md focus:ring-primary-500 p-2 h-10"
+                  />
+                </div>
+                <div class="col-span-8">
+                  <input
+                    v-model="form.misbehavior_students[index].behavior"
+                    id="behavior"
+                    name="behavior"
+                    placeholder="Behavior"
+                    class="w-full border border-gray-300 sm:text-sm rounded-md focus:ring-primary-500 p-2 h-10"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -263,7 +287,8 @@ export default {
         outcome: this.report.outcome ?? null,
         outstanding_students: this.report.outstanding_students ?? null,
         need_improvement_students: this.report.need_improvement_students ?? null,
-        report: this.report
+        report: this.report,
+        misbehavior_students: this.report.misbehavior_students ?? []
       }),
       customEditor: {
         height: 500,
@@ -283,7 +308,11 @@ export default {
     };
   },
   mounted() {
-
+    const newMisbehaviorStudent = {
+      name: null,
+      behavior: null,
+    }
+    this.form.misbehavior_students.push(newMisbehaviorStudent);
   },
   computed: {
     needConfirmTextComputed() {
@@ -316,6 +345,7 @@ export default {
       this.form.outcome = this.report.outcome;
       this.form.outstanding_students = this.report.outstanding_students;
       this.form.need_improvement_students = this.report.need_improvement_students;
+      this.form.misbehavior_students = this.report.misbehavior_students;
       this.form.report = this.report;
     }
   },

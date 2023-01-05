@@ -6,6 +6,7 @@ use App\Models\Grade;
 use App\Models\Report;
 use App\Models\School;
 use App\Transformers\GradeTransformer;
+use App\Transformers\MisbehaviorTransformer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -64,6 +65,9 @@ class PrepareReportAction
         $newReport['outcome'] = $report->outcome;
         $newReport['outstanding_students'] = $report->outstanding_students;
         $newReport['need_improvement_students'] = $report->need_improvement_students;
+        $newReport['misbehavior_students'] = $report->misbehaviorStudents->toArray();
+        $newReport['misbehavior_students'] = fractal($report->misbehaviorStudents,
+            new MisbehaviorTransformer())->toArray()['data'];
         $newReport['creator_id'] = $report->creator->id;
         $newReport['created_at'] = $report->present()->createdAt;
         $newReport['updated_at'] = $report->present()->updatedAt;

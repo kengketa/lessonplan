@@ -28,6 +28,7 @@ class CreateOrUpdateReportRequest extends FormRequest
             'outcome' => ['nullable'],
             'outstanding_students' => ['nullable'],
             'need_improvement_students' => ['nullable'],
+            'misbehavior_students' => ['nullable'],
             'report.for_grades' => ['required'],
             'report.for_grades.*.id' => ['required', 'exists:grades,id'],
             'report.for_grades.*.date' => ['nullable', 'date'],
