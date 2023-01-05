@@ -76,8 +76,7 @@
             </div>
             <div class="border">
               <p class="text-sm py-0.5 px-2 bg-red-100">Need improvment students</p>
-              <div class="border-t px-2 py-1" :class="fontSize">
-                {{ report.need_improvement_students }}
+              <div class="border-t px-2 py-1" :class="fontSize" v-html="report.need_improvement_students">
               </div>
             </div>
           </div>
