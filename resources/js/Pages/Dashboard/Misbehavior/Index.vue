@@ -22,14 +22,19 @@
             :key="item"
             class="hover:bg-gray-100 cursor-pointer"
           >
-            <TableTd>
+            <TableTd class="w-20">
               {{ item.grade }}
             </TableTd>
-            <TableTd>
+            <TableTd class="w-32">
               {{ item.name }}
             </TableTd>
+            <td>
+              <div class="w-60 text-sm">
+                {{ item.behavior }}
+              </div>
+            </td>
             <TableTd>
-              {{ item.behavior }}
+              {{ item.teacher.name }}
             </TableTd>
             <TableTd>
               {{ item.created_at }}
@@ -78,7 +83,7 @@ export default {
   },
   data() {
     return {
-      columns: ['Grade', 'Name', 'Behavior', 'Reported At'],
+      columns: ['Grade', 'Name', 'Behavior', 'Teacher', 'Reported At'],
       breadcrumbs: [
         {name: 'School', href: route("dashboard.schools.show", this.school.id)},
         {name: 'Misbehavior', href: "#"}
