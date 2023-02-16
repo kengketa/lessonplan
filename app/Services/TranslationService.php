@@ -10,14 +10,16 @@ class TranslationService
     {
         $response = Http::withHeaders([
             'X-RapidAPI-Key' => 'da711ddc66mshd5dd336f47997eep1856efjsn4c76074eaa1b',
-            'X-RapidAPI-Host' => 'translated-mymemory---translation-memory.p.rapidapi.com'
-        ])->get('https://translated-mymemory---translation-memory.p.rapidapi.com/api/get', [
-            'langpair' => 'en|th',
-            'q' => $englishVocab,
-            'mt' => '1',
-            'onlyprivate' => '0',
-            'de' => 'a@b.c'
-        ]);
+            'X-RapidAPI-Host' => 'translated-mymemory---translation-memory.p.rapidapi.com',
+        ])
+            ->get('https://translated-mymemory---translation-memory.p.rapidapi.com/get', [
+                'langpair' => 'en|th',
+                'q' => $englishVocab,
+                'mt' => '1',
+                'onlyprivate' => '0',
+                'de' => 'a@b.c',
+            ]);
+
         $decodedResponse = json_decode($response->getBody()->getContents(), true);
         if ($decodedResponse['responseStatus'] != 200) {
             return null;
