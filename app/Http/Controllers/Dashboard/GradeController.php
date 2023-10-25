@@ -12,6 +12,7 @@ use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,8 +26,14 @@ class GradeController extends Controller
             return redirect()->route('dashboard.schools.show', $school->id)
                 ->with("error", 'มี grade ที่กรอกอยู่แล้ว');
         }
+        $this->forgetSchoolCache($school->id);
         return redirect()->route('dashboard.schools.show', $school->id)
             ->with("success", 'Grade has been create.');
+    }
+
+    private function forgetSchoolCache(int $id): void
+    {
+        Cache::forget('cache_school_id_' . $id);
     }
 
     public function destroy(Grade $grade): RedirectResponse
@@ -38,6 +45,7 @@ class GradeController extends Controller
 
         $school = $grade->school;
         if ($grade->delete()) {
+            $this->forgetSchoolCache($school->id);
             return redirect()->route("dashboard.schools.show", $school->id)->with("success", "Grade has been removed!");
         } else {
             return redirect()->route("dashboard.schools.show", $school->id)->with("error", "Grade can't be removed!");

@@ -38,16 +38,8 @@ class SchoolController extends Controller
             [
                 'schools' => $schoolData,
                 'filters' => $filters,
-            ]);
-    }
-
-    public function create(): Response
-    {
-        return Inertia::render(
-            'Dashboard/Schools/Create',
-            [
-                'school' => new School()
-            ]);
+            ]
+        );
     }
 
     public function store(CreateOrUpdateSchoolRequest $request, SaveSchoolAction $saveSchoolAction): RedirectResponse
@@ -55,8 +47,10 @@ class SchoolController extends Controller
         $school = new School();
         $school = $saveSchoolAction->execute($school, $request->validated());
 
-        return redirect()->route('dashboard.schools.show', ['school' => $school])->with("success",
-            ' School  has been create!');
+        return redirect()->route('dashboard.schools.show', ['school' => $school])->with(
+            "success",
+            ' School  has been create!'
+        );
     }
 
     public function show(School $school, Request $request): Response|RedirectResponse
@@ -69,7 +63,7 @@ class SchoolController extends Controller
             return redirect()->route('dashboard.schools.index')
                 ->with("error", 'You are not authorized.');
         }
-        $cacheKey = 'cache_school_id_'.$school->id;
+        $cacheKey = 'cache_school_id_' . $school->id;
         $schoolData = Cache::remember($cacheKey, 60 * 30, function () use ($school) {
             $schoolData = fractal($school, new SchoolTransformer())->toArray();
             $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
@@ -97,13 +91,13 @@ class SchoolController extends Controller
         if ($request['filters']) {
             foreach ($reportData['meta']['pagination']['links'] as $link) {
                 if (isset($link->url)) {
-                    $link->url = $link->url.
-                        '&filters[academic_year]='.$request['filters']['academic_year'].
-                        '&filters[semester]='.$request['filters']['semester'].
-                        '&filters[grade]='.$request['filters']['grade'].
-                        '&filters[subject]='.$request['filters']['subject'].
-                        '&filters[teacher]='.$request['filters']['teacher'].
-                        '&filters[week]='.$request['filters']['week'];
+                    $link->url = $link->url .
+                        '&filters[academic_year]=' . $request['filters']['academic_year'] .
+                        '&filters[semester]=' . $request['filters']['semester'] .
+                        '&filters[grade]=' . $request['filters']['grade'] .
+                        '&filters[subject]=' . $request['filters']['subject'] .
+                        '&filters[teacher]=' . $request['filters']['teacher'] .
+                        '&filters[week]=' . $request['filters']['week'];
                 }
             }
         }
@@ -123,7 +117,8 @@ class SchoolController extends Controller
             'Dashboard/Schools/Edit',
             [
                 'school' => $school
-            ]);
+            ]
+        );
     }
 
     public function update(
@@ -133,8 +128,10 @@ class SchoolController extends Controller
     ): RedirectResponse {
         $school = $saveSchoolAction->execute($school, $request->validated());
 
-        return redirect()->route("dashboard.schools.show", ['school' => $school])->with("success",
-            "School has been update!");
+        return redirect()->route("dashboard.schools.show", ['school' => $school])->with(
+            "success",
+            "School has been update!"
+        );
     }
 
     public function destroy(School $school): RedirectResponse
@@ -158,8 +155,14 @@ class SchoolController extends Controller
         $subjects[] = $newSubject;
         $school->subjects = $subjects;
         $school->save();
+        $this->forgetSchoolCache($school->id);
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Subject has been added.");
+    }
+
+    private function forgetSchoolCache(int $id): void
+    {
+        Cache::forget('cache_school_id_' . $id);
     }
 
     public function deleteSubject(School $school, Request $request)
@@ -180,7 +183,7 @@ class SchoolController extends Controller
         });
         $school->subjects = $filteredSubjects;
         $school->save();
-
+        $this->forgetSchoolCache($school->id);
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Subject has been remove.");
     }
@@ -198,14 +201,26 @@ class SchoolController extends Controller
             'school_id' => $school->id,
             'teacher_id' => $request['teacher_id']
         ]);
+        $this->forgetSchoolCache($school->id);
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Teacher has been added.");
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render(
+            'Dashboard/Schools/Create',
+            [
+                'school' => new School()
+            ]
+        );
     }
 
     public function removeTeacher(School $school, Request $request)
     {
         $request->validate(['id' => 'required']);
         SchoolTeacher::where('school_id', $school->id)->where('teacher_id', $request['id'])->delete();
+        $this->forgetSchoolCache($school->id);
         return redirect()->route("dashboard.schools.show", $school->id)
             ->with("success", "Teacher has been removed.");
     }

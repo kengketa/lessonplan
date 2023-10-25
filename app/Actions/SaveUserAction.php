@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class SaveUserAction
@@ -14,7 +15,7 @@ class SaveUserAction
     {
         $this->user = $user;
 
-        if (! empty($this->user->id)) {
+        if (!empty($this->user->id)) {
             $this->user->roles()->detach();
             $this->user->assignRole(Role::find($data["role"]));
             $this->user->update($data);
@@ -28,8 +29,22 @@ class SaveUserAction
         $this->user->assignRole(Role::find($data["role"]));
         $setupUserAction = new SetupUserAction();
         $setupUserAction->execute($this->user, $this->generateToken());
-
+        Cache::flush();
         return $this->user;
+    }
+
+    protected static function generateRandomString($length = 10)
+    {
+        return substr(
+            str_shuffle(
+                str_repeat(
+                    $x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    ceil($length / strlen($x))
+                )
+            ),
+            1,
+            $length
+        );
     }
 
     protected function generateToken()
@@ -45,8 +60,4 @@ class SaveUserAction
         return $token;
     }
 
-    protected static function generateRandomString($length = 10)
-    {
-        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
-    }
 }
