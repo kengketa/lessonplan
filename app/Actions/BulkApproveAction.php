@@ -39,7 +39,8 @@ class BulkApproveAction
 //            if(strlen($report->activities) < 10){
 //                $checked = false;
 //            }
-            if (strlen($report->outcome) < 30) {
+            // case ngim doesnt need to check outcome
+            if (strlen($report->outcome) < 30 && $report->grade->school->id != 1) {
                 $checked = false;
             }
             return $checked;
@@ -81,10 +82,10 @@ class BulkApproveAction
                 ->whereNotNull('approver_id')
                 ->pluck('id')
                 ->toArray();
-            $link = URL::to('/').'/global-reports?';
+            $link = URL::to('/') . '/global-reports?';
             $i = 0;
             foreach ($reportIds as $id) {
-                $link = $link.'reportIds%5B'.$i.'%5D='.$id.'&';
+                $link = $link . 'reportIds%5B' . $i . '%5D=' . $id . '&';
                 $i++;
             }
             if ($generateLinkTeacher['done'] == false) {

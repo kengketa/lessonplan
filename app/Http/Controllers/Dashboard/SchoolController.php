@@ -231,7 +231,10 @@ class SchoolController extends Controller
         $schoolId = $school->id;
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);
-        })->where('week_number', $req['selectedWeek'])
+        })
+            ->where('academic_year', getCurrentAcademicYear())
+            ->where('semester', getCurrentSemester())
+            ->where('week_number', $req['selectedWeek'])
             ->get();
         $bulkApproveAction = new BulkApproveAction();
         $calculatedLinks = $bulkApproveAction->execute($reports, $req['selectedWeek']);
