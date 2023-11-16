@@ -241,4 +241,16 @@ class SchoolController extends Controller
         return json_encode($calculatedLinks);
     }
 
+    public function calendar(School $school)
+    {
+        $calendar = null;
+        if ($school->id == 3) {
+            $calendar = '/pdf/t5-2566-1.pdf';
+        }
+        return Inertia::render(
+            'Dashboard/Schools/Calendar',
+            ['schoolCalendar' => $calendar]
+        );
+    }
+
 }
