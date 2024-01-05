@@ -36,6 +36,7 @@ class PrepareReportAction
 
     private function prepareExistReport(Report $report)
     {
+        $report->load('creator', 'approver', 'grade.school.grades', 'misbehaviorStudents');
         $newReport['id'] = $report->id;
         $newReport['teacher_name'] = $report->creator ? $report->creator->name : 'undefined';
         $newReport['approver'] = $report->approver ? $report->approver->toArray() : null;
@@ -44,7 +45,8 @@ class PrepareReportAction
         $newReport['subject'] = $report->subject;
         $newReport['school'] = $report->grade->school->toArray();
         $newReport['all_grades'] = fractal($report->grade->school->grades, new GradeTransformer())->toArray()['data'];
-        $newReport['all_subjects'] = $report->grade->school->subjects;
+        $newReport['all_subjects'] = $newReport['school']['subjects'];
+        
         $newReport['types'] = [
             ['id' => Report::TOPIC_PHONIC, 'name' => 'phonic'],
             ['id' => Report::TOPIC_LEARNING_AREA, 'name' => 'learning area'],
@@ -66,8 +68,10 @@ class PrepareReportAction
         $newReport['outstanding_students'] = $report->outstanding_students;
         $newReport['need_improvement_students'] = $report->need_improvement_students;
         $newReport['misbehavior_students'] = $report->misbehaviorStudents->toArray();
-        $newReport['misbehavior_students'] = fractal($report->misbehaviorStudents,
-            new MisbehaviorTransformer())->toArray()['data'];
+        $newReport['misbehavior_students'] = fractal(
+            $report->misbehaviorStudents,
+            new MisbehaviorTransformer()
+        )->toArray()['data'];
         $newReport['creator_id'] = $report->creator->id;
         $newReport['created_at'] = $report->present()->createdAt;
         $newReport['updated_at'] = $report->present()->updatedAt;

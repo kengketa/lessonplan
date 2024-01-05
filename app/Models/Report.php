@@ -7,6 +7,7 @@ use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Report extends Model
 {
@@ -14,12 +15,9 @@ class Report extends Model
     use HasFactory;
     use Presentable;
 
-    protected $presenter = ReportPresenter::class;
-
     public const TOPIC_PHONIC = 1;
     public const TOPIC_LEARNING_AREA = 2;
-
-
+    protected $presenter = ReportPresenter::class;
     /**
      * The attributes that are mass assignable.
      *
@@ -66,6 +64,16 @@ class Report extends Model
      *
      * @var array
      */
+
+    public static function boot()
+    {
+        parent::boot();
+        static::saved(function ($model) {
+            if ($model instanceof Report) {
+                Cache::forget('cached_report_data_' . $model->id);
+            }
+        });
+    }
 
     public function scopeFilter(Builder $query, array|null $filters): void
     {

@@ -19,6 +19,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Browsershot\Browsershot;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class ReportController extends Controller
 {
@@ -33,18 +34,8 @@ class ReportController extends Controller
             [
                 'reports' => $reports,
                 'filters' => $filters,
-            ]);
-    }
-
-    public function create(School $school, Request $request)
-    {
-        $emptyReport = new PrepareReportAction();
-        $reportData = $emptyReport->execute($school);
-        return Inertia::render(
-            'Dashboard/Reports/Create',
-            [
-                'report' => $reportData
-            ]);
+            ]
+        );
     }
 
     public function store(CreateOrUpdateReportRequest $request, SaveReportAction $saveReportAction)
@@ -58,14 +49,19 @@ class ReportController extends Controller
 
     public function edit(Report $report): Response
     {
-        $school = $report->grade->school;
-        $transformedReport = new PrepareReportAction();
-        $reportData = $transformedReport->execute($school, $report);
+        $reportData = Cache::remember('cached_report_data_' . $report->id, now()->addDay(), function () use ($report) {
+            $school = $report->grade->school;
+            $transformedReport = new PrepareReportAction();
+            $reportData = $transformedReport->execute($school, $report);
+            return $reportData;
+        });
+
         return Inertia::render(
             'Dashboard/Reports/Edit',
             [
                 'report' => $reportData
-            ]);
+            ]
+        );
     }
 
     public function update(
@@ -187,56 +183,8 @@ class ReportController extends Controller
             [
                 'reportIds' => $reportIds,
                 'pages' => $reportDataGroupByPage
-            ]);
-    }
-
-    public function generateLink(Request $request)
-    {
-        $link = $request['link'];
-        $globalLink = str_replace('dashboard/print-reports-preview', 'global-reports', $link);
-        $globalReport = GlobalReport::where('link', $globalLink)->first();
-        if (!$globalReport) {
-            $globalReport = GlobalReport::create([
-                'link' => $globalLink,
-                'creator_id' => Auth::id()
-            ]);
-        }
-        $shortenLink = route('reports.global.show', $globalReport->hashid);
-        return response()->json($shortenLink);
-    }
-
-    public function globalReports(Request $request) // to remove later
-    {
-        $link = route('reports.global', [
-            'reportIds' => $request['reportIds']
-        ]);
-        $foundGeneratedLink = GlobalReport::where('link', $link)->first();
-        if (!$foundGeneratedLink) {
-            abort(403, 'Opps! nice tried.');
-        }
-
-        $reportIds = $request['reportIds'];
-        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
-        return Inertia::render(
-            'GlobalReports',
-            [
-                'pages' => $reportDataGroupByPage
-            ]);
-    }
-
-    public function showGlobalReports(GlobalReport $globalReport)
-    {
-        $arr = [];
-        parse_str($globalReport->link, $arr);
-        $reportIds = Arr::flatten($arr);
-        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
-        return Inertia::render(
-            'GlobalReports',
-            [
-                'pages' => $reportDataGroupByPage
-            ]);
-
-        return redirect($globalReport->link);
+            ]
+        );
     }
 
     private function prepareReportGroupByPage(array $reportIds)
@@ -259,6 +207,71 @@ class ReportController extends Controller
             }
         }
         return $reportDataGroupByPage;
+    }
+
+    public function generateLink(Request $request)
+    {
+        $link = $request['link'];
+        $globalLink = str_replace('dashboard/print-reports-preview', 'global-reports', $link);
+        $globalReport = GlobalReport::where('link', $globalLink)->first();
+        if (!$globalReport) {
+            $globalReport = GlobalReport::create([
+                'link' => $globalLink,
+                'creator_id' => Auth::id()
+            ]);
+        }
+        $shortenLink = route('reports.global.show', $globalReport->hashid);
+        return response()->json($shortenLink);
+    }
+
+    public function create(School $school, Request $request)
+    {
+        $reportData = Cache::rememberForever('create_school_report_' . $school->id, function () use ($school) {
+            $emptyReport = new PrepareReportAction();
+            return $emptyReport->execute($school);
+        });
+        return Inertia::render(
+            'Dashboard/Reports/Create',
+            [
+                'report' => $reportData
+            ]
+        );
+    }
+
+    public function globalReports(Request $request) // to remove later
+    {
+        $link = route('reports.global', [
+            'reportIds' => $request['reportIds']
+        ]);
+        $foundGeneratedLink = GlobalReport::where('link', $link)->first();
+        if (!$foundGeneratedLink) {
+            abort(403, 'Opps! nice tried.');
+        }
+
+        $reportIds = $request['reportIds'];
+        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        return Inertia::render(
+            'GlobalReports',
+            [
+                'pages' => $reportDataGroupByPage
+            ]
+        );
+    }
+
+    public function showGlobalReports(GlobalReport $globalReport)
+    {
+        $arr = [];
+        parse_str($globalReport->link, $arr);
+        $reportIds = Arr::flatten($arr);
+        $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        return Inertia::render(
+            'GlobalReports',
+            [
+                'pages' => $reportDataGroupByPage
+            ]
+        );
+
+        return redirect($globalReport->link);
     }
 
 }
