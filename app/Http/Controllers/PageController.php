@@ -44,6 +44,7 @@ class PageController extends Controller
                 'clockedIn' => $clockedInData,
                 'siteCoordinates' => $siteCoordinates,
                 'schools' => $schoolData
-            ]);
+            ]
+        );
     }
 }

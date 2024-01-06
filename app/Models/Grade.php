@@ -13,13 +13,11 @@ class Grade extends Model
     use HasFactory;
     use Presentable;
 
-    protected $presenter = GradePresenter::class;
-
     public const NURSERY_TYPE = 1;
     public const KINDERGATEN_TYPE = 2;
     public const PRIMARY_TYPE = 3;
     public const SECONDARY_TYPE = 4;
-
+    protected $presenter = GradePresenter::class;
     protected $fillable = [
         'school_id',
         'type',
@@ -59,8 +57,9 @@ class Grade extends Model
     {
         return $this->hasMany(Vocab::class, 'grade_id')->orderBy('created_at', 'desc');
     }
+    
 
-    public function fullName()
+    public function getFullNameAttribute()
     {
         $prefix = "";
         switch ($this->type) {
@@ -77,7 +76,7 @@ class Grade extends Model
                 $prefix = 'secondary';
                 break;
         }
-        return $prefix.'-'.$this->level;
+        return $prefix . '-' . $this->level;
     }
 
 }

@@ -6,10 +6,15 @@ use App\Actions\PrepareReportAction;
 use App\Actions\SaveReportAction;
 use App\Http\Requests\CreateOrUpdateReportRequest;
 use App\Models\GlobalReport;
+use App\Models\Grade;
 use App\Models\Report;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\School;
+use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
+use App\Transformers\SchoolTransformer;
+use App\Transformers\UserTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -23,17 +28,45 @@ use Illuminate\Support\Facades\Cache;
 
 class ReportController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, School $school): Response|RedirectResponse
     {
-        $filters = $request->only(["search"]);
-        $reports = Report::filter($filters)->latest()->paginate(30);
-        $reports = fractal($reports, new ReportTransformer())->toArray();
+        $user = Auth::user();
+        $thisUserIsInTheSchool = $school->teachers->filter(function ($q) use ($user) {
+            return $q->id == $user->id;
+        });
+        if ($thisUserIsInTheSchool->count() === 0 && $user->roles[0]->name === Role::ROLE_TEACHER) {
+            abort(401, 'You are not authorized.');
+        }
+        $cacheKey = 'cache_school_id_' . $school->id;
+//        $schoolData = Cache::remember($cacheKey, 60 * 30, function () use ($school) {
+//
+//            return $schoolData;
+//        });
 
+        $schoolData = fractal($school, new SchoolTransformer())->toArray();
+        $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
+        $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray()['data'];
+        $schoolData['years'] = getYears();;
+        $schoolData['semesters'] = getSemesters();
+        $schoolData['current_academic_year'] = getCurrentAcademicYear();
+        $schoolData['current_semester'] = getCurrentSemester();
+        $schoolData['weeks'] = getWeeks();
+
+
+        $schoolId = $school->id;
+        $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
+            $q->where('id', $schoolId);
+        })->filter($request['filters'])
+            ->orderBy('week_number', 'desc')
+            ->orderBy('lesson_number')
+            ->paginate(50);
+        $reportData = fractal($reports, new ReportTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Reports/Index',
             [
-                'reports' => $reports,
-                'filters' => $filters,
+                'school' => $schoolData,
+                'reports' => $reportData,
+                'filters' => $request['filters']
             ]
         );
     }

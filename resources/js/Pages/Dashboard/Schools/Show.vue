@@ -38,27 +38,6 @@
     </span>
       <template #actions>
         <Link
-          :href="route('dashboard.schools.calendar', school.id)"
-          class="button button-primary mr-2"
-        >
-          <CalendarIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          Calendar
-        </Link>
-        <Link
-          :href="route('dashboard.misbehaviors.index', school.id)"
-          class="button button-primary mr-2"
-        >
-          <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          MB Report
-        </Link>
-        <Link
-          :href="route('dashboard.reports.create', school.id)"
-          class="button button-primary mr-2"
-        >
-          <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          Create Lesson plan
-        </Link>
-        <Link
           v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
           :href="route('dashboard.schools.edit', school.id)"
           class="button button-primary mr-2"
@@ -75,115 +54,6 @@
         </form>
       </template>
     </PageHeading>
-    <section class="mt-4">
-      <div class="md:grid md:grid-cols-6 md:gap-2">
-        <SearchSelectInput
-          v-model="filterForm.filters.academic_year"
-          :is-show-line="false"
-          :options="school.years"
-          label="Academicyear"
-        />
-        <SearchSelectInput
-          v-model="filterForm.filters.semester"
-          :is-show-line="false"
-          :options="school.semesters"
-          label="Semester"
-        />
-        <SearchSelectInput
-          v-model="filterForm.filters.teacher"
-          :is-show-line="false"
-          :options="school.teachers"
-          label="Teacher"
-        />
-        <SearchSelectInput
-          v-model="filterForm.filters.grade"
-          :is-show-line="false"
-          :options="school.grades.data"
-          label="filter class"
-        />
-        <SearchSelectInput
-          v-model="filterForm.filters.subject"
-          :is-show-line="false"
-          :options="school.subjects"
-          label="filter subject"
-        />
-        <SearchSelectInput
-          v-model="filterForm.filters.week"
-          :is-show-line="false"
-          :options="school.weeks"
-          label="week"
-        />
-        <div class="flex items-end mt-2 md:mt-0">
-          <button class="button button-primary button-small mb-1" type="button" @click="print()">Print</button>
-          <button class="button button-primary button-small mb-1 ml-1" type="button" @click="clearFilter()">
-            Clear
-          </button>
-          <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                  class="button button-primary button-small mb-1 ml-1 whitespace-nowrap" type="button"
-                  @click="showSuperApproveModal = true">
-            Super Approve
-          </button>
-        </div>
-      </div>
-      <TableDisplayContainer class="mt-4">
-        <template #header>
-          <TableTh v-for="(column,index) in columns" :key="index">
-            <div class="flex">
-              <span>{{ column }}</span>
-            </div>
-          </TableTh>
-        </template>
-        <template #body>
-          <tr
-            v-for="(item, itemIndex) in reports.data"
-            :key="itemIndex"
-            :class="computedRowColour(itemIndex,item)"
-            class="cursor-pointer transition ease-in-out duration-200"
-            @click="openReportEdit(item)"
-          >
-            <TableTd>
-              <div>
-                {{ item.teacher_name }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.grade_name }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                <span class="capitalize">{{ item.subject }}</span>
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.week_number }}/{{ item.lesson_number }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                {{ item.date }}
-              </div>
-            </TableTd>
-            <TableTd>
-              <div>
-                <ul>
-                  <li v-for="(topic,index) in item.topics" :key="index">
-                    <div class="w-80 truncate">
-                      {{ topic }}
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </TableTd>
-          </tr>
-        </template>
-        <template #pagination>
-          <Pagination :data="reports.meta.pagination"></Pagination>
-        </template>
-      </TableDisplayContainer>
-    </section>
     <Card>
       <div class="md:flex md:items-center md:justify-between">
         <div class="w-full flex justify-between">
@@ -192,26 +62,9 @@
               School Information
             </h3>
           </div>
-          <div>
-            <button v-if="showSchoolInformation" class="text-gray-500 mr-4" type="button"
-                    @click="showSchoolInformation = false">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 15l7-7 7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-              </svg>
-            </button>
-            <button v-if="!showSchoolInformation" class="text-gray-500 mr-4" type="button"
-                    @click="showSchoolInformation = true">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
-      <div :class="!showSchoolInformation ? 'h-0':'h-100'"
-           class="mt-5 border-t border-gray-200 transition transform translate duration-500 ease-in-out"
+      <div class="mt-5 border-t border-gray-200 transition transform translate duration-500 ease-in-out"
       >
         <DataDisplayContainer>
           <DataDisplayRow>
@@ -300,8 +153,6 @@
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id"/>
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id"/>
     <AddTeacherModal v-model="showAddTeacherModal" :school="school"/>
-    <PrintModal v-model="showPrintModal" :print-list="printList" :school-id="school.id"/>
-    <SuperApproveModal v-model="showSuperApproveModal" :school="school" :week="filterForm.filters.week"/>
   </div>
 </template>
 
@@ -372,23 +223,12 @@ export default {
   data() {
     return {
       breadcrumbs: [],
-      columns: ['teacher', 'grade', 'subject', 'W/L', 'teaching date', 'topic'],
       deleteForm: useForm({}),
       subjectForm: useForm({
         id: null
       }),
       teacherForm: useForm({
         id: null
-      }),
-      filterForm: useForm({
-        filters: {
-          academic_year: this.filters ? parseInt(this.filters.academic_year) : 0,
-          semester: this.filters ? parseInt(this.filters.semester) : 0,
-          grade: this.filters ? parseInt(this.filters.grade) : 0,
-          subject: this.filters ? parseInt(this.filters.subject) : 0,
-          teacher: this.filters ? parseInt(this.filters.teacher) : 0,
-          week: this.filters ? parseInt(this.filters.week) : 0
-        }
       }),
       isShowDeleteDialog: false,
       showDeleteGradeDialog: false,
@@ -397,13 +237,10 @@ export default {
       showAddGradeModal: false,
       showAddSubjectModal: false,
       showAddTeacherModal: false,
-      showPrintModal: false,
       deletingGrade: null,
       deletingSubject: null,
       removingTeacher: null,
       printList: [],
-      showSchoolInformation: false,
-      showSuperApproveModal: false,
     };
   },
   mounted() {
@@ -422,72 +259,8 @@ export default {
     }
   },
   computed: {},
-  watch: {
-    showPrintModal() {
-      if (this.showPrintModal === false) {
-        setTimeout(() => {
-          this.printList = [];
-        }, 200);
-      }
-    },
-    'filterForm.filters.academic_year': function () {
-      this.submitSearch()
-    },
-    'filterForm.filters.semester': function () {
-      this.submitSearch()
-    },
-    'filterForm.filters.grade': function () {
-      this.submitSearch()
-    },
-    'filterForm.filters.subject': function () {
-      this.submitSearch()
-    },
-    'filterForm.filters.teacher': function () {
-      this.submitSearch()
-    },
-    'filterForm.filters.week': function () {
-      this.submitSearch()
-    },
-  },
+  watch: {},
   methods: {
-    computedRowColour(index, item) {
-      if (item.approver) {
-        return index % 2 === 0 ? 'bg-green-50 hover:bg-green-200' : 'bg-green-100 hover:bg-green-200'
-      }
-      return index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-gray-50 hover:bg-gray-200'
-    },
-    openReportEdit(report) {
-      //this.$inertia.visit(route('dashboard.reports.edit', report.id))
-      let url = route('dashboard.reports.edit', report.id);
-      window.open(url, '_blank');
-    },
-    print() {
-      this.reports.data.forEach(report => {
-        let newPrintList = {
-          id: report.id,
-          print: false,
-          teacher_name: report.teacher_name,
-          grade: report.grade_name,
-          subject: report.subject,
-          week_number: report.week_number,
-          lesson_number: report.lesson_number,
-          topics: report.topics
-        }
-        this.printList.push(newPrintList);
-      });
-      this.showPrintModal = true;
-    },
-    clearFilter() {
-      let url = route('dashboard.schools.show', this.school.id);
-      this.$inertia.visit(url,
-        {
-          preserveScroll: true
-        });
-    },
-    submitSearch() {
-      let url = route('dashboard.schools.show', this.school.id);
-      this.filterForm.get(url);
-    },
     removeTeacherPreConfirm(teacher) {
       this.removingTeacher = teacher;
       this.showRemoveTeacherDialog = true;
@@ -517,6 +290,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>
