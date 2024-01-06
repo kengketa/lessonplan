@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         if (config('app.env') == 'local') {
-
             $this->call(RolePermissionSeeder::class);
             $this->call(UsersSeeder::class);
             $this->call(SettingSeeder::class);
@@ -24,6 +23,7 @@ class DatabaseSeeder extends Seeder
             $this->call(MeetingSeeder::class);
             $this->call(AgendaSeeder::class);
             $this->call(MisbehaviorSeeder::class);
+            $this->call(StudentSeeder::class);
         }
         if (config('app.env') == 'production') {
             $this->call(RolePermissionSeeder::class);
@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             $this->call(RolePermissionSeeder::class);
             $this->call(SettingSeeder::class);
             $this->call(NgimSeeder::class);
+            $this->call(StudentSeeder::class);
         }
     }
 }

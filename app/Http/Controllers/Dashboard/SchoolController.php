@@ -86,21 +86,8 @@ class SchoolController extends Controller
         })->filter($request['filters'])
             ->orderBy('week_number', 'desc')
             ->orderBy('lesson_number')
-            ->paginate(60);
+            ->paginate(50);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
-        if ($request['filters']) {
-            foreach ($reportData['meta']['pagination']['links'] as $link) {
-                if (isset($link->url)) {
-                    $link->url = $link->url .
-                        '&filters[academic_year]=' . $request['filters']['academic_year'] .
-                        '&filters[semester]=' . $request['filters']['semester'] .
-                        '&filters[grade]=' . $request['filters']['grade'] .
-                        '&filters[subject]=' . $request['filters']['subject'] .
-                        '&filters[teacher]=' . $request['filters']['teacher'] .
-                        '&filters[week]=' . $request['filters']['week'];
-                }
-            }
-        }
         return Inertia::render(
             'Dashboard/Schools/Show',
             [
