@@ -17,7 +17,6 @@ class StudentTransformer extends TransformerAbstract
             'first_name' => $student->first_name,
             'last_name' => $student->last_name,
             'email' => $student->email,
-            'password' => $student->password,
             'phone' => $student->phone,
             'created_at' => $student->present()->createdAt,
             'updated_at' => $student->present()->updatedAt,

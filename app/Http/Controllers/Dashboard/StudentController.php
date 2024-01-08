@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Actions\SaveStudentAction;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrUpdateStudentRequest;
 use App\Models\School;
 use App\Models\Student;
-use App\Http\Controllers\Controller;
 use App\Transformers\SchoolTransformer;
 use App\Transformers\StudentTransformer;
 use Illuminate\Http\RedirectResponse;

@@ -92,4 +92,11 @@ class Grade extends Model
         return $prefix . '-' . $this->level;
     }
 
+    public function enrollmentThisSemester()
+    {
+        return $this->hasMany(Enrollment::class, 'grade_id')
+            ->where('academic_year', getCurrentAcademicYear())
+            ->where('semester', getCurrentSemester());
+    }
+
 }

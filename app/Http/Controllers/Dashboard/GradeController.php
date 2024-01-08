@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Actions\SaveGradeAction;
 use App\Http\Requests\CreateOrUpdateGradeRequest;
+use App\Models\Enrollment;
 use App\Models\Grade;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\School;
+use App\Transformers\EnrollmentTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
+use App\Transformers\StudentTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -56,15 +59,25 @@ class GradeController extends Controller
     {
         $gradeData = fractal($grade, new GradeTransformer())->toArray();
         $reports = Report::where('grade_id', $grade->id)
+            ->where('academic_year', getCurrentAcademicYear())
+            ->where('semester', getCurrentSemester())
             ->orderBy('week_number')
             ->orderBy('lesson_number')
             ->paginate(30);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
+        $students = Enrollment::where([
+            'grade_id' => $grade->id,
+            'academic_year' => getCurrentAcademicYear(),
+            'semester' => getCurrentSemester(),
+        ])->get()->map(function ($enrollment) {
+            return fractal($enrollment->student, new StudentTransformer())->toArray();
+        });
         return Inertia::render(
             'Dashboard/Grades/Show',
             [
                 'grade' => $gradeData,
-                'reports' => $reportData
+                'reports' => $reportData,
+                'students' => $students
             ]
         );
     }

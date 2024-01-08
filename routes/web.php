@@ -1,20 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClockInController;
+use App\Http\Controllers\Dashboard\AgendaController;
+use App\Http\Controllers\Dashboard\GradeController;
+use App\Http\Controllers\Dashboard\MeetingController;
+use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\SchoolController;
+use App\Http\Controllers\Dashboard\StudentController;
+use App\Http\Controllers\MisbehaviorController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSetupController;
-use App\Models\Role;
-use App\Http\Controllers\Dashboard\SchoolController;
-use App\Http\Controllers\Dashboard\GradeController;
-use App\Http\Controllers\Dashboard\ReportController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\ClockInController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\Dashboard\MeetingController;
-use App\Http\Controllers\Dashboard\AgendaController;
 use App\Http\Controllers\VocabController;
-use App\Http\Controllers\MisbehaviorController;
-use App\Http\Controllers\StudentController;
+use App\Models\Role;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\EnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,6 +213,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             Route::delete("students/{student}", [StudentController::class, "destroy"])->name(
                 "dashboard.students.destroy"
             );
+
+            // Grades
+            Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
         }
     );
 });

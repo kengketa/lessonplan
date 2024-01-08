@@ -24,7 +24,7 @@ class SettingFactory extends Factory
     {
         return [
             'settings' => [
-                'current_academic_year' => Carbon::today()->format('Y'),
+                'current_academic_year' => 2023,
                 'current_semester' => 2
             ]
         ];

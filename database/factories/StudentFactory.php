@@ -23,7 +23,7 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            'school_id' => School::inrandomOrder()->first()->id ?? School::factory(),
+            'school_id' => School::first()->id,
             'code' => $this->faker->numerify('#####'),
             'prefix' => $this->faker->randomElement(['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง']),
             'first_name' => $this->faker->firstName,

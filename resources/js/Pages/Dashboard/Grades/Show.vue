@@ -1,8 +1,8 @@
 <template>
   <div>
     <Breadcrumbs
-      :breadcrumbs="breadcrumbs"
       :back="route('dashboard.schools.index')"
+      :breadcrumbs="breadcrumbs"
     />
     <PageHeading>
     <span class="hidden lg:inline">
@@ -28,7 +28,7 @@
         >
           <TableTd>
             <Link
-              :href="route('dashboard.reports.show',item.id)"
+              :href="route('dashboard.reports.edit',item.id)"
               class="hover:underline"
             >
               {{ item.subject }}
@@ -36,7 +36,7 @@
           </TableTd>
           <TableTd>
             <Link
-              :href="route('dashboard.reports.show',item.id)"
+              :href="route('dashboard.reports.edit',item.id)"
               class="hover:underline"
             >
               {{ item.week_number }}
@@ -44,7 +44,7 @@
           </TableTd>
           <TableTd>
             <Link
-              :href="route('dashboard.reports.show',item.id)"
+              :href="route('dashboard.reports.edit',item.id)"
               class="hover:underline"
             >
               {{ item.lesson_number }}
@@ -52,7 +52,7 @@
           </TableTd>
           <TableTd>
             <Link
-              :href="route('dashboard.reports.show',item.id)"
+              :href="route('dashboard.reports.edit',item.id)"
               class="hover:underline"
             >
               {{ item.date }}
@@ -60,7 +60,7 @@
           </TableTd>
           <TableTd>
             <Link
-              :href="route('dashboard.reports.show',item.id)"
+              :href="route('dashboard.reports.edit',item.id)"
               class="hover:underline"
             >
               {{ item.plans.topic }}
@@ -77,6 +77,9 @@
         <Pagination :data="reports.meta.pagination"></Pagination>
       </template>
     </TableDisplayContainer>
+    <div>
+      {{ students }}
+    </div>
   </div>
 </template>
 
@@ -116,6 +119,10 @@ export default {
   layout: Layout,
   props: {
     grade: Object,
+    students: {
+      type: Object,
+      required: true
+    },
     reports: {
       type: Object,
       required: true

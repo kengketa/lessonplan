@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Presenters\StudentPresenter;
+use App\Presenters\EnrollmentPresenter;
 use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Enrollment extends Model
 {
 
     use HasFactory;
     use Presentable;
 
-    protected $presenter = StudentPresenter::class;
+    protected $presenter = EnrollmentPresenter::class;
 
 
     /**
@@ -23,14 +23,10 @@ class Student extends Model
      * @var array
      */
     protected $fillable = [
-        'school_id',
-        'code',
-        'prefix',
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'phone',
+        'grade_id',
+        'academic_year',
+        'student_id',
+        'semester',
     ];
 
     /**
@@ -39,7 +35,7 @@ class Student extends Model
      * @var array
      */
     protected $hidden = [
-        'password'
+
     ];
 
     /**
@@ -61,10 +57,21 @@ class Student extends Model
     {
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("code", "like", "%$filters[search]%")
-                    ->orWhere("first_name", "like", "%$filters[search]%")
-                    ->orWhere("last_name", "like", "%$filters[search]%");
+                $qr->where("grade_id", "like", "%$filters[search]%")->orWhere(
+                    "academic_year",
+                    "like",
+                    "%$filters[search]%"
+                )->orWhere("student_id", "like", "%$filters[search]%")->orWhere(
+                    "semester",
+                    "like",
+                    "%$filters[search]%"
+                );
             });
         }
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }
