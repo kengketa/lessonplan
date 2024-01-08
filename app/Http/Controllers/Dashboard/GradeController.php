@@ -9,15 +9,13 @@ use App\Models\Grade;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\School;
-use App\Transformers\EnrollmentTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
+use App\Transformers\SubjectTransformer;
 use App\Transformers\StudentTransformer;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class GradeController extends Controller
 {
@@ -72,12 +70,16 @@ class GradeController extends Controller
         ])->get()->map(function ($enrollment) {
             return fractal($enrollment->student, new StudentTransformer())->toArray();
         });
+        
+        $subjectData = fractal($grade->subjects, new SubjectTransformer)->toArray()['data'];
+
         return Inertia::render(
             'Dashboard/Grades/Show',
             [
                 'grade' => $gradeData,
                 'reports' => $reportData,
-                'students' => $students
+                'students' => $students,
+                'subjects' => $subjectData
             ]
         );
     }

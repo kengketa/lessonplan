@@ -80,6 +80,10 @@
     <div>
       {{ students }}
     </div>
+
+    <div class="mt-10">
+      {{ subjects }}
+    </div>
   </div>
 </template>
 
@@ -120,6 +124,10 @@ export default {
   props: {
     grade: Object,
     students: {
+      type: Object,
+      required: true
+    },
+    subjects: {
       type: Object,
       required: true
     },

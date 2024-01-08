@@ -99,4 +99,9 @@ class Grade extends Model
             ->where('semester', getCurrentSemester());
     }
 
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)->withPivot('academic_year', 'semester', 'teacher_id');
+    }
+
 }

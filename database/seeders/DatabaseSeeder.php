@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             $this->call(StudentSeeder::class);
             $this->call(EnrollmentSeeder::class);
             $this->call(SubjectSeeder::class);
+            $this->call(GradeSubjectSeeder::class);
         }
         if (config('app.env') == 'production') {
             $this->call(RolePermissionSeeder::class);

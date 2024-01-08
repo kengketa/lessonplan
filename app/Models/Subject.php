@@ -23,7 +23,9 @@ class Subject extends Model
      * @var array
      */
     protected $fillable = [
-        'code','name','unit',
+        'code',
+        'name',
+        'unit',
     ];
 
     /**
@@ -52,10 +54,19 @@ class Subject extends Model
 
     public function scopeFilter(Builder $query, array $filters): void
     {
-        if (! empty($filters["search"])) {
+        if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("code", "like", "%$filters[search]%")->orWhere("name", "like", "%$filters[search]%")->orWhere("unit", "like", "%$filters[search]%");
+                $qr->where("code", "like", "%$filters[search]%")->orWhere(
+                    "name",
+                    "like",
+                    "%$filters[search]%"
+                )->orWhere("unit", "like", "%$filters[search]%");
             });
         }
+    }
+
+    public function grades()
+    {
+        return $this->belongsToMany(Grade::class);
     }
 }
