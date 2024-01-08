@@ -16,6 +16,7 @@ use App\Http\Controllers\VocabController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\EnrollmentController;
+use App\Http\Controllers\Dashboard\SubjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -242,4 +243,13 @@ Route::middleware(["auth"])->group(function () {
     Route::get("agendas/{agenda}/edit", [AgendaController::class, "edit"])->name("dashboard.agendas.edit");
     Route::put("agendas/{agenda}", [AgendaController::class, "update"])->name("dashboard.agendas.update");
     Route::delete("agendas/{agenda}", [AgendaController::class, "destroy"])->name("dashboard.agendas.destroy");
-});
+
+	//subjects
+	Route::get("subjects", [SubjectController::class,"index"])->name("dashboard.subjects.index");
+	Route::get("subjects/create", [SubjectController::class,"create"])->name("dashboard.subjects.create");
+	Route::get("subjects/{subject}", [SubjectController::class,"show"])->name("dashboard.subjects.show");
+	Route::post("subjects", [SubjectController::class,"store"])->name("dashboard.subjects.store");
+	Route::get("subjects/{subject}/edit", [SubjectController::class,"edit"])->name("dashboard.subjects.edit");
+	Route::put("subjects/{subject}", [SubjectController::class,"update"])->name("dashboard.subjects.update");
+	Route::delete("subjects/{subject}", [SubjectController::class,"destroy"])->name("dashboard.subjects.destroy");
+	});
