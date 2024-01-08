@@ -24,7 +24,7 @@ class StudentFactory extends Factory
     {
         return [
             'school_id' => School::inrandomOrder()->first()->id ?? School::factory(),
-            'code' => $this->faker->text(20),
+            'code' => $this->faker->numerify('#####'),
             'prefix' => $this->faker->randomElement(['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง']),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,

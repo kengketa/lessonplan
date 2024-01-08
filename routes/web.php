@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSetupController;
-use Inertia\Inertia;
 use App\Models\Role;
 use App\Http\Controllers\Dashboard\SchoolController;
 use App\Http\Controllers\Dashboard\GradeController;
@@ -196,13 +194,21 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
                 [MisbehaviorController::class, "index"]
             )->name('dashboard.misbehaviors.index');
 
-            //students
-            Route::get("students", [StudentController::class, "index"])->name("dashboard.students.index");
-            Route::get("students/create", [StudentController::class, "create"])->name("dashboard.students.create");
+            // Student
+            Route::prefix('schools/{school}')->group(function () {
+                Route::get("students", [StudentController::class, "index"])
+                    ->name("dashboard.schools.students.index");
+                Route::get("students/create", [StudentController::class, "create"])
+                    ->name("dashboard.schools.students.create");
+            });
             Route::get("students/{student}", [StudentController::class, "show"])->name("dashboard.students.show");
             Route::post("students", [StudentController::class, "store"])->name("dashboard.students.store");
-            Route::get("students/{student}/edit", [StudentController::class, "edit"])->name("dashboard.students.edit");
-            Route::put("students/{student}", [StudentController::class, "update"])->name("dashboard.students.update");
+            Route::get("students/{student}/edit", [StudentController::class, "edit"])->name(
+                "dashboard.students.edit"
+            );
+            Route::put("students/{student}", [StudentController::class, "update"])->name(
+                "dashboard.students.update"
+            );
             Route::delete("students/{student}", [StudentController::class, "destroy"])->name(
                 "dashboard.students.destroy"
             );

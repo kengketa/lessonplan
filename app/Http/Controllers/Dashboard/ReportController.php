@@ -37,22 +37,19 @@ class ReportController extends Controller
         if ($thisUserIsInTheSchool->count() === 0 && $user->roles[0]->name === Role::ROLE_TEACHER) {
             abort(401, 'You are not authorized.');
         }
+
         $cacheKey = 'cache_school_id_' . $school->id;
-//        $schoolData = Cache::remember($cacheKey, 60 * 30, function () use ($school) {
-//
-//            return $schoolData;
-//        });
-
-        $schoolData = fractal($school, new SchoolTransformer())->toArray();
-        $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
-        $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray()['data'];
-        $schoolData['years'] = getYears();;
-        $schoolData['semesters'] = getSemesters();
-        $schoolData['current_academic_year'] = getCurrentAcademicYear();
-        $schoolData['current_semester'] = getCurrentSemester();
-        $schoolData['weeks'] = getWeeks();
-
-
+        $schoolData = Cache::rememberForever($cacheKey, function () use ($school) {
+            $schoolData = fractal($school, new SchoolTransformer())->toArray();
+            $grades = Grade::with('school')->where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
+            $schoolData['grades'] = fractal($grades, new GradeTransformer())->toArray()['data'];
+            $schoolData['years'] = getYears();;
+            $schoolData['semesters'] = getSemesters();
+            $schoolData['current_academic_year'] = getCurrentAcademicYear();
+            $schoolData['current_semester'] = getCurrentSemester();
+            $schoolData['weeks'] = getWeeks();
+            return $schoolData;
+        });
         $schoolId = $school->id;
         $reports = Report::whereHas('grade.school', function ($q) use ($schoolId) {
             $q->where('id', $schoolId);

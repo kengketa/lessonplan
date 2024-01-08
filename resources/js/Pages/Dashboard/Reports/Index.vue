@@ -173,7 +173,6 @@ import TableDisplayContainer from "@/Components/TableDisplayContainer";
 import TableTh from "@/Components/TableTh";
 import TableTd from "@/Components/TableTd";
 import {Link} from '@inertiajs/inertia-vue3';
-import AddGradeModal from "@/Components/Forms/AddGradeModal";
 import Pagination from "@/Components/Pagination";
 
 import {
@@ -188,11 +187,8 @@ import {
 } from '@heroicons/vue/solid';
 import {useForm} from '@inertiajs/inertia-vue3';
 import Button from '@/Jetstream/Button';
-import AddSubjectModal from "../../../Components/Forms/AddSubjectModal";
-import TextInput from "../../../Components/TextInput";
-import SearchSelectInput from "../../../Components/SearchSelectInput";
-import AddTeacherModal from "../../../Components/Forms/AddTeacherModal";
-import PrintModal from "../../../Components/Forms/PrintModal";
+import SearchSelectInput from "@/Components/SearchSelectInput";
+import PrintModal from "@/Components/Forms/PrintModal";
 import SuperApproveModal from "@/Components/Forms/SuperApproveModal";
 
 export default {
@@ -200,11 +196,8 @@ export default {
   components: {
     SuperApproveModal,
     PrintModal,
-    AddTeacherModal,
     SearchSelectInput,
-    TextInput,
-    AddSubjectModal,
-    Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
+    Card, PageHeading, Breadcrumbs, DataDisplayContainer,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
     ConfirmDialog, TableDisplayContainer, TableTh, TableTd, Link, DocumentReportIcon,
     CalendarIcon,
@@ -229,13 +222,6 @@ export default {
     return {
       breadcrumbs: [],
       columns: ['teacher', 'grade', 'subject', 'W/L', 'teaching date', 'topic'],
-      deleteForm: useForm({}),
-      subjectForm: useForm({
-        id: null
-      }),
-      teacherForm: useForm({
-        id: null
-      }),
       filterForm: useForm({
         filters: {
           academic_year: this.filters ? parseInt(this.filters.academic_year) : 0,

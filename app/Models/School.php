@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class School extends Model
 {
@@ -55,6 +56,15 @@ class School extends Model
      *
      * @var array
      */
+    public static function boot()
+    {
+        parent::boot();
+        static::saved(function ($model) {
+            if ($model instanceof School) {
+                Cache::forget('cache_school_id_' . $model->id);
+            }
+        });
+    }
 
     public function scopeFilter(Builder $query, array $filters): void
     {

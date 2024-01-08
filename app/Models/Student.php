@@ -61,19 +61,9 @@ class Student extends Model
     {
         if (!empty($filters["search"])) {
             $query->where(function ($qr) use ($filters) {
-                $qr->where("code", "like", "%$filters[search]%")->orWhere(
-                    "prefix",
-                    "like",
-                    "%$filters[search]%"
-                )->orWhere("first_name", "like", "%$filters[search]%")->orWhere(
-                    "last_name",
-                    "like",
-                    "%$filters[search]%"
-                )->orWhere("email", "like", "%$filters[search]%")->orWhere(
-                    "password",
-                    "like",
-                    "%$filters[search]%"
-                )->orWhere("phone", "like", "%$filters[search]%");
+                $qr->where("code", "like", "%$filters[search]%")
+                    ->orWhere("first_name", "like", "%$filters[search]%")
+                    ->orWhere("last_name", "like", "%$filters[search]%");
             });
         }
     }

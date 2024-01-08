@@ -7,7 +7,7 @@
         <template #actions>
           <Link
             v-if="$page.props.authUserRole==='SUPER_ADMIN' || $page.props.authUserRole==='ADMIN'"
-            :href="route('dashboard.students.create')"
+            :href="route('dashboard.schools.students.create',this.school.id)"
             class="button button-primary"
           >
             <UserAddIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
@@ -110,22 +110,27 @@ export default {
   },
   props: {
     students: Object,
+    school: {
+      type: Object,
+      require: true
+    },
     filters: Object,
     title: String,
   },
   data() {
     return {
       form: {
+        school: this.school.id,
         search: this.filters.search ?? "",
       },
-      breadcrumbs: [{name: 'Students', href: "#"}],
-      columns: ['name', 'address',],
+      breadcrumbs: [
+        {name: this.school.name, href: this.route('dashboard.schools.show', this.school.id)},
+        {name: 'Students', href: "#"}
+      ],
+      columns: ['code', 'name',],
     };
   },
   mounted() {
-    console.log('-----------------');
-    console.log(this.students.meta.pagination);
-    console.log('-----------------');
   },
   methods: {
     removeSchool: function (student) {
@@ -145,7 +150,7 @@ export default {
       }, 500);
     },
     sendRequest() {
-      this.$inertia.replace(this.route("dashboard.students.index", this.form));
+      this.$inertia.replace(this.route("dashboard.schools.students.index", this.form));
     },
 
   },

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Actions\SaveStudentAction;
 use App\Http\Requests\CreateOrUpdateStudentRequest;
+use App\Models\School;
 use App\Models\Student;
 use App\Http\Controllers\Controller;
+use App\Transformers\SchoolTransformer;
 use App\Transformers\StudentTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,15 +16,17 @@ use Inertia\Response;
 
 class StudentController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, School $school): Response
     {
         $filters = $request->only(["search"]);
-        $students = Student::filter($filters)->latest()->paginate(30);
+        $students = Student::where('school_id', $school->id)->filter($filters)->paginate(30);
         $students = fractal($students, new StudentTransformer())->toArray();
+        $schoolData = fractal($school, new SchoolTransformer())->toArray();
         return Inertia::render(
             'Dashboard/Students/Index',
             [
                 'students' => $students,
+                'school' => $schoolData,
                 'filters' => $filters,
             ]
         );

@@ -7,6 +7,7 @@ use App\Traits\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Grade extends Model
 {
@@ -43,6 +44,18 @@ class Grade extends Model
 
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+        static::saved(function ($model) {
+            if ($model instanceof Grade) {
+                $schoolId = $model->school->id;
+                Cache::forget('cache_school_id_' . $schoolId);
+            }
+        });
+    }
+
+
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');
@@ -57,7 +70,7 @@ class Grade extends Model
     {
         return $this->hasMany(Vocab::class, 'grade_id')->orderBy('created_at', 'desc');
     }
-    
+
 
     public function getFullNameAttribute()
     {
