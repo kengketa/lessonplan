@@ -226,10 +226,8 @@ class ReportController extends Controller
 
     public function create(School $school, Request $request)
     {
-        $reportData = Cache::rememberForever('create_school_report_' . $school->id, function () use ($school) {
-            $emptyReport = new PrepareReportAction();
-            return $emptyReport->execute($school);
-        });
+        $emptyReport = new PrepareReportAction();
+        $reportData = $emptyReport->execute($school);
         return Inertia::render(
             'Dashboard/Reports/Create',
             [
