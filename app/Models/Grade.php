@@ -92,16 +92,32 @@ class Grade extends Model
         return $prefix . '-' . $this->level;
     }
 
-    public function enrollmentThisSemester()
+    public function thisSemesterEnrollment()
     {
-        return $this->hasMany(Enrollment::class, 'grade_id')
-            ->where('academic_year', getCurrentAcademicYear())
-            ->where('semester', getCurrentSemester());
+        return $this->enrollments()->where([
+            'academic_year' => getCurrentAcademicYear(),
+            'semester' => getCurrentSemester()
+        ]);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'grade_id');
+    }
+
+    public function thisSemesterSubjects()
+    {
+        return $this->subjects()
+            ->where([
+                'academic_year' => getCurrentAcademicYear(),
+                'semester' => getCurrentSemester()
+            ]);
     }
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->withPivot('academic_year', 'semester', 'teacher_id');
+        return $this->belongsToMany(Subject::class)
+            ->withPivot('academic_year', 'semester', 'teacher_id');
     }
 
 }

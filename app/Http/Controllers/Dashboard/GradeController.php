@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Actions\SaveGradeAction;
 use App\Http\Requests\CreateOrUpdateGradeRequest;
+use App\Models\CurrentGrade;
 use App\Models\Enrollment;
 use App\Models\Grade;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\School;
+use App\Transformers\CurrentGradeTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
 use App\Transformers\SubjectTransformer;
@@ -70,9 +72,7 @@ class GradeController extends Controller
         ])->get()->map(function ($enrollment) {
             return fractal($enrollment->student, new StudentTransformer())->toArray();
         });
-        
-        $subjectData = fractal($grade->subjects, new SubjectTransformer)->toArray()['data'];
-
+        $subjectData = fractal($grade->thisSemesterSubjects, new SubjectTransformer)->toArray()['data'];
         return Inertia::render(
             'Dashboard/Grades/Show',
             [

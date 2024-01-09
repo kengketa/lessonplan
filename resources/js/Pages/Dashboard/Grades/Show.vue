@@ -11,73 +11,11 @@
       </span>
     </span>
     </PageHeading>
-    <TableDisplayContainer>
-      <template #header>
-        <TableTh v-for="(column,index) in columns" :key="index">
-          <div class="flex">
-            <span>{{ column }}</span>
-          </div>
-        </TableTh>
-        <TableTh>Actions</TableTh>
-      </template>
-      <template #body>
-        <tr
-          v-for="(item, itemIndex) in reports.data"
-          :key="item"
-          :class="itemIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
-        >
-          <TableTd>
-            <Link
-              :href="route('dashboard.reports.edit',item.id)"
-              class="hover:underline"
-            >
-              {{ item.subject }}
-            </Link>
-          </TableTd>
-          <TableTd>
-            <Link
-              :href="route('dashboard.reports.edit',item.id)"
-              class="hover:underline"
-            >
-              {{ item.week_number }}
-            </Link>
-          </TableTd>
-          <TableTd>
-            <Link
-              :href="route('dashboard.reports.edit',item.id)"
-              class="hover:underline"
-            >
-              {{ item.lesson_number }}
-            </Link>
-          </TableTd>
-          <TableTd>
-            <Link
-              :href="route('dashboard.reports.edit',item.id)"
-              class="hover:underline"
-            >
-              {{ item.date }}
-            </Link>
-          </TableTd>
-          <TableTd>
-            <Link
-              :href="route('dashboard.reports.edit',item.id)"
-              class="hover:underline"
-            >
-              {{ item.plans.topic }}
-            </Link>
-          </TableTd>
-          <TableTd>
-            <Link :href="route('dashboard.reports.edit', item.id)" class="link">
-              Edit
-            </Link>
-          </TableTd>
-        </tr>
-      </template>
-      <template #pagination>
-        <Pagination :data="reports.meta.pagination"></Pagination>
-      </template>
-    </TableDisplayContainer>
     <div>
+      {{ reports }}
+    </div>
+    
+    <div class="mt-10">
       {{ students }}
     </div>
 
