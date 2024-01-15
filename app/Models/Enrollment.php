@@ -26,6 +26,7 @@ class Enrollment extends Model
         'grade_id',
         'academic_year',
         'student_id',
+        'number_in_grade',
         'semester',
     ];
 

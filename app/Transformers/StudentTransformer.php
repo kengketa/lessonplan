@@ -12,10 +12,11 @@ class StudentTransformer extends TransformerAbstract
         $data = [
             'school_id' => $student->school_id,
             'id' => $student->id,
-            'code' => $student->code,
+            'number' => $student->number,
             'prefix' => $student->prefix,
             'first_name' => $student->first_name,
             'last_name' => $student->last_name,
+            'nick_name' => $student->nick_name,
             'email' => $student->email,
             'phone' => $student->phone,
             'created_at' => $student->present()->createdAt,

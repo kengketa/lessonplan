@@ -14,16 +14,9 @@ class CreateOrUpdateEnrollmentRequest extends FormRequest
      */
     public function rules()
     {
-
-        $rules=[
-
-            'grade_id'	=>	['required', ],
-			'academic_year'	=>	['required', ],
-			'student_id'	=>	['required', ],
-			'semester'	=>	['required', ],
-			
+        $rules = [
+            'file' => ['required', 'mimes:xlsx,xls', 'max:10240']
         ];
-
         return $rules;
     }
 }

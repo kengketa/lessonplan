@@ -24,10 +24,11 @@ class StudentFactory extends Factory
     {
         return [
             'school_id' => School::first()->id,
-            'code' => $this->faker->numerify('#####'),
+            'number' => (int)$this->faker->numerify('#####'),
             'prefix' => $this->faker->randomElement(['นาย', 'นางสาว', 'เด็กชาย', 'เด็กหญิง']),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'nick_name' => $this->faker->firstName,
             'email' => $this->faker->safeEmail,
             'password' => $this->faker->password,
             'phone' => $this->faker->phoneNumber,

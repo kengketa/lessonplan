@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\School;
 use App\Transformers\CurrentGradeTransformer;
+use App\Transformers\EnrollmentTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
 use App\Transformers\SubjectTransformer;
@@ -65,20 +66,26 @@ class GradeController extends Controller
             ->orderBy('lesson_number')
             ->paginate(30);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
-        $students = Enrollment::where([
+//        $students = Enrollment::where([
+//            'grade_id' => $grade->id,
+//            'academic_year' => getCurrentAcademicYear(),
+//            'semester' => getCurrentSemester(),
+//        ])->get()->map(function ($enrollment) {
+//            return fractal($enrollment->student, new StudentTransformer())->toArray();
+//        });
+        $enrollments = Enrollment::where([
             'grade_id' => $grade->id,
             'academic_year' => getCurrentAcademicYear(),
             'semester' => getCurrentSemester(),
-        ])->get()->map(function ($enrollment) {
-            return fractal($enrollment->student, new StudentTransformer())->toArray();
-        });
+        ])->orderBy('number_in_grade', 'asc')->get();
+        $enrollmentData = fractal($enrollments, new EnrollmentTransformer())->toArray()['data'];
         $subjectData = fractal($grade->thisSemesterSubjects, new SubjectTransformer)->toArray()['data'];
         return Inertia::render(
             'Dashboard/Grades/Show',
             [
                 'grade' => $gradeData,
                 'reports' => $reportData,
-                'students' => $students,
+                'enrollments' => $enrollmentData,
                 'subjects' => $subjectData
             ]
         );

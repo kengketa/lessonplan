@@ -14,6 +14,7 @@ class EnrollmentTransformer extends TransformerAbstract
             'grade_id' => $enrollment->grade_id,
             'academic_year' => $enrollment->academic_year,
             'student_id' => $enrollment->student_id,
+            'number_in_grade' => $enrollment->number_in_grade,
             'semester' => $enrollment->semester,
             'student' => fractal($enrollment->student, new StudentTransformer())->toArray(),
             'created_at' => $enrollment->present()->createdAt,

@@ -217,6 +217,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 
             // Grades
             Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
+
+            //Enrollment
+            Route::post('grades/{grade}/enrollments', [EnrollmentController::class, 'store'])
+                ->name('dashboard.grades.enrollment');
         }
     );
 });
@@ -244,12 +248,12 @@ Route::middleware(["auth"])->group(function () {
     Route::put("agendas/{agenda}", [AgendaController::class, "update"])->name("dashboard.agendas.update");
     Route::delete("agendas/{agenda}", [AgendaController::class, "destroy"])->name("dashboard.agendas.destroy");
 
-	//subjects
-	Route::get("subjects", [SubjectController::class,"index"])->name("dashboard.subjects.index");
-	Route::get("subjects/create", [SubjectController::class,"create"])->name("dashboard.subjects.create");
-	Route::get("subjects/{subject}", [SubjectController::class,"show"])->name("dashboard.subjects.show");
-	Route::post("subjects", [SubjectController::class,"store"])->name("dashboard.subjects.store");
-	Route::get("subjects/{subject}/edit", [SubjectController::class,"edit"])->name("dashboard.subjects.edit");
-	Route::put("subjects/{subject}", [SubjectController::class,"update"])->name("dashboard.subjects.update");
-	Route::delete("subjects/{subject}", [SubjectController::class,"destroy"])->name("dashboard.subjects.destroy");
-	});
+    //subjects
+    Route::get("subjects", [SubjectController::class, "index"])->name("dashboard.subjects.index");
+    Route::get("subjects/create", [SubjectController::class, "create"])->name("dashboard.subjects.create");
+    Route::get("subjects/{subject}", [SubjectController::class, "show"])->name("dashboard.subjects.show");
+    Route::post("subjects", [SubjectController::class, "store"])->name("dashboard.subjects.store");
+    Route::get("subjects/{subject}/edit", [SubjectController::class, "edit"])->name("dashboard.subjects.edit");
+    Route::put("subjects/{subject}", [SubjectController::class, "update"])->name("dashboard.subjects.update");
+    Route::delete("subjects/{subject}", [SubjectController::class, "destroy"])->name("dashboard.subjects.destroy");
+});

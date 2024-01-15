@@ -15,6 +15,7 @@ class CreateEnrollmentsTable extends Migration
             $table->unsignedBigInteger('grade_id');
             $table->unsignedInteger('academic_year');
             $table->unsignedBigInteger('student_id');
+            $table->unsignedInteger('number_in_grade')->nullable();
             $table->unsignedTinyInteger('semester');
             $table->timestamps();
 

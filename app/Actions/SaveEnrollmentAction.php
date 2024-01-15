@@ -2,25 +2,30 @@
 
 namespace App\Actions;
 
+use App\Imports\EnrollmentImport;
 use App\Models\Enrollment;
+use App\Models\Grade;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaveEnrollmentAction
 {
-    protected Enrollment $enrollment;
+    protected Grade $grade;
 
-    public function execute(Enrollment $enrollment, array $data): Enrollment
+    public function execute(Grade $grade, $file): void
     {
-        $this->enrollment = $enrollment;
-
-        if (! empty($this->enrollment->id)) {
-            $this->enrollment->update($data);
-            return $this->enrollment;
+        $this->grade = $grade;
+        $path = $file->storeAs('enrolment-imports', $file->getClientOriginalName());
+        try {
+            DB::beginTransaction();
+            Excel::import(new EnrollmentImport($grade), $path);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-
-        //create case
-        $this->enrollment = $this->enrollment->create($data);
-        return $this->enrollment;
+        return;
     }
-
 }
