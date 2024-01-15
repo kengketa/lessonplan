@@ -14,7 +14,7 @@
     <div>
       <input accept=".xlsx, .xls" name="excelFile" type="file" @input="uploadExcel">
     </div>
-    <Card class="w-1/2">
+    <div class="w-1/2 h-screen overflow-y-scroll rounded-lg overflow-x-hidden hide-scroll">
       <TableDisplayContainer>
         <template #header>
           <TableTh v-for="(column,index) in columns" :key="index">
@@ -26,29 +26,35 @@
         </template>
         <template #body>
           <tr
-            v-for="(enrollment, enrollmentIndex) in enrollments"
-            :key="enrollment"
-            :class="enrollmentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+            v-for="(student, studentIndex) in this.students"
+            :key="student"
+            :class="studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
           >
             <TableTd>
-              <p>{{ enrollment.number_in_grade }}</p>
+              <p>{{ student.number_in_grade }}</p>
             </TableTd>
             <TableTd>
-              {{ enrollment.student.number }}
+              {{ student.number }}
             </TableTd>
             <TableTd>
-              {{ enrollment.student.prefix }} {{ enrollment.student.first_name }} {{ enrollment.student.last_name }}
+              {{ student.prefix }} {{ student.first_name }} {{ student.last_name }}
             </TableTd>
             <TableTd>
-              {{ enrollment.student.nick_name }}
+              {{ student.nick_name }}
             </TableTd>
             <TableTd>
-              ###
+              <div>
+                <button :class="student.present ?'bg-lime-300 border-lime-300':'border-gray-300'"
+                        class="rounded-full h-6 w-6 cursor-pointer border"
+                        @click="toggleNameCheck(student)"></button>
+              </div>
             </TableTd>
           </tr>
         </template>
       </TableDisplayContainer>
-    </Card>
+    </div>
+
+
     <!--    <div class="mt-10">-->
     <!--      subjects <br>-->
     <!--      {{ subjects }}-->
@@ -113,18 +119,33 @@ export default {
     errorBags: Object,
     errors: Object,
   },
+  mounted() {
+
+  },
   data() {
     return {
       breadcrumbs: [
         {name: this.grade.school.name, href: route('dashboard.schools.show', this.grade.school.id)},
         {name: this.grade.name, href: '#'},
       ],
-      columns: ['#', 'CODE', 'Full Name', 'nickname'],
+      columns: ['#', 'code', 'Full Name', 'nickname'],
       isShowDeleteDialog: false,
+      students: this.enrollments.map(en => ({...en.student, number_in_grade: en.number_in_grade, present: false}))
     };
   },
   computed: {},
   methods: {
+    async toggleNameCheck(student) {
+      const foundStudent = this.students.find(s => s.number === student.number);
+      if (!foundStudent) {
+        return;
+      }
+      foundStudent.present = !foundStudent.present;
+      // const res = await axios.post(this.route('dashboard.attendances.check'), {
+      //   studentId: foundStudent.id,
+      //   present: foundStudent.present
+      // });
+    },
     async uploadExcel(event) {
       const file = event.target.files[0];
       const formData = new FormData();
@@ -135,12 +156,19 @@ export default {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
       });
-
-
     }
   },
 };
 </script>
 
 <style>
+.hide-scroll {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
 </style>

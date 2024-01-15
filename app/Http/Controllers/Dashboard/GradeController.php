@@ -66,13 +66,6 @@ class GradeController extends Controller
             ->orderBy('lesson_number')
             ->paginate(30);
         $reportData = fractal($reports, new ReportTransformer())->toArray();
-//        $students = Enrollment::where([
-//            'grade_id' => $grade->id,
-//            'academic_year' => getCurrentAcademicYear(),
-//            'semester' => getCurrentSemester(),
-//        ])->get()->map(function ($enrollment) {
-//            return fractal($enrollment->student, new StudentTransformer())->toArray();
-//        });
         $enrollments = Enrollment::where([
             'grade_id' => $grade->id,
             'academic_year' => getCurrentAcademicYear(),
