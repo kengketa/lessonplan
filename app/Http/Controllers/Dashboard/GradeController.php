@@ -4,18 +4,21 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Actions\SaveGradeAction;
 use App\Http\Requests\CreateOrUpdateGradeRequest;
+use App\Models\Attendance;
 use App\Models\CurrentGrade;
 use App\Models\Enrollment;
 use App\Models\Grade;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\School;
+use App\Transformers\AttendanceTransformer;
 use App\Transformers\CurrentGradeTransformer;
 use App\Transformers\EnrollmentTransformer;
 use App\Transformers\GradeTransformer;
 use App\Transformers\ReportTransformer;
 use App\Transformers\SubjectTransformer;
 use App\Transformers\StudentTransformer;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -73,13 +76,16 @@ class GradeController extends Controller
         ])->orderBy('number_in_grade', 'asc')->get();
         $enrollmentData = fractal($enrollments, new EnrollmentTransformer())->toArray()['data'];
         $subjectData = fractal($grade->thisSemesterSubjects, new SubjectTransformer)->toArray()['data'];
+        $attendances = Attendance::where('grade_id', $grade->id)->whereDate('created_at', Carbon::today())->get();
+        $attendanceData = fractal($attendances, new AttendanceTransformer())->toArray()['data'];
         return Inertia::render(
             'Dashboard/Grades/Show',
             [
                 'grade' => $gradeData,
                 'reports' => $reportData,
                 'enrollments' => $enrollmentData,
-                'subjects' => $subjectData
+                'subjects' => $subjectData,
+                'attendances' => $attendanceData
             ]
         );
     }

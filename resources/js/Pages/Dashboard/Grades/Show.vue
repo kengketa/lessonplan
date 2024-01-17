@@ -107,6 +107,10 @@ export default {
       type: Object,
       required: true
     },
+    attendances: {
+      type: Object,
+      required: true
+    },
     subjects: {
       type: Object,
       required: true
@@ -120,7 +124,6 @@ export default {
     errors: Object,
   },
   mounted() {
-
   },
   data() {
     return {
@@ -130,7 +133,11 @@ export default {
       ],
       columns: ['#', 'code', 'Full Name', 'nickname'],
       isShowDeleteDialog: false,
-      students: this.enrollments.map(en => ({...en.student, number_in_grade: en.number_in_grade, present: false}))
+      students: this.enrollments.map(en => ({
+        ...en.student,
+        number_in_grade: en.number_in_grade,
+        present: this.attendances.some(attendance => attendance.student_id === en.student.id)
+      }))
     };
   },
   computed: {},
@@ -141,21 +148,23 @@ export default {
         return;
       }
       foundStudent.present = !foundStudent.present;
-      // const res = await axios.post(this.route('dashboard.attendances.check'), {
-      //   studentId: foundStudent.id,
-      //   present: foundStudent.present
-      // });
+      const res = await axios.post(this.route('dashboard.attendances.store', this.grade.id), {
+        student_id: foundStudent.id,
+        present: foundStudent.present
+      });
     },
     async uploadExcel(event) {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
-      const response = await Inertia.post(this.route('dashboard.grades.enrollment', this.grade.id), formData, {
+      const response = await Inertia.post(this.route('dashboard.enrollments.store', this.grade.id), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
       });
+     
+
     }
   },
 };

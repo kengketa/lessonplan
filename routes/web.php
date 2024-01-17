@@ -17,6 +17,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\EnrollmentController;
 use App\Http\Controllers\Dashboard\SubjectController;
+use App\Http\Controllers\Dashboard\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,10 +143,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             Route::get("schools/{school}", [SchoolController::class, "show"])->name("dashboard.schools.show");
 
             //reports
-            Route::get(
-                "schools/{school}/reports/create",
-                [ReportController::class, "create"]
-            )->name("dashboard.reports.create");
+            Route::get("schools/{school}/reports/create", [ReportController::class, "create"])
+                ->name("dashboard.reports.create");
             Route::get("schools/{school}/reports", [ReportController::class, "index"])->name("dashboard.reports.index");
             Route::post("reports", [ReportController::class, "store"])->name("dashboard.reports.store");
             Route::get("reports/{report}/edit", [ReportController::class, "edit"])->name("dashboard.reports.edit");
@@ -219,8 +218,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
 
             //Enrollment
-            Route::post('grades/{grade}/enrollments', [EnrollmentController::class, 'store'])
-                ->name('dashboard.grades.enrollment');
+            Route::post("grades/{grade}/enrollments", [EnrollmentController::class, "store"])
+                ->name("dashboard.enrollments.store");
+            
+
+            //Attendance
+            Route::post("grades/{grade}/attendances", [AttendanceController::class, "store"])
+                ->name("dashboard.attendances.store");
         }
     );
 });

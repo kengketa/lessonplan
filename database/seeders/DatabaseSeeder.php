@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             $this->call(EnrollmentSeeder::class);
             $this->call(SubjectSeeder::class);
             $this->call(GradeSubjectSeeder::class);
+            //$this->call(AttendanceSeeder::class);
         }
         if (config('app.env') == 'production') {
             $this->call(RolePermissionSeeder::class);
@@ -41,6 +42,7 @@ class DatabaseSeeder extends Seeder
             $this->call(StudentSeeder::class);
             $this->call(EnrollmentSeeder::class);
             $this->call(SubjectSeeder::class);
+            $this->call(AttendanceSeeder::class);
         }
     }
 }

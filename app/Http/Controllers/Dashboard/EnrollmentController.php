@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Models\Enrollment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -23,7 +25,6 @@ class EnrollmentController extends Controller
     ) {
         $file = $request->file('file');
         $saveEnrollmentAction->execute($grade, $file);
-        return redirect()->route('dashboard.grades.show', ['grade' => $grade])
-            ->with("success", 'Imported all students to this class.');
+        return Inertia::location(route('dashboard.grades.show', ['grade' => $grade]));
     }
 }
