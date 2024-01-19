@@ -7,14 +7,17 @@
         <div class="overflow-x-auto w-full">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
-            <slot name="header" />
+            <slot name="header-title"/>
+            </thead>
+            <thead class="bg-gray-50">
+            <slot name="header"/>
             </thead>
             <tbody>
-            <slot name="body" />
+            <slot name="body"/>
             </tbody>
           </table>
         </div>
-        <slot name="pagination" />
+        <slot name="pagination"/>
       </div>
     </div>
   </div>

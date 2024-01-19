@@ -4,61 +4,101 @@
       :back="route('dashboard.schools.index')"
       :breadcrumbs="breadcrumbs"
     />
-    <PageHeading>
-    <span class="hidden lg:inline">
-      <span class="max-w-xs truncate">
-        {{ grade.name }}
-      </span>
-    </span>
-    </PageHeading>
-    <div>
-      <input accept=".xlsx, .xls" name="excelFile" type="file" @input="uploadExcel">
+    <div class="w-full text-4xl flex justify-center uppercase font-bold text-blue-800">
+      <p>{{ grade.name }}</p>
     </div>
-    <div class="w-1/2 h-screen overflow-y-scroll rounded-lg overflow-x-hidden hide-scroll">
-      <TableDisplayContainer>
-        <template #header>
-          <TableTh v-for="(column,index) in columns" :key="index">
-            <div class="flex">
-              <span>{{ column }}</span>
-            </div>
-          </TableTh>
-          <TableTh>Actions</TableTh>
-        </template>
-        <template #body>
-          <tr
-            v-for="(student, studentIndex) in this.students"
-            :key="student"
-            :class="studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
-          >
-            <TableTd>
-              <p>{{ student.number_in_grade }}</p>
-            </TableTd>
-            <TableTd>
-              {{ student.number }}
-            </TableTd>
-            <TableTd>
-              {{ student.prefix }} {{ student.first_name }} {{ student.last_name }}
-            </TableTd>
-            <TableTd>
-              {{ student.nick_name }}
-            </TableTd>
-            <TableTd>
-              <div>
-                <button :class="student.present ?'bg-lime-300 border-lime-300':'border-gray-300'"
-                        class="rounded-full h-6 w-6 cursor-pointer border"
-                        @click="toggleNameCheck(student)"></button>
+    <Card>
+      <div class="w-full grid grid-cols-5 gap-0 text-gray-500">
+        <div class="day-button">MON</div>
+        <div class="day-button">Tue</div>
+        <div class="day-button">Wed</div>
+        <div class="day-button active">Thu</div>
+        <div class="day-button">Fri</div>
+      </div>
+      <div class="w-full grid grid-cols-6 gap-0 text-gray-500">
+        <div class="subject-button active relative">
+          <p class="absolute top-0 right-2 text-xs">09.00</p>
+          <p>Maths</p>
+        </div>
+        <div class="subject-button relative">
+          <p class="absolute top-0 right-2 text-xs">10.00</p>
+          <p>Sci</p>
+        </div>
+        <div class="subject-button relative">
+          <p class="absolute top-0 right-2 text-xs">11.00</p>
+          <p>PE</p>
+        </div>
+        <div class="subject-button relative">
+          <p class="absolute top-0 right-2 text-xs">13.00</p>
+          <p>Eng</p>
+        </div>
+        <div class="subject-button relative">
+          <p class="absolute top-0 right-2 text-xs">14.00</p>
+          <p>Thai</p>
+        </div>
+        <div class="subject-button relative">
+          <p class="absolute top-0 right-2 text-xs">15.00</p>
+          <p>Club</p>
+        </div>
+      </div>
+    </Card>
+    <div class="grid grid-cols-2 gap-2 mt-8">
+      <div class="h-screen overflow-y-scroll rounded-lg overflow-x-hidden pb-8">
+        <Card>
+          sdhfgjd
+        </Card>
+      </div>
+      <div class="-my-4">
+        <TableDisplayContainer>
+          <template #header-title>
+            <th class="py-2 font-bold text-blue-800 uppercase" colspan="5">Attendance</th>
+          </template>
+          <template #header>
+            <TableTh v-for="(column,index) in columns" :key="index">
+              <div class="flex">
+                <span>{{ column }}</span>
               </div>
-            </TableTd>
-          </tr>
-        </template>
-      </TableDisplayContainer>
+            </TableTh>
+            <TableTh>Actions</TableTh>
+          </template>
+          <template #body>
+            <tr
+              v-for="(student, studentIndex) in this.students"
+              :key="student"
+              :class="studentIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+            >
+              <TableTd>
+                <p>{{ student.number_in_grade }}</p>
+              </TableTd>
+              <TableTd>
+                {{ student.number }}
+              </TableTd>
+              <TableTd>
+                {{ student.prefix }} {{ student.first_name }} {{ student.last_name }}
+              </TableTd>
+              <TableTd>
+                {{ student.nick_name }}
+              </TableTd>
+              <TableTd>
+                <div class="w-full flex justify-center">
+                  <button class="rounded-full h-6 w-6 cursor-pointer border border-gray-300 overflow-hidden"
+                          @click="toggleNameCheck(student)">
+                    <div :class="student.present ? 'text-lime-500':'text-transparent'"
+                         class="flex justify-center items-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3.0"
+                           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m4.5 12.75 6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+              </TableTd>
+            </tr>
+          </template>
+        </TableDisplayContainer>
+        <input accept=".xlsx, .xls" name="excelFile" type="file" @input="uploadExcel">
+      </div>
     </div>
-
-
-    <!--    <div class="mt-10">-->
-    <!--      subjects <br>-->
-    <!--      {{ subjects }}-->
-    <!--    </div>-->
   </div>
 </template>
 
@@ -163,7 +203,7 @@ export default {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
       });
-     
+
 
     }
   },

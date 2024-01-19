@@ -21,3 +21,19 @@
 .button.button-small {
     @apply text-xs sm:text-sm font-light py-1 px-2;
 }
+
+.subject-button {
+    @apply h-24 w-full border border-gray-300 flex items-center justify-center text-4xl font-bold cursor-pointer uppercase;
+}
+
+.subject-button.active {
+    @apply bg-blue-800 text-white border-blue-800;
+}
+
+.day-button {
+    @apply h-10 w-full border border-gray-300 flex items-center justify-center text-xl font-semibold cursor-pointer uppercase;
+}
+
+.day-button.active {
+    @apply bg-blue-800 text-white border-blue-800;
+}
