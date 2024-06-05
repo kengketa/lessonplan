@@ -4,8 +4,8 @@
     <Editor
       :id="id"
       v-model="modelValue"
+      :api-key="randomKey"
       :init="customEditor"
-      api-key="ol1126m8xn7ctjfx1zespip0jmov7z2uv24idmqyy1wag0ru"
       class="mt-2"
     />
   </div>
@@ -68,9 +68,22 @@ export default {
       }
     };
   },
+  mounted() {
+
+  },
   watch: {
     modelValue() {
       this.$emit('update:modelValue', this.modelValue)
+    }
+  },
+  computed: {
+    randomKey() {
+      const keys = [
+        'ol1126m8xn7ctjfx1zespip0jmov7z2uv24idmqyy1wag0ru',
+        '1e0xecfq756q33p2w5b8cf43zyslqltpjgjuu4705xpt0xmr',
+        'mzcneekbxarhh0k2g7lho8dbuw2w21dblxozmz1tk3rvbqgc'
+      ];
+      return keys[Math.floor(Math.random() * keys.length)];
     }
   },
   emits: ["update:modelValue"],
