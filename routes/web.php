@@ -216,11 +216,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
 
             // Grades
             Route::get("grades/{grade}", [GradeController::class, "show"])->name("dashboard.grades.show");
+            Route::get("grades/{grade}/available-subjects", [GradeController::class, "availableSubjects"])
+                ->name("dashboard.grades.available_subjects");
 
             //Enrollment
             Route::post("grades/{grade}/enrollments", [EnrollmentController::class, "store"])
                 ->name("dashboard.enrollments.store");
-            
+
 
             //Attendance
             Route::post("grades/{grade}/attendances", [AttendanceController::class, "store"])

@@ -4,48 +4,20 @@
       :back="route('dashboard.schools.index')"
       :breadcrumbs="breadcrumbs"
     />
+    <div class="w-full flex justify-end -mt-10">
+      <ToggleInput id="adminMode" v-model="adminMode" label="Admin Mode"/>
+    </div>
+
     <div class="w-full text-4xl flex justify-center uppercase font-bold text-blue-800">
       <p>{{ grade.name }}</p>
     </div>
-    <Card>
-      <div class="w-full grid grid-cols-5 gap-0 text-gray-500">
-        <div class="day-button">MON</div>
-        <div class="day-button">Tue</div>
-        <div class="day-button">Wed</div>
-        <div class="day-button active">Thu</div>
-        <div class="day-button">Fri</div>
-      </div>
-      <div class="w-full grid grid-cols-6 gap-0 text-gray-500">
-        <div class="subject-button active relative">
-          <p class="absolute top-0 right-2 text-xs">09.00</p>
-          <p>Maths</p>
-        </div>
-        <div class="subject-button relative">
-          <p class="absolute top-0 right-2 text-xs">10.00</p>
-          <p>Sci</p>
-        </div>
-        <div class="subject-button relative">
-          <p class="absolute top-0 right-2 text-xs">11.00</p>
-          <p>PE</p>
-        </div>
-        <div class="subject-button relative">
-          <p class="absolute top-0 right-2 text-xs">13.00</p>
-          <p>Eng</p>
-        </div>
-        <div class="subject-button relative">
-          <p class="absolute top-0 right-2 text-xs">14.00</p>
-          <p>Thai</p>
-        </div>
-        <div class="subject-button relative">
-          <p class="absolute top-0 right-2 text-xs">15.00</p>
-          <p>Club</p>
-        </div>
-      </div>
-    </Card>
+    <div class="w-full">
+      <DayAndSubjectCard v-model="activeDayAndSubject" :admin-mode="adminMode" :grade="grade"/>
+    </div>
     <div class="grid grid-cols-2 gap-2 mt-8">
       <div class="h-screen overflow-y-scroll rounded-lg overflow-x-hidden pb-8">
         <Card>
-          sdhfgjd
+          {{ activeDayAndSubject }}
         </Card>
       </div>
       <div class="-my-4">
@@ -96,7 +68,7 @@
             </tr>
           </template>
         </TableDisplayContainer>
-        <input accept=".xlsx, .xls" name="excelFile" type="file" @input="uploadExcel">
+        <input v-if="adminMode" accept=".xlsx, .xls" name="excelFile" type="file" @input="uploadExcel">
       </div>
     </div>
   </div>
@@ -131,10 +103,14 @@ import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import Form from "@/Components/Form.vue";
 import {Inertia} from '@inertiajs/inertia';
+import DayAndSubjectCard from "@/Components/DayAndSubjectCard.vue";
+import ToggleInput from "@/Components/ToggleInput.vue";
 
 export default {
   name: 'GradeShow',
   components: {
+    ToggleInput,
+    DayAndSubjectCard,
     Form, SelectInput, TextInput,
     Card, PageHeading, Breadcrumbs, DataDisplayContainer, AddGradeModal,
     DataDisplayRow, PencilIcon, TrashIcon, ExternalLinkIcon, EyeIcon,
@@ -167,6 +143,7 @@ export default {
   },
   data() {
     return {
+      adminMode: false,
       breadcrumbs: [
         {name: this.grade.school.name, href: route('dashboard.schools.show', this.grade.school.id)},
         {name: this.grade.name, href: '#'},
@@ -177,7 +154,8 @@ export default {
         ...en.student,
         number_in_grade: en.number_in_grade,
         present: this.attendances.some(attendance => attendance.student_id === en.student.id)
-      }))
+      })),
+      activeDayAndSubject: null
     };
   },
   computed: {},
@@ -203,10 +181,13 @@ export default {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
       });
-
-
-    }
+    },
   },
+  watch: {
+    activeDayAndSubject() {
+      
+    }
+  }
 };
 </script>
 

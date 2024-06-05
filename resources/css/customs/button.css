@@ -23,7 +23,7 @@
 }
 
 .subject-button {
-    @apply h-24 w-full border border-gray-300 flex items-center justify-center text-4xl font-bold cursor-pointer uppercase;
+    @apply h-24 w-full border border-gray-300 flex items-center justify-center text-4xl font-bold cursor-pointer uppercase hover:bg-gray-100;
 }
 
 .subject-button.active {
@@ -31,7 +31,7 @@
 }
 
 .day-button {
-    @apply h-10 w-full border border-gray-300 flex items-center justify-center text-xl font-semibold cursor-pointer uppercase;
+    @apply h-10 w-full border border-gray-300 flex items-center justify-center text-xl font-semibold cursor-pointer uppercase hover:bg-gray-100;
 }
 
 .day-button.active {

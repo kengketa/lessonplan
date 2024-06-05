@@ -25,15 +25,18 @@ class SubjectController extends Controller
             [
                 'subjects' => $subjects,
                 'filters' => $filters,
-            ]);
+            ]
+        );
     }
+
     public function create(): Response
     {
         return Inertia::render(
             'Dashboard/Subjects/Create',
             [
                 'subject' => new Subject()
-            ]);
+            ]
+        );
     }
 
     public function store(CreateOrUpdateSubjectRequest $request, SaveSubjectAction $saveSubjectAction): RedirectResponse
@@ -41,7 +44,10 @@ class SubjectController extends Controller
         $subject = new Subject();
         $subject = $saveSubjectAction->execute($subject, $request->validated());
 
-        return redirect()->route('dashboard.subjects.show', ['subject' => $subject])->with("success", ' Subject  has been create!');
+        return redirect()->route('dashboard.subjects.show', ['subject' => $subject])->with(
+            "success",
+            ' Subject  has been create!'
+        );
     }
 
     public function show(Subject $subject): Response
@@ -52,7 +58,8 @@ class SubjectController extends Controller
             'Dashboard/Subjects/Show',
             [
                 'subject' => $subject,
-            ]);
+            ]
+        );
     }
 
     public function edit(Subject $subject): Response
@@ -61,14 +68,21 @@ class SubjectController extends Controller
             'Dashboard/Subjects/Edit',
             [
                 'subject' => $subject
-            ]);
+            ]
+        );
     }
 
-    public function update(CreateOrUpdateSubjectRequest $request, Subject $subject, SaveSubjectAction $saveSubjectAction): RedirectResponse
-    {
+    public function update(
+        CreateOrUpdateSubjectRequest $request,
+        Subject $subject,
+        SaveSubjectAction $saveSubjectAction
+    ): RedirectResponse {
         $subject = $saveSubjectAction->execute($subject, $request->validated());
 
-        return redirect()->route("dashboard.subjects.show", ['subject' => $subject])->with("success", "Subject has been update!");
+        return redirect()->route("dashboard.subjects.show", ['subject' => $subject])->with(
+            "success",
+            "Subject has been update!"
+        );
     }
 
     public function destroy(Subject $subject): RedirectResponse

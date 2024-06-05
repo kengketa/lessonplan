@@ -90,4 +90,10 @@ class GradeController extends Controller
         );
     }
 
+    public function availableSubjects(Grade $grade)
+    {
+        $subjectData = fractal($grade->thisSemesterSubjects, new SubjectTransformer())->toArray()['data'];
+        return response()->json($subjectData);
+    }
+
 }
