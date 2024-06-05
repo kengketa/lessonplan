@@ -2,11 +2,11 @@
   <div>
     <label class="text-sm font-medium text-gray-700">{{ label }}</label>
     <Editor
-      class="mt-2"
-      v-model="modelValue"
-      api-key="ecqe60fpomvdhv29uid57rf0hvbq4cpi3pq3zix4qf9gbn7y"
-      :init="customEditor"
       :id="id"
+      v-model="modelValue"
+      :init="customEditor"
+      api-key="ol1126m8xn7ctjfx1zespip0jmov7z2uv24idmqyy1wag0ru"
+      class="mt-2"
     />
   </div>
 </template>
