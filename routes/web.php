@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\MeetingController;
 use App\Http\Controllers\Dashboard\AgendaController;
 use App\Http\Controllers\VocabController;
 use App\Http\Controllers\MisbehaviorController;
+use App\Http\Controllers\ImportLessonPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,6 +194,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
                 "schools/{school}/misbehavior-report",
                 [MisbehaviorController::class, "index"]
             )->name('dashboard.misbehaviors.index');
+
+            Route::post('schools/{school}/import-my-lesson-plan', [ImportLessonPlanController::class, 'import'])->name(
+                'dashboard.schools.import_my_lesson_plan'
+            );
         }
     );
 });

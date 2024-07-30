@@ -37,6 +37,10 @@
       <span class="max-w-xs truncate text-2xl">{{ school.name }}</span>
     </span>
       <template #actions>
+        <button class="button button-primary mr-2" type="button" @click="$refs.excelFileInput.click()">
+          Import From Excel
+        </button>
+        <input ref="excelFileInput" accept=".xls,.xlsx" class="hidden" type="file" @change="handleExcelUpload">
         <Link
           :href="route('dashboard.schools.calendar', school.id)"
           class="button button-primary mr-2"
@@ -450,6 +454,20 @@ export default {
     },
   },
   methods: {
+    async handleExcelUpload(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await axios.post(this.route('dashboard.schools.import_my_lesson_plan', this.school.id), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+    },
     computedRowColour(index, item) {
       if (item.approver) {
         return index % 2 === 0 ? 'bg-green-50 hover:bg-green-200' : 'bg-green-100 hover:bg-green-200'

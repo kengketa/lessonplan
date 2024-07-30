@@ -32,25 +32,6 @@ class SaveReportAction
         return $createdReports;
     }
 
-    private function addVocabs($reportId): void
-    {
-        $report = Report::find($reportId);
-        foreach ($report['plans'] as $plan) {
-            foreach ($plan['vocabs'] as $vocab) {
-                $duplicatedVocab = Vocab::where('school_id', $report->grade->school->id)
-                    ->where('academic_year', getCurrentAcademicYear())
-                    ->where('semester', getCurrentSemester())
-                    ->where('grade_id', $report->grade_id)
-                    ->where('subject_id', $report->getSubjectId())
-                    ->where('vocab_en', strtolower($vocab))->first();
-                if ($duplicatedVocab) {
-                    continue;
-                }
-                TranslateVocabAndAddToDatabase::dispatch($report, $vocab);
-            }
-        }
-    }
-
     private function updateReport($data): array
     {
         $plans = [];
@@ -90,7 +71,7 @@ class SaveReportAction
             Misbehavior::where('report_id', $this->report->id)->delete();
             foreach ($data['misbehavior_students'] as $misbehaviorStudent) {
                 $gradeTypeString = $this->report->grade->type == Grade::PRIMARY_TYPE ? 'G' : 'K';
-                $gradeString = $gradeTypeString.''.$this->report->grade->level.'/'.$this->report->grade->room_number;
+                $gradeString = $gradeTypeString . '' . $this->report->grade->level . '/' . $this->report->grade->room_number;
                 Misbehavior::create([
                     'name' => $misbehaviorStudent['name'],
                     'behavior' => $misbehaviorStudent['behavior'],
@@ -105,6 +86,25 @@ class SaveReportAction
         $updatedReport = new PrepareReportAction();
         $updatedReportData = $updatedReport->execute($this->report->grade->school, $this->report);
         return $updatedReportData;
+    }
+
+    private function addVocabs($reportId): void
+    {
+        $report = Report::find($reportId);
+        foreach ($report['plans'] as $plan) {
+            foreach ($plan['vocabs'] as $vocab) {
+                $duplicatedVocab = Vocab::where('school_id', $report->grade->school->id)
+                    ->where('academic_year', getCurrentAcademicYear())
+                    ->where('semester', getCurrentSemester())
+                    ->where('grade_id', $report->grade_id)
+                    ->where('subject_id', $report->getSubjectId())
+                    ->where('vocab_en', strtolower($vocab))->first();
+                if ($duplicatedVocab) {
+                    continue;
+                }
+                TranslateVocabAndAddToDatabase::dispatch($report, $vocab);
+            }
+        }
     }
 
     private function createReports($data): array
