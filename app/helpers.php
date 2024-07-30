@@ -13,7 +13,7 @@ function snakeCaseToText($text)
 function getYears()
 {
     $years = [
-        ['id' => 0, 'name' => 'Current ('.getCurrentAcademicYear().')'],
+        ['id' => 0, 'name' => 'Current (' . getCurrentAcademicYear() . ')'],
         ['id' => 2019, 'name' => '2019'],
         ['id' => 2020, 'name' => '2020'],
         ['id' => 2021, 'name' => '2021'],
@@ -63,7 +63,8 @@ function getClockInMonthList()
         ->select(
             DB::raw('count(id) as total'),
             DB::raw('year(date) as year'),
-            DB::raw('month(date) as month'))
+            DB::raw('month(date) as month')
+        )
         ->groupBy('year', 'month')
         ->orderBy('year', 'desc')
         ->orderBy('month', 'desc')
@@ -71,8 +72,10 @@ function getClockInMonthList()
 
 
     foreach ($clockInGroupByMonthYear as $index => $clockIn) {
-        $monthOptions[$index]['id'] = Carbon::parse($clockIn->year.'-'.$clockIn->month.'-'.'1')->format('Y-m');
-        $monthOptions[$index]['name'] = Carbon::parse($clockIn->year.'-'.$clockIn->month.'-'.'1')->format('F - Y');
+        $monthOptions[$index]['id'] = Carbon::parse($clockIn->year . '-' . $clockIn->month . '-' . '1')->format('Y-m');
+        $monthOptions[$index]['name'] = Carbon::parse($clockIn->year . '-' . $clockIn->month . '-' . '1')->format(
+            'F - Y'
+        );
     }
     return $monthOptions;
 }
@@ -80,7 +83,7 @@ function getClockInMonthList()
 function getSemesters()
 {
     $semester = [
-        ['id' => 0, 'name' => 'Current ('.getCurrentSemester().')'],
+        ['id' => 0, 'name' => 'Current (' . getCurrentSemester() . ')'],
         ['id' => 1, 'name' => 'semseter 1'],
         ['id' => 2, 'name' => 'semester 2'],
     ];
@@ -97,4 +100,29 @@ function getCurrentSemester()
 {
     $settings = \App\Models\Setting::first()->settings;
     return (integer)$settings['current_semester'];
+}
+
+function cleanString($text)
+{
+    $utf8 = array(
+        '/[áàâãªä]/u' => 'a',
+        '/[ÁÀÂÃÄ]/u' => 'A',
+        '/[ÍÌÎÏ]/u' => 'I',
+        '/[íìîï]/u' => 'i',
+        '/[éèêë]/u' => 'e',
+        '/[ÉÈÊË]/u' => 'E',
+        '/[óòôõºö]/u' => 'o',
+        '/[ÓÒÔÕÖ]/u' => 'O',
+        '/[úùûü]/u' => 'u',
+        '/[ÚÙÛÜ]/u' => 'U',
+        '/ç/' => 'c',
+        '/Ç/' => 'C',
+        '/ñ/' => 'n',
+        '/Ñ/' => 'N',
+        '/–/' => '-', // UTF-8 hyphen to "normal" hyphen
+        '/[’‘‹›‚]/u' => ' ', // Literally a single quote
+        '/[“”«»„]/u' => ' ', // Double quote
+        '/ /' => ' ', // nonbreaking space (equiv. to 0x160)
+    );
+    return preg_replace(array_keys($utf8), array_values($utf8), $text);
 }

@@ -25,6 +25,11 @@ class ImportLessonPlanFromExcelAction
         $data = [];
         $grade = $this->findGradeFromString($this->rows[0][0]);
         $subject = $this->getSubjectFromString($this->rows[0][0]);
+        if (!$grade || !$subject) {
+            $status['message'] = 'No grade or subject found';
+            $status['status'] = 404;
+            return $status;
+        }
         foreach ($this->rows[1] as $role1Index => $weekNumber) {
             if ($role1Index == 0) {
                 continue;
@@ -86,7 +91,7 @@ class ImportLessonPlanFromExcelAction
                     $data[$weekNumber][$lessonNumber][$header] = explode(',', $column);
                 }
                 if ($header == 'date' && $column != null) {
-                    $parsedDate = Carbon::createFromFormat('d/m/Y', $column);
+                    $parsedDate = Carbon::createFromFormat('d/m/Y', str_replace(' ', '', $column));
                     $formattedDate = $parsedDate->format('Y-m-d');
                     $data[$weekNumber][$lessonNumber][$header] = $formattedDate;
                 }
@@ -121,9 +126,11 @@ class ImportLessonPlanFromExcelAction
             }
             $saveReportAction->execute($report, $this->school, $readyInput);
         }
+        $status['status'] = 200;
+        return $status;
     }
 
-    private function findGradeFromString($str): null|Grade
+    private function findGradeFromString($str): Grade|null
     {
         $parts = explode("/", $str);
         $first_part = $parts[0];
@@ -158,7 +165,7 @@ class ImportLessonPlanFromExcelAction
 
     private function getSubjectFromString($str)
     {
-        $parts = explode(":", $str);
+        $parts = explode(":", str_replace(' ', '', $str));
         $subject = $parts[1];
         if (!$parts[1]) {
             return null;
