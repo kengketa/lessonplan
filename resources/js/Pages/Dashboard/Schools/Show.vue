@@ -37,6 +37,15 @@
       <span class="max-w-xs truncate text-2xl">{{ school.name }}</span>
     </span>
       <template #actions>
+        <div class="flex items-center mr-4 cursor-pointer text-blue-800">
+          <a class="underline" href="/excel/Lesson-plan-template.xlsx">
+            Excel Template (Click To Download)
+          </a>
+        </div>
+        <button class="button button-primary mr-2 hidden" type="button" @click="$refs.excelFileInput.click()">
+          Import From Excel
+        </button>
+        <input ref="excelFileInput" accept=".xls,.xlsx" class="hidden" type="file" @change="handleExcelUpload">
         <Link
           :href="route('dashboard.schools.calendar', school.id)"
           class="button button-primary mr-2"
@@ -302,6 +311,7 @@
     <AddTeacherModal v-model="showAddTeacherModal" :school="school"/>
     <PrintModal v-model="showPrintModal" :print-list="printList" :school-id="school.id"/>
     <SuperApproveModal v-model="showSuperApproveModal" :school="school" :week="filterForm.filters.week"/>
+    <LoadingModal v-model="isSubmitting"/>
   </div>
 </template>
 
@@ -338,10 +348,12 @@ import SearchSelectInput from "../../../Components/SearchSelectInput";
 import AddTeacherModal from "../../../Components/Forms/AddTeacherModal";
 import PrintModal from "../../../Components/Forms/PrintModal";
 import SuperApproveModal from "@/Components/Forms/SuperApproveModal";
+import LoadingModal from "@/Components/LoadingModal.vue";
 
 export default {
   name: 'SchoolShow',
   components: {
+    LoadingModal,
     SuperApproveModal,
     PrintModal,
     AddTeacherModal,
@@ -404,6 +416,7 @@ export default {
       printList: [],
       showSchoolInformation: false,
       showSuperApproveModal: false,
+      isSubmitting: false
     };
   },
   mounted() {
@@ -450,6 +463,40 @@ export default {
     },
   },
   methods: {
+    async handleExcelUpload(event) {
+      this.isSubmitting = true;
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await axios.post(this.route('dashboard.schools.import_my_lesson_plan', this.school.id), formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        if (response.status === 200) {
+          this.$swal.fire({
+            title: "Completed",
+            text: "Lesson plans uploaded!",
+            icon: "success"
+          }).then(() => {
+            window.location.reload();
+          });
+        }
+      } catch (error) {
+        this.$swal.fire({
+          title: "Error",
+          text: error.response.data.message,
+          icon: "error"
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+      this.isSubmitting = false;
+    },
     computedRowColour(index, item) {
       if (item.approver) {
         return index % 2 === 0 ? 'bg-green-50 hover:bg-green-200' : 'bg-green-100 hover:bg-green-200'
