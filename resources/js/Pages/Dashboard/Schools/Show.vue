@@ -37,51 +37,54 @@
       <span class="max-w-xs truncate text-2xl">{{ school.name }}</span>
     </span>
       <template #actions>
-        <div class="flex items-center mr-4 cursor-pointer text-blue-800">
-          <a class="underline" href="/excel/Lesson-plan-template.xlsx">
-            Excel Template (Click To Download)
-          </a>
-        </div>
-        <button class="button button-primary mr-2 hidden" type="button" @click="$refs.excelFileInput.click()">
-          Import From Excel
-        </button>
-        <input ref="excelFileInput" accept=".xls,.xlsx" class="hidden" type="file" @change="handleExcelUpload">
-        <Link
-          :href="route('dashboard.schools.calendar', school.id)"
-          class="button button-primary mr-2"
-        >
-          <CalendarIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          Calendar
-        </Link>
-        <Link
-          :href="route('dashboard.misbehaviors.index', school.id)"
-          class="button button-primary mr-2"
-        >
-          <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          MB Report
-        </Link>
-        <Link
-          :href="route('dashboard.reports.create', school.id)"
-          class="button button-primary mr-2"
-        >
-          <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          Create Lesson plan
-        </Link>
-        <Link
-          v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-          :href="route('dashboard.schools.edit', school.id)"
-          class="button button-primary mr-2"
-        >
-          <PencilIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-          Edit
-        </Link>
-        <form v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-              class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
-          <button class="button button-danger" type="submit">
-            <TrashIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
-            Delete
+        <div class="w-full flex flex-wrap gap-2">
+          <div class="flex items-center mr-4 cursor-pointer text-blue-800">
+            <a class="underline text-sm whitespace-nowrap flex gap-2" href="/excel/Lesson-plan-template.xlsx">
+              Excel Template
+            </a>
+          </div>
+          <button class="button button-primary mr-2" type="button" @click="$refs.excelFileInput.click()">
+            Import From Excel
           </button>
-        </form>
+          <input ref="excelFileInput" accept=".xls,.xlsx" class="hidden" type="file" @change="handleExcelUpload">
+          <Link
+            :href="route('dashboard.schools.calendar', school.id)"
+            class="button button-primary mr-2"
+          >
+            <CalendarIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
+            Calendar
+          </Link>
+          <Link
+            :href="route('dashboard.misbehaviors.index', school.id)"
+            class="button button-primary mr-2"
+          >
+            <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
+            MB Report
+          </Link>
+          <Link
+            :href="route('dashboard.reports.create', school.id)"
+            class="button button-primary mr-2"
+          >
+            <DocumentReportIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
+            Create Lesson plan
+          </Link>
+          <Link
+            v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+            :href="route('dashboard.schools.edit', school.id)"
+            class="button button-primary mr-2"
+          >
+            <PencilIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
+            Edit
+          </Link>
+          <form v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
+                class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
+            <button class="button button-danger" type="submit">
+              <TrashIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
+              Delete
+            </button>
+          </form>
+        </div>
+
       </template>
     </PageHeading>
     <section class="mt-4">
@@ -464,6 +467,18 @@ export default {
   },
   methods: {
     async handleExcelUpload(event) {
+      const result = await this.$swal.fire({
+        title: "Do you want to import the lesson plans from excel?",
+        showCancelButton: false,
+        showDenyButton: true,
+        confirmButtonText: "Import",
+        denyButtonText: `Cancel`,
+        denyButtonColor: 'gray'
+      });
+      if (result.isDenied) {
+        window.location.reload();
+        return;
+      }
       this.isSubmitting = true;
       const file = event.target.files[0];
       if (!file) {
