@@ -39,7 +39,8 @@
       <template #actions>
         <div class="w-full flex flex-wrap gap-2">
           <div class="flex items-center mr-4 cursor-pointer text-blue-800">
-            <a class="underline text-sm whitespace-nowrap flex gap-2" href="/excel/Lesson-plan-template.xlsx">
+            <a class="underline text-sm whitespace-nowrap flex gap-2"
+               href="/excel/Lesson-plan-template_semester_2.xlsx">
               Excel Template
             </a>
           </div>
