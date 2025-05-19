@@ -17,6 +17,7 @@ use App\Http\Controllers\Dashboard\AgendaController;
 use App\Http\Controllers\VocabController;
 use App\Http\Controllers\MisbehaviorController;
 use App\Http\Controllers\ImportLessonPlanController;
+use App\Http\Controllers\SubstituteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,13 @@ Route::prefix('tessaban5')->group(function () {
         [VocabController::class, "acceptCookie"]
     )->name("vocabs.accept_cookie");
 });
+
+Route::prefix('abpy-sub')->group(function () {
+    Route::get("/", [SubstituteController::class, "volunteer"])->name("substitute.volunteer");
+});
+
+Route::patch('substitute/{substitute}', [SubstituteController::class, "update"])
+    ->name("substitute.update");
 
 // reset, setup password, pin for user
 Route::get("setup-password/{token}/{key}", [UserSetupController::class, "setup"])->name("user-setup.show");
@@ -133,6 +141,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             "meetings/{meeting}/achieve",
             [MeetingController::class, "achieve"]
         )->name("dashboard.meetings.achieve");
+
+        Route::get("schools/{school}/sub", [SubstituteController::class, "index"])
+            ->name("dashboard.substitute.index");
+        Route::post("schools/{school}/sub", [SubstituteController::class, "store"])
+            ->name("dashboard.substitute.store");
+        Route::delete('substitute/{substitute}', [SubstituteController::class, "destroy"])
+            ->name("dashboard.substitute.destroy");
     });
 
     Route::middleware(["role:" . Role::ROLE_ADMIN . '|' . Role::ROLE_SUPER_ADMIN . '|' . Role::ROLE_TEACHER])->group(
