@@ -17,6 +17,7 @@ use App\Http\Controllers\Dashboard\AgendaController;
 use App\Http\Controllers\VocabController;
 use App\Http\Controllers\MisbehaviorController;
 use App\Http\Controllers\ImportLessonPlanController;
+use App\Http\Controllers\SubstituteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             "meetings/{meeting}/achieve",
             [MeetingController::class, "achieve"]
         )->name("dashboard.meetings.achieve");
+
+        Route::get("schools/{school}/sub", [SubstituteController::class, "index"])
+            ->name("dashboard.substitute.index");
+        Route::post("schools/{school}/sub", [SubstituteController::class, "store"])
+            ->name("dashboard.substitute.store");
+        Route::patch('substitute/{substitute}', [SubstituteController::class, "update"])
+            ->name("dashboard.substitute.update");
     });
 
     Route::middleware(["role:" . Role::ROLE_ADMIN . '|' . Role::ROLE_SUPER_ADMIN . '|' . Role::ROLE_TEACHER])->group(
