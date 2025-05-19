@@ -1,12 +1,12 @@
 <template>
   <div class="h-screen flex overflow-hidden bg-gray-100">
-    <TransitionRoot as="template" :show="sidebarOpen">
+    <TransitionRoot :show="sidebarOpen" as="template">
       <Dialog
-        as="div"
-        static
-        class="fixed inset-0 flex z-40 "
-        @close="sidebarOpen = false"
         :open="sidebarOpen"
+        as="div"
+        class="fixed inset-0 flex z-40 "
+        static
+        @close="sidebarOpen = false"
       >
         <TransitionChild
           as="template"
@@ -17,7 +17,7 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <DialogOverlay class="fixed inset-0 bg-gray-600 bg-opacity-75" />
+          <DialogOverlay class="fixed inset-0 bg-gray-600 bg-opacity-75"/>
         </TransitionChild>
         <TransitionChild
           as="template"
@@ -30,9 +30,9 @@
         >
           <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-blue-900">
             <div class="flex-shrink-0 flex items-center px-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="white">
+              <svg class="h-5 w-5" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                  d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
               </svg>
               <span class="text-gray-100 font-bold ml-3 text-xl">Lesson Plan</span>
             </div>
@@ -47,13 +47,13 @@
                   </div>
                   <a
                     v-else
-                    :href="item.href"
                     :class="[
                       isUrl(item.routeGroup)
                         ? 'bg-gray-900 text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                     ]"
+                    :href="item.href"
                   >
                     <component
                       :is="item.icon"
@@ -72,7 +72,7 @@
             </div>
           </div>
         </TransitionChild>
-        <div class="flex-shrink-0 w-14" aria-hidden="true">
+        <div aria-hidden="true" class="flex-shrink-0 w-14">
           <!-- Dummy element to force sidebar to shrink to fit close icon -->
         </div>
       </Dialog>
@@ -84,9 +84,9 @@
         <div class="flex flex-col h-0 flex-1">
           <div class="flex items-center h-16 flex-shrink-0 px-4 bg-blue-900">
             <!-- <img class="h-8 w-auto" src="/images/shell.svg" alt="Shell logo" /> -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="white">
+            <svg class="h-5 w-5" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
             </svg>
             <span class="text-gray-100 font-bold ml-3 text-lg">Lesson Plan</span>
           </div>
@@ -101,13 +101,13 @@
                 </div>
                 <Link
                   v-else
-                  :href="item.href"
                   :class="[
                     isUrl(item.routeGroup)
                       ? 'bg-gray-900 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                     'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                   ]"
+                  :href="item.href"
                 >
                   <component
                     :is="item.icon"
@@ -134,7 +134,7 @@
           @click="sidebarOpen = true"
         >
           <span class="sr-only">Open sidebar</span>
-          <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+          <MenuAlt2Icon aria-hidden="true" class="h-6 w-6"/>
         </button>
         <div class="flex-1 px-4 flex justify-end">
           <div class="ml-4 flex items-center md:ml-6">
@@ -151,28 +151,28 @@
                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
                   >
                     <img
-                      class="h-8 w-8 rounded-full object-cover"
-                      :src="$page.props.user.profile_photo_url"
                       :alt="$page.props.user.name"
+                      :src="$page.props.user.profile_photo_url"
+                      class="h-8 w-8 rounded-full object-cover"
                     />
                   </button>
                   <span v-else class="inline-flex rounded-md">
                     <button
-                      type="button"
                       class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
+                      type="button"
                     >
                       {{ $page.props.user.name }}
 
                       <svg
                         class="ml-2 -mr-0.5 h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
                         fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                           clip-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          fill-rule="evenodd"
                         />
                       </svg>
                     </button>
@@ -196,22 +196,22 @@
                     v-slot="{ active }"
                   >
                     <Link
-                      :href="item.href"
                       :class="[
                         active ? 'bg-gray-100' : '',
                         'block px-4 py-2 text-sm text-gray-700',
                       ]"
+                      :href="item.href"
                     >{{ item.name }}
                     </Link
                     >
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <Link
-                      href="#"
                       :class="[
                         active ? 'bg-gray-100' : '',
                         'block px-4 py-2 text-sm text-gray-700',
                       ]"
+                      href="#"
                       @click.prevent="logout"
                     >
                       Sign out
@@ -229,7 +229,7 @@
           <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <!-- Replace with your content -->
             <FlashMessage></FlashMessage>
-            <slot />
+            <slot/>
             <!-- /End replace -->
           </div>
         </div>
@@ -316,18 +316,24 @@ const navs = {
     icon: DocumentTextIcon,
     routeGroup: "dashboard.meetings.*",
   },
-  leaves: {
-    name: "Leaves",
-    href: '#',
-    icon: FireIcon,
-    routeGroup: "#",
-  },
-  visas: {
-    name: "Visas",
-    href: '#',
+  substitute: {
+    name: "Substitutes",
+    href: route("dashboard.substitute.index", {school: 8}),
     icon: DocumentTextIcon,
-    routeGroup: "#",
+    routeGroup: "dashboard.substitute.*",
   },
+  // leaves: {
+  //   name: "Leaves",
+  //   href: '#',
+  //   icon: FireIcon,
+  //   routeGroup: "#",
+  // },
+  // visas: {
+  //   name: "Visas",
+  //   href: '#',
+  //   icon: DocumentTextIcon,
+  //   routeGroup: "#",
+  // },
 };
 export default {
   name: "Layout",
@@ -380,14 +386,16 @@ export default {
         //nav.push(navs.schools);
         nav.push(navs.clockIns);
         nav.push(navs.meetings);
-        nav.push(navs.leaves);
-        nav.push(navs.visas);
+        nav.push(navs.substitute);
+        // nav.push(navs.leaves);
+        // nav.push(navs.visas);
       } else if (user.roles[0].id == roles.SUPER_ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.users);
         //nav.push(navs.schools);
         nav.push(navs.clockIns);
         nav.push(navs.meetings);
+        nav.push(navs.substitute);
       } else {
         //push nothing
       }

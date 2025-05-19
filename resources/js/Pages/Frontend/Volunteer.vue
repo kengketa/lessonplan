@@ -11,7 +11,6 @@
       </h3>
       <p class="text-xl font-semibold text-center text-gray-800">({{ currentDateTime }})</p>
     </div>
-
     <div class="overflow-x-auto bg-white shadow-sm rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 text-sm">
         <thead class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
@@ -75,7 +74,6 @@
       <p> Thank you for stepping in — you help us keep learning and growing.</p>
     </div>
   </div>
-
 </template>
 <script>
 import {Inertia} from "@inertiajs/inertia";
