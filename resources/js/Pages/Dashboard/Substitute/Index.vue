@@ -277,7 +277,7 @@ export default {
       if (!userInput) {
         return;
       }
-      Inertia.patch(this.route("dashboard.substitute.update", sub.id), {
+      Inertia.patch(this.route("substitute.update", sub.id), {
           volunteer: userInput
         }, {
           onSuccess: async () => {
@@ -293,7 +293,7 @@ export default {
     },
     updateTime() {
       const now = new Date()
-      const date = now.toLocaleDateString()
+      const date = now.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'});
       const time = now.toLocaleTimeString(undefined, {hour12: false})
       this.currentDateTime = `${date} ${time}`
     },

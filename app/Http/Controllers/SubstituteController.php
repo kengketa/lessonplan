@@ -63,4 +63,18 @@ class SubstituteController extends Controller
         $substitute->delete();
         return redirect()->back();
     }
+
+    public function volunteer()
+    {
+        $school = School::find(8);
+        $substitutes = Substitute::where('school_id', $school->id)
+            ->whereDate('date', Carbon::today())
+            ->orderBy('start_time', 'asc')
+            ->get();
+        $substituteData = fractal($substitutes, new SubstituteTransformer())->toArray()['data'];
+        return Inertia::render('Frontend/Volunteer')->with([
+            'substitutes' => $substituteData,
+            'school' => fractal($school, new SchoolTransformer())->toArray(),
+        ]);
+    }
 }

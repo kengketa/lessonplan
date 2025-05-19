@@ -53,6 +53,13 @@ Route::prefix('tessaban5')->group(function () {
     )->name("vocabs.accept_cookie");
 });
 
+Route::prefix('abpy-sub')->group(function () {
+    Route::get("/", [SubstituteController::class, "volunteer"])->name("substitute.volunteer");
+});
+
+Route::patch('substitute/{substitute}', [SubstituteController::class, "update"])
+    ->name("substitute.update");
+
 // reset, setup password, pin for user
 Route::get("setup-password/{token}/{key}", [UserSetupController::class, "setup"])->name("user-setup.show");
 Route::post("do-setup", [UserSetupController::class, "doSetup"])->name("user-setup.save");
@@ -139,8 +146,6 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             ->name("dashboard.substitute.index");
         Route::post("schools/{school}/sub", [SubstituteController::class, "store"])
             ->name("dashboard.substitute.store");
-        Route::patch('substitute/{substitute}', [SubstituteController::class, "update"])
-            ->name("dashboard.substitute.update");
         Route::delete('substitute/{substitute}', [SubstituteController::class, "destroy"])
             ->name("dashboard.substitute.destroy");
     });
