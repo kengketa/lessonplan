@@ -143,8 +143,8 @@ export default {
         }, {
           onSuccess: async () => {
             await this.$swal.fire({
-              title: "Assigned",
-              text: `Awesome! You assigned ${userInput} to teach`,
+              title: "Awesome!",
+              text: `You volunteered to teach.`,
               icon: "success"
             });
             window.location.reload();
