@@ -8,7 +8,12 @@
       <div>
         <div class="mx-auto mt-10 p-6 bg-white shadow rounded-2xl">
           <div class="">
-            <h3 class="text-xl font-semibold mb-4">Today’s Substitutions ({{ currentDateTime }})</h3>
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold mb-4">Today’s Substitutions ({{ currentDateTime }})</h3>
+              <p class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
+                {{ route('substitute.volunteer') }}
+              </p>
+            </div>
             <table class="w-full border">
               <thead class="bg-gray-100 text-left">
               <tr class="text-center">
@@ -233,6 +238,16 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    copyToClipboard() {
+      const text = this.route('substitute.volunteer');
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert('Copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    },
     async deleteSubstitute(sub) {
       const result = await this.$swal.fire({
         title: "Are you sure?",

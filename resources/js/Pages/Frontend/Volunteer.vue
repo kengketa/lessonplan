@@ -5,16 +5,19 @@
         <img alt="ABP Logo" src="/images/abpy/abpy-logo.png"/>
       </div>
     </div>
-    <h3 class="text-xl font-semibold text-center text-gray-800 mb-6">
-      Today’s Substitutions ({{ currentDateTime }})
-    </h3>
+    <div>
+      <h3 class="text-xl font-semibold text-center text-gray-800">
+        Today’s Substitutions
+      </h3>
+      <p class="text-xl font-semibold text-center text-gray-800">({{ currentDateTime }})</p>
+    </div>
+
     <div class="overflow-x-auto bg-white shadow-sm rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 text-sm">
         <thead class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
         <tr class="text-center">
           <th class="px-4 py-3">Time</th>
           <th class="px-4 py-3">G</th>
-          <th class="px-4 py-3">Subject</th>
           <th class="px-4 py-3">Absent</th>
           <th class="px-4 py-3">Substitute</th>
         </tr>
@@ -26,22 +29,20 @@
           class="text-center text-gray-700 hover:bg-gray-50 transition"
         >
           <td class="px-4 py-2">
-            <p class="whitespace-nowrap text-sm"> {{ sub.start_time }} - {{ sub.end_time }}</p>
+            <p class="">{{ sub.start_time }}-</p>
+            <p class="">{{ sub.end_time }}</p>
           </td>
           <td class="px-4 py-2">
             {{ sub.grade }}
           </td>
           <td class="px-4 py-2">
-            {{ sub.subject }}
-          </td>
-          <td class="px-4 py-2">
-            {{ sub.teacher }}
+            <p class="text-xs">{{ sub.teacher }}</p>
           </td>
           <td class="px-4 py-2">
             <div v-if="sub.id !== null" class="flex flex-wrap justify-center gap-2">
               <button
                 v-if="sub.volunteer"
-                class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition"
+                class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition leading-3"
                 @click="assignNewSubstitute(sub)"
               >
                 {{ sub.volunteer }}
