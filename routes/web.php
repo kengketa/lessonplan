@@ -141,6 +141,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             ->name("dashboard.substitute.store");
         Route::patch('substitute/{substitute}', [SubstituteController::class, "update"])
             ->name("dashboard.substitute.update");
+        Route::delete('substitute/{substitute}', [SubstituteController::class, "destroy"])
+            ->name("dashboard.substitute.destroy");
     });
 
     Route::middleware(["role:" . Role::ROLE_ADMIN . '|' . Role::ROLE_SUPER_ADMIN . '|' . Role::ROLE_TEACHER])->group(

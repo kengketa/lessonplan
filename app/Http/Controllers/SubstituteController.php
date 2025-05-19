@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\School;
 use App\Models\Substitute;
+use App\Transformers\SchoolTransformer;
 use App\Transformers\SubstituteTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class SubstituteController extends Controller
         $substituteData = fractal($substitutes, new SubstituteTransformer())->toArray()['data'];
         return Inertia::render('Dashboard/Substitute/Index')->with([
             'substitutes' => $substituteData,
+            'school' => fractal($school, new SchoolTransformer())->toArray(),
         ]);
     }
 
@@ -53,6 +55,12 @@ class SubstituteController extends Controller
         ]);
         $substitute->volunteer = $req['volunteer'];
         $substitute->save();
+        return redirect()->back();
+    }
+
+    public function destroy(Substitute $substitute)
+    {
+        $substitute->delete();
         return redirect()->back();
     }
 }

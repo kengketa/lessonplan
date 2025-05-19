@@ -100,7 +100,7 @@
                   </div>
                 </td>
                 <td class="p-2 border">
-                  <div v-if="sub.id !== null">
+                  <div v-if="sub.id !== null" class="flex gap-2 justify-center">
                     <button v-if="sub.volunteer"
                             class="px-2 py-1 bg-green-500 rounded-md text-white cursor-pointer font-bold"
                             type="button"
@@ -113,7 +113,11 @@
                             @click="assignNewSubstitute(sub)">
                       Need
                     </button>
-
+                    <button class="px-2 py-1 bg-red-500 rounded-md text-white cursor-pointer font-bold"
+                            type="button"
+                            @click="deleteSubstitute(sub)">
+                      Delete
+                    </button>
                   </div>
                   <div v-if="sub.id === null" class="flex justify-center gap-2 items-center">
                     <input
@@ -198,6 +202,10 @@ export default {
     substitutes: {
       type: Array,
       required: true
+    },
+    school: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -219,12 +227,38 @@ export default {
   mounted() {
     this.substituteData = this.substitutes;
     this.updateTime()
-    this.timer = setInterval(this.updateTime, 1000)
+    this.timer = setInterval(this.updateTime, 1000);
   },
   beforeUnmount() {
     clearInterval(this.timer)
   },
   methods: {
+    async deleteSubstitute(sub) {
+      const result = await this.$swal.fire({
+        title: "Are you sure?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#d33", // red for delete
+        cancelButtonColor: "#6c757d"
+      });
+      if (!result.isConfirmed) {
+        return;
+      }
+      Inertia.delete(this.route("dashboard.substitute.destroy", sub.id), {
+          onSuccess: async () => {
+            await this.$swal.fire({
+              title: "Assigned",
+              text: `Awesome! You deleted substitute.`,
+              icon: "success"
+            });
+            window.location.reload();
+          }
+        }
+      )
+    },
     async assignNewSubstitute(sub) {
       const {value: userInput} = await this.$swal.fire({
         title: 'Assign New Substitute',
@@ -282,12 +316,9 @@ export default {
       window.location.reload();
     },
     addNewSubstitute() {
-      Inertia.post(this.route('dashboard.substitute.store', {school: 1}), this.form, {
+      Inertia.post(this.route('dashboard.substitute.store', {school: this.school.id}), this.form, {
         onSuccess: () => {
           window.location.reload();
-          console.log('-----------------');
-          console.log('sdfhdsg');
-          console.log('-----------------');
         }
       });
     },
