@@ -77,4 +77,18 @@ class SubstituteController extends Controller
             'school' => fractal($school, new SchoolTransformer())->toArray(),
         ]);
     }
+
+    public function print(School $school)
+    {
+        $school = School::find(8);
+        $substitutes = Substitute::where('school_id', $school->id)
+            ->whereDate('date', Carbon::today())
+            ->orderBy('start_time', 'asc')
+            ->get();
+        $substituteData = fractal($substitutes, new SubstituteTransformer())->toArray()['data'];
+        return Inertia::render('Frontend/PrintVolunteer')->with([
+            'substitutes' => $substituteData,
+            'school' => fractal($school, new SchoolTransformer())->toArray(),
+        ]);
+    }
 }

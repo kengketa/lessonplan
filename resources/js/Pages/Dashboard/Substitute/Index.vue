@@ -9,12 +9,20 @@
         <div class="mx-auto mt-10 p-6 bg-white shadow rounded-2xl">
           <div class="">
             <div class="flex items-center justify-between">
-              <h3 class="text-xl font-semibold mb-4">Today’s Substitutions ({{ currentDateTime }})</h3>
-              <p class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
-                {{ route('substitute.volunteer') }}
-              </p>
+              <div>
+                <h3 class="text-xl font-semibold">Today’s Substitutions ({{ currentDateTime }})</h3>
+                <p class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
+                  {{ route('substitute.volunteer') }}
+                </p>
+              </div>
+              <div>
+                <Link :href="route('dashboard.substitute.print',{school:school.id})" class="text-blue-800"
+                      type="button">
+                  <PrinterIcon aria-hidden="true" class="h-8 w-8"/>
+                </Link>
+              </div>
             </div>
-            <table class="w-full border">
+            <table class="w-full border mt-4">
               <thead class="bg-gray-100 text-left">
               <tr class="text-center">
                 <th class="p-2 border">Time</th>
@@ -186,11 +194,14 @@ import {UserAddIcon, AcademicCapIcon} from "@heroicons/vue/solid";
 import {Link} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
 import {nextTick} from "vue";
+import {PrinterIcon} from "@heroicons/vue/solid";
+import {MenuAlt2Icon} from "@heroicons/vue/outline";
 
 export default {
   name: "SubstituteIndex",
   layout: Layout,
   components: {
+    MenuAlt2Icon,
     Pagination,
     PageHeading,
     TableDisplayContainer,
@@ -201,7 +212,8 @@ export default {
     Breadcrumbs,
     UserAddIcon,
     AcademicCapIcon,
-    Link
+    Link,
+    PrinterIcon
   },
   props: {
     substitutes: {
@@ -233,6 +245,7 @@ export default {
     this.substituteData = this.substitutes;
     this.updateTime()
     this.timer = setInterval(this.updateTime, 1000);
+
   },
   beforeUnmount() {
     clearInterval(this.timer)
