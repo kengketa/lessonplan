@@ -17,15 +17,16 @@
         <tr class="text-center">
           <th class="px-4 py-3">Time</th>
           <th class="px-4 py-3">G</th>
-          <th class="px-4 py-3">Absent</th>
-          <th class="px-4 py-3">Substitute</th>
+          <th class="px-4 py-3">Abs</th>
+          <th class="px-4 py-3">Sub</th>
         </tr>
         </thead>
         <tbody v-if="substituteData" class="divide-y divide-gray-100">
         <tr
           v-for="(sub, index) in substituteData"
           :key="index"
-          class="text-center text-gray-700 hover:bg-gray-50 transition"
+          :class="isCurrentTime(sub) ?'bg-yellow-100 hover:bg-yellow-200':'hover:bg-gray-50'"
+          class="text-center text-gray-700 transition"
         >
           <td class="px-4 py-2">
             <p class="">{{ sub.start_time }}-</p>
@@ -81,7 +82,6 @@ import {Inertia} from "@inertiajs/inertia";
 
 export default {
   name: "SubstituteIndex",
-
   components: {},
   props: {
     substitutes: {
@@ -118,6 +118,17 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    isCurrentTime(sub) {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const parseTime = (timeStr) => {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+      };
+      const startMinutes = parseTime(sub.start_time);
+      const endMinutes = parseTime(sub.end_time);
+      return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+    },
     async assignNewSubstitute(sub) {
       const {value: userInput} = await this.$swal.fire({
         title: 'Let me take this class.',
