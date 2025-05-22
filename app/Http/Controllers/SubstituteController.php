@@ -91,4 +91,11 @@ class SubstituteController extends Controller
             'school' => fractal($school, new SchoolTransformer())->toArray(),
         ]);
     }
+
+    public function remove(Substitute $substitute)
+    {
+        $substitute->volunteer = null;
+        $substitute->save();
+        return redirect()->back();
+    }
 }

@@ -124,7 +124,14 @@
                             class="px-2 py-1 bg-yellow-400 rounded-md text-white cursor-pointer font-bold"
                             type="button"
                             @click="assignNewSubstitute(sub)">
-                      Need
+                      Needed
+                    </button>
+                    <button v-if="sub.volunteer"
+                            class="px-2 py-1 bg-orange-500 rounded-md text-white cursor-pointer font-bold"
+                            type="button"
+                            @click="removeSubstitute(sub)"
+                    >
+                      W/D
                     </button>
                     <button class="px-2 py-1 bg-red-500 rounded-md text-white cursor-pointer font-bold"
                             type="button"
@@ -251,6 +258,32 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    async removeSubstitute(sub) {
+      const result = await this.$swal.fire({
+        title: `Are you sure to remove ${sub.volunteer}?`,
+        text: "",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Remove",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#f97316",
+        cancelButtonColor: "#6c757d"
+      });
+      if (!result.isConfirmed) {
+        return;
+      }
+      Inertia.patch(this.route("dashboard.substitute.remove", sub.id), {}, {
+          onSuccess: async () => {
+            await this.$swal.fire({
+              title: "Removed",
+              text: `You Removed substitute.`,
+              icon: "success"
+            });
+            window.location.reload();
+          }
+        }
+      )
+    },
     copyToClipboard() {
       const text = this.route('substitute.volunteer');
       navigator.clipboard.writeText(text)

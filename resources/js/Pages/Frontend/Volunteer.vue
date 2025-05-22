@@ -52,7 +52,7 @@
                 class="px-3 py-1 bg-yellow-400 text-white text-xs rounded-lg hover:bg-yellow-500 transition"
                 @click="assignNewSubstitute(sub)"
               >
-                Need
+                Needed
               </button>
             </div>
             <div v-else class="flex flex-col items-center gap-1">

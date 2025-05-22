@@ -148,6 +148,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             ->name("dashboard.substitute.store");
         Route::delete('substitute/{substitute}', [SubstituteController::class, "destroy"])
             ->name("dashboard.substitute.destroy");
+        Route::patch('substitute/{substitute}/remove', [SubstituteController::class, "remove"])
+            ->name("dashboard.substitute.remove");
         Route::get("schools/{school}/sub-print", [SubstituteController::class, "print"])
             ->name("dashboard.substitute.print");
     });
