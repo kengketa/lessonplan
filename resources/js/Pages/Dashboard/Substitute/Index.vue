@@ -11,15 +11,25 @@
             <div class="flex items-center justify-between">
               <div>
                 <h3 class="text-xl font-semibold">Today’s Substitutions ({{ currentDateTime }})</h3>
-                <p class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
+                <p v-show="isEditAble" class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
                   {{ route('substitute.volunteer') }}
                 </p>
               </div>
-              <div>
-                <Link :href="route('dashboard.substitute.print',{school:school.id})" class="text-blue-800"
+              <div class="flex items-center gap-1">
+                <Link v-show="isEditAble" :href="route('dashboard.substitute.print',{school:school.id})"
+                      class="text-blue-800"
                       type="button">
                   <PrinterIcon aria-hidden="true" class="h-8 w-8"/>
                 </Link>
+                <div>
+                  <button
+                    :class="isEditAble ? 'bg-blue-800' : 'bg-gray-300'"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors ease-in-out duration-200"
+                    @click="isEditAble = !isEditAble">
+                    <span :class="isEditAble ? 'translate-x-6' : 'translate-x-1'"
+                          class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform ease-in-out duration-200"></span>
+                  </button>
+                </div>
               </div>
             </div>
             <table class="w-full border mt-4">
@@ -127,13 +137,15 @@
                       Needed
                     </button>
                     <button v-if="sub.volunteer"
+                            v-show="isEditAble"
                             class="px-2 py-1 bg-orange-500 rounded-md text-white cursor-pointer font-bold"
                             type="button"
                             @click="removeSubstitute(sub)"
                     >
                       W/D
                     </button>
-                    <button class="px-2 py-1 bg-red-500 rounded-md text-white cursor-pointer font-bold"
+                    <button v-show="isEditAble"
+                            class="px-2 py-1 bg-red-500 rounded-md text-white cursor-pointer font-bold"
                             type="button"
                             @click="deleteSubstitute(sub)">
                       Delete
@@ -168,7 +180,7 @@
                             @click.prevent="addNewSubstitute">
                       Save
                     </button>
-                    <button v-if="!hasNewSubstitute"
+                    <button v-if="!hasNewSubstitute" v-show="isEditAble"
                             class="px-2 py-1 bg-blue-800 rounded-md text-white cursor-pointer font-bold uppercase"
                             type="button"
                             @click="newSubstitute">
@@ -245,7 +257,8 @@ export default {
         absent: "",
         substitute: ""
       },
-      currentDateTime: ''
+      currentDateTime: '',
+      isEditAble: true,
     };
   },
   mounted() {
