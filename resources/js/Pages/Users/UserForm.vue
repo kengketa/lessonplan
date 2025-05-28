@@ -1,6 +1,6 @@
 <template>
   <Card>
-    <Form formClass="space-y-8 divide-y divide-gray-200" :submitEvent="submit">
+    <Form :submitEvent="submit" formClass="space-y-8 divide-y divide-gray-200">
       <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div class="space-y-6 sm:space-y-5">
           <div>
@@ -8,23 +8,23 @@
           </div>
           <div class="space-y-6 sm:space-y-5">
             <TextInput
-              v-model="form.name"
               id="name"
+              v-model="form.name"
               :error="form.errors.name"
               label="Full Name"
             />
             <TextInput
-              v-model="form.email"
               id="email"
+              v-model="form.email"
               :error="form.errors.email"
-              type="email"
               label="Email address"
+              type="email"
             />
             <SelectInput
-              label="Role"
               id="role"
-              :error="form.errors.role"
               v-model="form.role"
+              :error="form.errors.role"
+              label="Role"
             >
               <template #option>
                 <option value="">Please select a role</option>
@@ -34,6 +34,24 @@
                   :value="option"
                 >
                   {{ key }}
+                </option>
+              </template>
+            </SelectInput>
+            <SelectInput
+              v-if="form.role >=60 && form.role <=70"
+              id="school"
+              v-model="form.school_id"
+              :error="form.errors.school_id"
+              label="School"
+            >
+              <template #option>
+                <option value="">Please select a School</option>
+                <option
+                  v-for="(option, key) in schools"
+                  :key="option.id"
+                  :value="option.id"
+                >
+                  {{ option.name }}
                 </option>
               </template>
             </SelectInput>
@@ -73,6 +91,7 @@ export default {
     roles: Object,
     user: Object,
     errors: Object,
+    schools: Array
   },
   data() {
     return {
@@ -80,8 +99,7 @@ export default {
         name: this.user.name,
         email: this.user.email,
         company_id: this.user.company_id,
-        // password: null,
-        // password_confirmation: null,
+        school_id: this.user.school_id,
         role: null,
         contact: this.user.contact,
       }),
@@ -95,6 +113,9 @@ export default {
   },
   methods: {
     submit() {
+      // console.log('-----------------');
+      // console.log(this.form);
+      // console.log('-----------------');
       if (this.form.role != 10) {
         this.form.company_id = null;
       }
@@ -105,6 +126,7 @@ export default {
       }
     },
   },
+  watch: {}
 };
 </script>
 

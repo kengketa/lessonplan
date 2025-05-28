@@ -9,9 +9,13 @@ class UserTransformer extends TransformerAbstract
 {
     public function transform(User $user): array
     {
+        $school = $user->school()->first();
         $data = [
             'id' => $user->id,
             'name' => $user->name,
+            'school_id' => $school?->id,
+            'schools' => fractal($user->school, new SchoolTransformer())->toArray()['data'],
+            'roles' => $user->roles->toArray(),
             'email' => $user->email,
             'profile_photo_url' => $user->profile_photo_url,
             'role' => $user->present()->role,

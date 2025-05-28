@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 // use App\Enums\UserRoleEnum;
 use app\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateOrUpdateUserRequest extends FormRequest
 {
@@ -18,9 +19,9 @@ class CreateOrUpdateUserRequest extends FormRequest
         // base rules
         $rules = [
             "name" => ["required", "string", "max:255"],
-            "role" => ["in:".User::ROLE_USER.",".User::ROLE_ADMIN.",".User::ROLE_SUPER_ADMIN.",".User::ROLE_TEACHER],
+            "role" => ["required", "integer", Rule::in(array_values(User::ROLES))],
+            'school_id' => ["nullable", "integer", "exists:schools,id"],
         ];
-
         if ($this->getMethod() === "POST") { //for create
             $rules["email"] = ["required", "email", "unique:users,email", "max:255"];
             // $rules["password"] = ["required", "min:6", "confirmed"];

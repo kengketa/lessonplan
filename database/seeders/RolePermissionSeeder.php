@@ -16,6 +16,9 @@ class RolePermissionSeeder extends Seeder
     public function run()
     {
         foreach (User::ROLES as $name => $value) {
+            if (Role::where('id', $value)->exists()) {
+                continue;
+            }
             Role::create(['id' => $value, 'name' => $name]);
         }
     }

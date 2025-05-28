@@ -25,20 +25,23 @@ class User extends Authenticatable
     use Presentable;
     use SoftDeletes;
 
-    protected $presenter = UserPresenter::class;
-
     public const ROLES = [
         Role::ROLE_USER => self::ROLE_USER, // 'USER' => 1
         Role::ROLE_TEACHER => self::ROLE_TEACHER, // 'TEACHER' => 50
+        Role::ROLE_SCHOOL_ADMIN => self::ROLE_SCHOOL_ADMIN, // 'SCHOOL_VICE_DIRECTOR' => 60
+        Role::ROLE_SCHOOL_VICE_DIRECTOR => self::ROLE_SCHOOL_VICE_DIRECTOR, // 'SCHOOL_VICE_DIRECTOR' => 61
+        Role::ROLE_SCHOOL_DIRECTOR => self::ROLE_SCHOOL_DIRECTOR, // 'SCHOOL_VICE_DIRECTOR' => 70
         Role::ROLE_ADMIN => self::ROLE_ADMIN, // 'ADMIN' => 90
         Role::ROLE_SUPER_ADMIN => self::ROLE_SUPER_ADMIN, // 'SUPER_ADMIN' => 100
     ];
-
     public const ROLE_USER = 1;
     public const ROLE_TEACHER = 50;
+    public const ROLE_SCHOOL_ADMIN = 60;
+    public const ROLE_SCHOOL_VICE_DIRECTOR = 61;
+    public const ROLE_SCHOOL_DIRECTOR = 70;
     public const ROLE_ADMIN = 90;
     public const ROLE_SUPER_ADMIN = 100;
-
+    protected $presenter = UserPresenter::class;
     /**
      * The attributes that are mass assignable.
      *

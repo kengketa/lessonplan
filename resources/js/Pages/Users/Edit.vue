@@ -1,16 +1,17 @@
 <template>
   <div>
     <Breadcrumbs
-      :breadcrumbs="breadcrumbs"
       :back="route('dashboard.users.show', userModel.id)"
+      :breadcrumbs="breadcrumbs"
     />
-    <PageHeading> Edit User: {{ userModel.name }} </PageHeading>
+    <PageHeading> Edit User: {{ userModel.name }}</PageHeading>
     <div>
       <UserForm
         :companies="companies"
-        type="edit"
-        :user="userModel"
         :roles="roles"
+        :schools="schools"
+        :user="userModel"
+        type="edit"
       />
     </div>
   </div>
@@ -26,23 +27,24 @@ import PageHeading from "@/Components/PageHeading";
 export default {
   name: "Index",
   layout: Layout,
-  components: { PageHeading, Breadcrumbs, UserForm },
+  components: {PageHeading, Breadcrumbs, UserForm},
   props: {
     roles: Object,
     userModel: Object,
     errors: Object,
     companies: Object,
+    schools: Array
   },
   data() {
     return {
       breadcrumbs: [
         // { name: 'Dashboard', href: '#' },
-        { name: "Users", href: route("dashboard.users.index") },
+        {name: "Users", href: route("dashboard.users.index")},
         {
           name: this.userModel.name,
           href: route("dashboard.users.show", this.userModel.id),
         },
-        { name: "Edit", href: "#" },
+        {name: "Edit", href: "#"},
       ],
     };
   },

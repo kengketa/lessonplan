@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Role;
+use App\Models\SchoolTeacher;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -14,21 +15,28 @@ class SaveUserAction
     public function execute(User $user, array $data): User
     {
         $this->user = $user;
-
         if (!empty($this->user->id)) {
             $this->user->roles()->detach();
             $this->user->assignRole(Role::find($data["role"]));
             $this->user->update($data);
-
-            return $this->user;
         }
-
-        //create
-        $data["password"] = $this->generateRandomString(50);
-        $this->user = $this->user->create($data);
-        $this->user->assignRole(Role::find($data["role"]));
-        $setupUserAction = new SetupUserAction();
-        $setupUserAction->execute($this->user, $this->generateToken());
+        if (empty($this->user->id)) {
+            //create
+            $data["password"] = $this->generateRandomString(50);
+            $this->user = $this->user->create($data);
+            $this->user->assignRole(Role::find($data["role"]));
+            $setupUserAction = new SetupUserAction();
+            $setupUserAction->execute($this->user, $this->generateToken());
+        }
+        if ($data['school_id'] && $data["role"] >= 60 && $data["role"] <= 70) {
+            $foundDuplicated = SchoolTeacher::where([
+                "teacher_id" => $this->user->id
+            ])->delete();
+            SchoolTeacher::create([
+                'school_id' => $data["school_id"],
+                'teacher_id' => $this->user->id
+            ]);
+        }
         Cache::flush();
         return $this->user;
     }

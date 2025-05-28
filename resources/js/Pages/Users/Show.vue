@@ -5,13 +5,13 @@
       :loadingText="`mailing to ${userModel.email}`"
     ></PreLoad>
     <ConfirmDialog
-      title="Delete user?"
-      :body="`User ${userModel.name} and its related data will be deleted. This action cannot be undone.`"
-      confirmText="Delete User"
       v-model="isShowDeleteDialog"
+      :body="`User ${userModel.name} and its related data will be deleted. This action cannot be undone.`"
       :confirmEvent="deleteUser"
+      confirmText="Delete User"
+      title="Delete user?"
     ></ConfirmDialog>
-    <Breadcrumbs :breadcrumbs="breadcrumbs" :back="route('dashboard.users.index')" />
+    <Breadcrumbs :back="route('dashboard.users.index')" :breadcrumbs="breadcrumbs"/>
     <PageHeading>
       <span class="hidden lg:inline">User information:</span> {{ userModel.name }}
       <template #actions>
@@ -19,13 +19,13 @@
           :href="route('dashboard.users.edit', userModel.id)"
           class="button button-primary mr-2"
         >
-          <PencilIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+          <PencilIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
           Edit
         </Link
         >
-        <form @submit.prevent="isShowDeleteDialog = true" class="inline-flex">
-          <button type="submit" class="button button-danger">
-            <TrashIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+        <form class="inline-flex" @submit.prevent="isShowDeleteDialog = true">
+          <button class="button button-danger" type="submit">
+            <TrashIcon aria-hidden="true" class="h-5 w-5 mr-2"/>
             Delete
           </button>
         </form>
@@ -37,7 +37,7 @@
           <div
             class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mr-2 overflow-hidden"
           >
-            <img :src="userModel.profile_photo_url" />
+            <img :src="userModel.profile_photo_url"/>
           </div>
           <div>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -63,12 +63,20 @@
             <template #label>Role</template>
             <span>{{ userModel.role }} </span>
           </DataDisplayRow>
+          <DataDisplayRow>
+            <template #label>School</template>
+            <div v-if="userModel.schools.length > 0">
+              <p v-for="(school,index) in userModel.schools">
+                - {{ school.name }}
+              </p>
+            </div>
+          </DataDisplayRow>
           <DataDisplayRow v-show="userModel.role == 'Customer'">
             <template #label>Company</template>
             <Link
               v-if="userModel.company != null"
-              class="link"
               :href="route('companies.show', { company: userModel.company })"
+              class="link"
             >{{ userModel.company.name }}
             </Link
             >
@@ -77,8 +85,8 @@
           <DataDisplayRow>
             <template #label>Security</template>
             <button
-              @click="resetPassword"
               class="button button-secondary button-small mr-2 border-indigo-500 text-sm text-indigo-500"
+              @click="resetPassword"
             >
               Send reset password email
             </button>
