@@ -197,119 +197,119 @@
         </template>
       </TableDisplayContainer>
     </section>
-    <Card>
-      <div class="md:flex md:items-center md:justify-between">
-        <div class="w-full flex justify-between">
-          <div>
-            <h3 class="text-lg leading-6 font-medium text-gray-900">
-              School Information
-            </h3>
-          </div>
-          <div>
-            <button v-if="showSchoolInformation" class="text-gray-500 mr-4" type="button"
-                    @click="showSchoolInformation = false">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 15l7-7 7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-              </svg>
-            </button>
-            <button v-if="!showSchoolInformation" class="text-gray-500 mr-4" type="button"
-                    @click="showSchoolInformation = true">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div :class="!showSchoolInformation ? 'h-0':'h-100'"
-           class="mt-5 border-t border-gray-200 transition transform translate duration-500 ease-in-out"
-      >
-        <DataDisplayContainer>
-          <DataDisplayRow>
-            <template #label>
-              Name
-            </template>
-            {{ school.name }}
-          </DataDisplayRow>
-          <DataDisplayRow>
-            <template #label>
-              Address
-            </template>
-            {{ school.address }}
-          </DataDisplayRow>
-          <DataDisplayRow>
-            <template #label>
-              Grades
-            </template>
-            <div class="flex flex-wrap">
-              <div v-for="grade in school.grades.data" class="relative ml-1 my-1">
-                <p class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
-                  <span>{{ grade.name }}</span>
-                </p>
-                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                        class="absolute -top-1 right-0 text-red-500" @click="deleteGradePreConfirm(grade)">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                    class="button button-primary button-small" @click="showAddGradeModal=true">Add Grade
-            </button>
-          </DataDisplayRow>
-          <DataDisplayRow>
-            <template #label>
-              Subjects
-            </template>
-            <div class="flex flex-wrap">
-              <div v-for="subject in school.subjects" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
-                <span class="uppercase">{{ subject.name }}</span>
-                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                        class="absolute -top-2 -right-2 text-red-500" @click="deleteSubjectPreConfirm(subject)">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                    class="button button-primary button-small" @click="showAddSubjectModal=true">Add Subject
-            </button>
-          </DataDisplayRow>
-          <DataDisplayRow>
-            <template #label>
-              Teachers
-            </template>
-            <div class="flex flex-wrap">
-              <div v-for="teacher in school.teachers" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">
-                <span>{{ teacher.name }}</span>
-                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                        class="absolute -top-2 -right-2 text-red-500" @click="removeTeacherPreConfirm(teacher)">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"
-                    class="button button-primary button-small" @click="showAddTeacherModal=true">Add Teacher
-            </button>
-          </DataDisplayRow>
-        </DataDisplayContainer>
-      </div>
-    </Card>
+    <!--    <Card>-->
+    <!--      <div class="md:flex md:items-center md:justify-between">-->
+    <!--        <div class="w-full flex justify-between">-->
+    <!--          <div>-->
+    <!--            <h3 class="text-lg leading-6 font-medium text-gray-900">-->
+    <!--              School Information-->
+    <!--            </h3>-->
+    <!--          </div>-->
+    <!--          <div>-->
+    <!--            <button v-if="showSchoolInformation" class="text-gray-500 mr-4" type="button"-->
+    <!--                    @click="showSchoolInformation = false">-->
+    <!--              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"-->
+    <!--                   xmlns="http://www.w3.org/2000/svg">-->
+    <!--                <path d="M5 15l7-7 7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>-->
+    <!--              </svg>-->
+    <!--            </button>-->
+    <!--            <button v-if="!showSchoolInformation" class="text-gray-500 mr-4" type="button"-->
+    <!--                    @click="showSchoolInformation = true">-->
+    <!--              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"-->
+    <!--                   xmlns="http://www.w3.org/2000/svg">-->
+    <!--                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>-->
+    <!--              </svg>-->
+    <!--            </button>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      <div :class="!showSchoolInformation ? 'h-0':'h-100'"-->
+    <!--           class="mt-5 border-t border-gray-200 transition transform translate duration-500 ease-in-out"-->
+    <!--      >-->
+    <!--        <DataDisplayContainer>-->
+    <!--          <DataDisplayRow>-->
+    <!--            <template #label>-->
+    <!--              Name-->
+    <!--            </template>-->
+    <!--            {{ school.name }}-->
+    <!--          </DataDisplayRow>-->
+    <!--          <DataDisplayRow>-->
+    <!--            <template #label>-->
+    <!--              Address-->
+    <!--            </template>-->
+    <!--            {{ school.address }}-->
+    <!--          </DataDisplayRow>-->
+    <!--          <DataDisplayRow>-->
+    <!--            <template #label>-->
+    <!--              Grades-->
+    <!--            </template>-->
+    <!--            <div class="flex flex-wrap">-->
+    <!--              <div v-for="grade in school.grades.data" class="relative ml-1 my-1">-->
+    <!--                <p class="bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">-->
+    <!--                  <span>{{ grade.name }}</span>-->
+    <!--                </p>-->
+    <!--                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                        class="absolute -top-1 right-0 text-red-500" @click="deleteGradePreConfirm(grade)">-->
+    <!--                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"-->
+    <!--                       xmlns="http://www.w3.org/2000/svg">-->
+    <!--                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
+    <!--                          stroke-linecap="round" stroke-linejoin="round"-->
+    <!--                          stroke-width="2"/>-->
+    <!--                  </svg>-->
+    <!--                </button>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                    class="button button-primary button-small" @click="showAddGradeModal=true">Add Grade-->
+    <!--            </button>-->
+    <!--          </DataDisplayRow>-->
+    <!--          <DataDisplayRow>-->
+    <!--            <template #label>-->
+    <!--              Subjects-->
+    <!--            </template>-->
+    <!--            <div class="flex flex-wrap">-->
+    <!--              <div v-for="subject in school.subjects" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">-->
+    <!--                <span class="uppercase">{{ subject.name }}</span>-->
+    <!--                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                        class="absolute -top-2 -right-2 text-red-500" @click="deleteSubjectPreConfirm(subject)">-->
+    <!--                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"-->
+    <!--                       xmlns="http://www.w3.org/2000/svg">-->
+    <!--                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
+    <!--                          stroke-linecap="round" stroke-linejoin="round"-->
+    <!--                          stroke-width="2"/>-->
+    <!--                  </svg>-->
+    <!--                </button>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                    class="button button-primary button-small" @click="showAddSubjectModal=true">Add Subject-->
+    <!--            </button>-->
+    <!--          </DataDisplayRow>-->
+    <!--          <DataDisplayRow>-->
+    <!--            <template #label>-->
+    <!--              Teachers-->
+    <!--            </template>-->
+    <!--            <div class="flex flex-wrap">-->
+    <!--              <div v-for="teacher in school.teachers" class="relative bg-yellow-100 px-2 py-2 mx-2 mb-2 rounded-md">-->
+    <!--                <span>{{ teacher.name }}</span>-->
+    <!--                <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                        class="absolute -top-2 -right-2 text-red-500" @click="removeTeacherPreConfirm(teacher)">-->
+    <!--                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"-->
+    <!--                       xmlns="http://www.w3.org/2000/svg">-->
+    <!--                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
+    <!--                          stroke-linecap="round" stroke-linejoin="round"-->
+    <!--                          stroke-width="2"/>-->
+    <!--                  </svg>-->
+    <!--                </button>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <button v-if="$page.props.authUserRole === 'ADMIN' || $page.props.authUserRole === 'SUPER_ADMIN'"-->
+    <!--                    class="button button-primary button-small" @click="showAddTeacherModal=true">Add Teacher-->
+    <!--            </button>-->
+    <!--          </DataDisplayRow>-->
+    <!--        </DataDisplayContainer>-->
+    <!--      </div>-->
+    <!--    </Card>-->
     <AddGradeModal v-model="showAddGradeModal" :school-id="school.id"/>
     <AddSubjectModal v-model="showAddSubjectModal" :school-id="school.id"/>
     <AddTeacherModal v-model="showAddTeacherModal" :school="school"/>

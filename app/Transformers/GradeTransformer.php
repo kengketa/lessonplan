@@ -12,7 +12,6 @@ class GradeTransformer extends TransformerAbstract
         $grade->load('school');
         $data = [
             'id' => $grade->id,
-            'school' => $grade->school->toArray(),
             'name' => $grade->present()->name,
             'created_at' => $grade->present()->createdAt,
             'updated_at' => $grade->present()->updatedAt,
