@@ -10,4 +10,9 @@ class SchoolTeacher extends Model
     use HasFactory;
 
     protected $fillable = ['school_id', 'teacher_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
 }

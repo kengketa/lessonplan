@@ -100,4 +100,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(School::class, 'school_teachers', 'teacher_id', 'school_id');
     }
+
+    public function schoolTeachers()
+    {
+        return $this->hasMany(SchoolTeacher::class, 'teacher_id');
+    }
+
 }

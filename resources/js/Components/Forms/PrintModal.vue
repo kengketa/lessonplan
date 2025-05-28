@@ -1,16 +1,16 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <TransitionRoot as="template" :show="modelValue">
+  <TransitionRoot :show="modelValue" as="template">
     <Dialog as="div" class="fixed z-30 inset-0 overflow-y-auto" @close="cancel()">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
                          enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
                          leave-to="opacity-0">
-          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <span aria-hidden="true" class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
         <TransitionChild as="template" enter="ease-out duration-300"
                          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                          enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200"
@@ -28,25 +28,25 @@
                     <fieldset class="space-y-2">
                       <div class="relative flex items-start">
                         <div class="flex items-center h-5">
-                          <input id="select-all" aria-describedby="comments-description"
-                                 v-model="selectAll"
+                          <input id="select-all" v-model="selectAll"
+                                 aria-describedby="comments-description"
+                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                                  name="selectAll"
-                                 type="checkbox"
-                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                 type="checkbox">
                         </div>
                         <div class="ml-3 text-sm">
-                          <label for="select-all" class="font-medium text-gray-700">
+                          <label class="font-medium text-gray-700" for="select-all">
                             Select All
                           </label>
                         </div>
                       </div>
                       <div v-for="(report,reportIndex) in printList" :key="report.id" class="relative flex items-start">
                         <div class="flex items-center h-5">
-                          <input :id="'report-'+report.id" aria-describedby="comments-description"
-                                 v-model="form.print_list[reportIndex].print"
+                          <input :id="'report-'+report.id" v-model="form.print_list[reportIndex].print"
                                  :name="'report-'+report.id"
-                                 type="checkbox"
-                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                 aria-describedby="comments-description"
+                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                 type="checkbox">
                         </div>
                         <div class="ml-3 text-sm">
                           <label :for="'report-'+report.id" class="font-medium text-gray-700">
@@ -60,14 +60,14 @@
                       </div>
                       <div class="relative flex items-start">
                         <div class="flex items-center h-5">
-                          <input id="select-all" aria-describedby="comments-description"
-                                 v-model="selectAll"
+                          <input id="select-all" v-model="selectAll"
+                                 aria-describedby="comments-description"
+                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                                  name="selectAll"
-                                 type="checkbox"
-                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                 type="checkbox">
                         </div>
                         <div class="ml-3 text-sm">
-                          <label for="select-all" class="font-medium text-gray-700">
+                          <label class="font-medium text-gray-700" for="select-all">
                             Select All
                           </label>
                         </div>
@@ -77,16 +77,21 @@
                 </div>
               </div>
             </div>
-            <div class="mt-4 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <button type="button"
+            <div class="mt-4 sm:grid sm:grid-cols-3 sm:gap-3 sm:grid-flow-row-dense">
+              <button ref="cancelButtonRef"
                       class="button button-secondary button-small mr-2"
-                      @click="cancel()" ref="cancelButtonRef">
+                      type="button" @click="cancel()">
                 Cancel
               </button>
-              <button type="button"
-                      class="button button-primary button-small"
-                      @click="submit()">
-                Preview
+              <button class="button button-primary button-small"
+                      type="button"
+                      @click="submit('landscape')">
+                Landscape
+              </button>
+              <button class="button button-primary button-small"
+                      type="button"
+                      @click="submit('portrait')">
+                Portrait
               </button>
             </div>
           </div>
@@ -137,8 +142,10 @@ export default {
   },
   emits: ['update:modelValue'],
   methods: {
-    submit() {
-      this.form.post(route('dashboard.reports.print'), {
+    submit(type) {
+      this.form.post(route('dashboard.reports.print', {
+        type: type,
+      }), {
         onSuccess: () => this.$emit('update:modelValue', false),
       });
     },

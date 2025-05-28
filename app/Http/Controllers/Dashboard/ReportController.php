@@ -8,7 +8,9 @@ use App\Http\Requests\CreateOrUpdateReportRequest;
 use App\Models\GlobalReport;
 use App\Models\Report;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\School;
+use App\Models\SchoolTeacher;
 use App\Transformers\ReportTransformer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -169,7 +171,10 @@ class ReportController extends Controller
         foreach ($toBePrintedReports as $report) {
             $reportIds[] = $report['id'];
         }
-        $url = route('dashboard.reports.print_preview', ['reportIds' => $reportIds]);
+        $url = route('dashboard.reports.print_preview', [
+            'reportIds' => $reportIds,
+            'type' => $request['type'] ?? 'landscape',
+        ]);
         //Browsershot::url($url)->save('example.pdf');
         return redirect($url);
     }
@@ -177,12 +182,33 @@ class ReportController extends Controller
     public function printPreview(Request $request)
     {
         $reportIds = $request['reportIds'];
+        $type = $request['type'] ?? 'landscape';
         $reportDataGroupByPage = $this->prepareReportGroupByPage($reportIds);
+        $firstReportId = $reportIds[0];
+        $school = School::whereHas('reports', function ($q) use ($firstReportId) {
+            $q->where('reports.id', $firstReportId);
+        })->first();
+        $schoolAdmin = User::role(Role::ROLE_SCHOOL_ADMIN)
+            ->whereHas('schoolTeachers', function ($q) use ($school) {
+                $q->where('school_id', $school->id);
+            })
+            ->first();
+        $schoolViceDirector = User::role(Role::ROLE_SCHOOL_VICE_DIRECTOR)
+            ->whereHas('schoolTeachers', function ($q) use ($school) {
+                $q->where('school_id', $school->id);
+            })
+            ->first();
+        $componentToPrint = 'Dashboard/Reports/Print';
+        if ($type == 'portrait') {
+            $componentToPrint = 'Dashboard/Reports/VerticalPrint';
+        }
         return Inertia::render(
-            'Dashboard/Reports/Print',
+            $componentToPrint,
             [
                 'reportIds' => $reportIds,
-                'pages' => $reportDataGroupByPage
+                'pages' => $reportDataGroupByPage,
+                'schoolAdmin' => $schoolAdmin,
+                'schoolViceDirector' => $schoolViceDirector,
             ]
         );
     }
