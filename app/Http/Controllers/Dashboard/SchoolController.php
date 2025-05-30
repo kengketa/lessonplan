@@ -253,4 +253,18 @@ class SchoolController extends Controller
         );
     }
 
+    public function manage(School $school)
+    {
+        $schoolData = fractal($school, new SchoolTransformer())->toArray();
+        $grades = Grade::where('school_id', $school->id)->orderBy('type')->orderBy('level')->get();
+        $gradeData = fractal($grades, new GradeTransformer())->toArray();
+        $schoolData['grades'] = $gradeData;
+        return Inertia::render(
+            'Dashboard/Schools/Manage',
+            [
+                'school' => $schoolData
+            ]
+        );
+    }
+
 }

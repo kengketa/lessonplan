@@ -154,11 +154,15 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             ->name("dashboard.substitute.print");
     });
 
-    Route::middleware(["role:" . Role::ROLE_ADMIN . '|' . Role::ROLE_SUPER_ADMIN . '|' . Role::ROLE_TEACHER])->group(
+    Route::middleware(
+        ["role:" . Role::ROLE_ADMIN . '|' . Role::ROLE_SUPER_ADMIN . '|' . Role::ROLE_TEACHER . '|' . Role::ROLE_SCHOOL_ADMIN]
+    )->group(
         function () {
             Route::get("/", [PageController::class, "dashboard"])->name("dashboard");
             Route::get("schools", [SchoolController::class, "index"])->name("dashboard.schools.index");
             Route::get("schools/{school}", [SchoolController::class, "show"])->name("dashboard.schools.show");
+            Route::get("schools/{school}/manage", [SchoolController::class, "manage"])
+                ->name("dashboard.schools.manage");
 
             //reports
             Route::get(
