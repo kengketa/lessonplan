@@ -59,7 +59,7 @@ class School extends Model
     public function scopeFilter(Builder $query, array $filters): void
     {
         $user = Auth::user();
-        if ($user->roles[0]->name === Role::ROLE_TEACHER) {
+        if ($user->roles[0]->name === Role::ROLE_TEACHER || $user->roles[0]->name === Role::ROLE_SCHOOL_ADMIN) {
             $query->whereHas('teachers', function ($q) use ($user) {
                 $q->where('teacher_id', $user->id);
             });

@@ -376,7 +376,7 @@ export default {
       const roles = this.$page.props.roleEnum;
       if (user.roles[0].id == roles.USER) {
         nav.push(navs.dashboard);
-      } else if (user.roles[0].id == roles.TEACHER) {
+      } else if (user.roles[0].id == roles.TEACHER || user.roles[0].id == roles.SCHOOL_ADMIN) {
         nav.push(navs.dashboard);
         nav.push(navs.timeSheets);
         nav.push(navs.meetings);
