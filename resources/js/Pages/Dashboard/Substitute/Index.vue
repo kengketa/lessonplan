@@ -10,13 +10,18 @@
           <div class="">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-xl font-semibold">Today’s Substitutions ({{ currentDateTime }})</h3>
+                <h3 v-if="date==null" class="text-xl font-semibold">Today’s Substitutions ({{ currentDateTime }})</h3>
+                <h3 v-if="date" class="text-xl font-semibold">Substitutions On ({{ formattedDate(date) }})</h3>
                 <p v-show="isEditAble" class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
                   {{ route('substitute.volunteer') }}
                 </p>
               </div>
               <div class="flex items-center gap-1">
-                <Link v-show="isEditAble" :href="route('dashboard.substitute.print',{school:school.id})"
+                <div>
+                  <input v-model="date" class="block w-full border-gray-300 focus:outline-none sm:text-sm rounded-md"
+                         placeholder="date" type="date"/>
+                </div>
+                <Link v-show="isEditAble" :href="computedRoute"
                       class="text-blue-800"
                       type="button">
                   <PrinterIcon aria-hidden="true" class="h-8 w-8"/>
@@ -249,6 +254,7 @@ export default {
       breadcrumbs: [{name: 'Substitute', href: "#"}],
       columns: ['name', 'address',],
       substituteData: [],
+      date: new URLSearchParams(window.location.search).get('date') ?? null,
       form: {
         start_time: "",
         end_time: "",
@@ -271,6 +277,10 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    formattedDate(date) {
+      const newDate = new Date(date);
+      return newDate.toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'});
+    },
     async removeSubstitute(sub) {
       const result = await this.$swal.fire({
         title: `Are you sure to remove ${sub.volunteer}?`,
@@ -418,8 +428,23 @@ export default {
       });
     }
   },
-  watch: {},
+  watch: {
+    date() {
+      let url = this.route('dashboard.substitute.index', {school: this.school.id});
+      if (this.date) {
+        url = url + '?date=' + this.date;
+      }
+      Inertia.visit(url);
+    }
+  },
   computed: {
+    computedRoute() {
+      let url = this.route('dashboard.substitute.print', {school: this.school.id});
+      if (this.date) {
+        url = url + '?date=' + this.date;
+      }
+      return url;
+    },
     hasNewSubstitute() {
       return this.substituteData.some(sub => sub.id === null);
     },

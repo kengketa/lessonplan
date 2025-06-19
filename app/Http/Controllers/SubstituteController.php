@@ -12,10 +12,17 @@ use Inertia\Inertia;
 
 class SubstituteController extends Controller
 {
-    public function index(School $school)
+    public function index(School $school, Request $request)
     {
+        $req = $request->validate([
+            'date' => ['nullable', 'date'],
+        ]);
+        $date = Carbon::today();
+        if (isset($req['date'])) {
+            $date = $req['date'];
+        }
         $substitutes = Substitute::where('school_id', $school->id)
-            ->whereDate('date', Carbon::today())
+            ->whereDate('date', $date)
             ->orderBy('start_time', 'asc')
             ->get();
         $substituteData = fractal($substitutes, new SubstituteTransformer())->toArray()['data'];
@@ -78,11 +85,18 @@ class SubstituteController extends Controller
         ]);
     }
 
-    public function print(School $school)
+    public function print(School $school, Request $request)
     {
+        $req = $request->validate([
+            'date' => ['nullable', 'date'],
+        ]);
+        $date = Carbon::today();
+        if (isset($req['date'])) {
+            $date = $req['date'];
+        }
         $school = School::find(8);
         $substitutes = Substitute::where('school_id', $school->id)
-            ->whereDate('date', Carbon::today())
+            ->whereDate('date', $date)
             ->orderBy('start_time', 'asc')
             ->get();
         $substituteData = fractal($substitutes, new SubstituteTransformer())->toArray()['data'];

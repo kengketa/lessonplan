@@ -80,6 +80,7 @@ export default {
       breadcrumbs: [{name: 'Substitute', href: "#"}],
       columns: ['name', 'address',],
       substituteData: [],
+      date: new URLSearchParams(window.location.search).get('date') ?? null,
       form: {
         start_time: "",
         end_time: "",
@@ -112,7 +113,10 @@ export default {
   watch: {},
   computed: {
     currentDate() {
-      const now = new Date();
+      let now = new Date();
+      if (this.date) {
+        now = new Date(this.date);
+      }
       const date = now.toLocaleDateString('en-GB', {
         weekday: 'short',
         day: '2-digit',
