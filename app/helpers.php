@@ -4,6 +4,7 @@ use App\Models\DailyReport;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\ClockIn;
+use App\Models\School;
 
 function snakeCaseToText($text)
 {
@@ -125,4 +126,20 @@ function cleanString($text)
         '/ /' => ' ', // nonbreaking space (equiv. to 0x160)
     );
     return preg_replace(array_keys($utf8), array_values($utf8), $text);
+}
+
+function getSubjectIdByName(int $schoolId, string $subjectName): ?int
+{
+    $school = School::where('id', $schoolId)
+        ->whereJsonContains('subjects', ['name' => $subjectName])
+        ->first();
+
+    if ($school) {
+        foreach ($school->subjects as $subject) {
+            if ($subject['name'] === $subjectName) {
+                return $subject['id'];
+            }
+        }
+    }
+    return null;
 }

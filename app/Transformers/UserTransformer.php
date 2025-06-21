@@ -7,6 +7,10 @@ use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
 {
+    protected array $availableIncludes = [
+        'school',
+    ];
+
     public function transform(User $user): array
     {
         $school = $user->school()->first();
@@ -23,5 +27,15 @@ class UserTransformer extends TransformerAbstract
         ];
 
         return $data;
+    }
+
+    public function includeSchool(User $user)
+    {
+        $school = $user->school()->first();
+        if ($school) {
+            return $this->item($school, new SchoolTransformer());
+        }
+
+        return $this->null();
     }
 }

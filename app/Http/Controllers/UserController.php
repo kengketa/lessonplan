@@ -60,8 +60,7 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
-        $user = User::where("id", $user->id)->first();
-        $userData = fractal($user, new UserTransformer())->toArray();
+        $userData = fractal($user, new UserTransformer())->includeSchool()->toArray();
         return Inertia::render('Users/Show', ["userModel" => $userData, "title" => "View : {$user->name}"]);
     }
 

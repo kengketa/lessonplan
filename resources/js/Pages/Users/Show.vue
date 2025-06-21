@@ -65,9 +65,9 @@
           </DataDisplayRow>
           <DataDisplayRow>
             <template #label>School</template>
-            <div v-if="userModel.schools.length > 0">
-              <p v-for="(school,index) in userModel.schools">
-                - {{ school.name }}
+            <div v-if="userModel.school">
+              <p>
+                {{ userModel.school.name }}
               </p>
             </div>
           </DataDisplayRow>
