@@ -23,13 +23,14 @@ class ApiController extends Controller
         try {
             DB::beginTransaction();
             $teacherName = strtolower($req['plans'][0]['teacher']);
+            $teacherEmail = $req['plans'][0]['email'];
             $teacherNameLower = strtolower($teacherName);
             $user = User::whereRaw('LOWER(name) LIKE ?', [$teacherNameLower . '%'])->first();
             $school = School::find(8);
             if (!$user) {
                 $user = User::factory()->create([
                     'name' => $teacherName,
-                    'email' => $teacherName . '@abpy.ac.th',
+                    'email' => $teacherEmail,
                 ]);
                 $user->assignRole(Role::where("name", \App\Models\Role::ROLE_TEACHER)->first());
             }
