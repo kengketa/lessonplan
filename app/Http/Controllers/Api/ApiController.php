@@ -25,7 +25,7 @@ class ApiController extends Controller
             $teacherName = strtolower($req['plans'][0]['teacher']);
             $teacherEmail = $req['plans'][0]['email'];
             $teacherNameLower = strtolower($teacherName);
-            $user = User::whereRaw('LOWER(name) LIKE ?', [$teacherNameLower . '%'])->first();
+            $user = User::where('email', $teacherEmail)->first();
             $school = School::find(8);
             if (!$user) {
                 $user = User::factory()->create([
