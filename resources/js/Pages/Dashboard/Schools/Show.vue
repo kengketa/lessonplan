@@ -38,15 +38,15 @@
     </span>
       <template #actions>
         <div class="w-full flex flex-wrap gap-2">
-          <div class="flex items-center mr-4 cursor-pointer text-blue-800">
-            <a class="underline text-sm whitespace-nowrap flex gap-2"
-               href="/excel/Lesson-plan-template_semester_2.xlsx">
-              Excel Template
-            </a>
-          </div>
-          <button class="button button-primary mr-2" type="button" @click="$refs.excelFileInput.click()">
-            Import From Excel
-          </button>
+          <!--          <div class="flex items-center mr-4 cursor-pointer text-blue-800">-->
+          <!--            <a class="underline text-sm whitespace-nowrap flex gap-2"-->
+          <!--               href="/excel/Lesson-plan-template_semester_2.xlsx">-->
+          <!--              Excel Template-->
+          <!--            </a>-->
+          <!--          </div>-->
+          <!--          <button class="button button-primary mr-2" type="button" @click="$refs.excelFileInput.click()">-->
+          <!--            Import From Excel-->
+          <!--          </button>-->
           <input ref="excelFileInput" accept=".xls,.xlsx" class="hidden" type="file" @change="handleExcelUpload">
           <Link
             :href="route('dashboard.schools.calendar', school.id)"
