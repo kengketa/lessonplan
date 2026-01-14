@@ -131,6 +131,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', 'verified'])->group(func
             [ClockInController::class, "generateReport"]
         )->name("dashboard.clock_ins.generate_report");
 
+        Route::post("clock-ins", [ClockInController::class, "leaveRequest"])
+            ->name("dashboard.clock_ins.leave_request");
+
         //meetings
         Route::get("meetings/create", [MeetingController::class, "create"])->name("dashboard.meetings.create");
         Route::post("meetings", [MeetingController::class, "store"])->name("dashboard.meetings.store");

@@ -19,6 +19,7 @@ class ClockInTransformer extends TransformerAbstract
             'date' => Carbon::parse($clockIn->date)->format('D d M Y'),
             'clock_in' => $clockIn->clock_in ? Carbon::parse($clockIn->clock_in)->format('h:i:sa') : null,
             'clock_out' => $clockIn->clock_out ? Carbon::parse($clockIn->clock_out)->format('h:i:sa') : null,
+            'comment' => $clockIn->comment
         ];
 
         return $data;

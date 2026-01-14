@@ -18,6 +18,7 @@ class CreateClockInsTable extends Migration
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('school_id');
             $table->date('date');
+            $table->text('comment')->nullable();
             $table->timestamp('clock_in')->nullable();
             $table->timestamp('clock_out')->nullable();
             $table->timestamps();

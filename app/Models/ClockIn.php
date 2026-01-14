@@ -10,7 +10,7 @@ class ClockIn extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['teacher_id', 'school_id', 'date', 'clock_in', 'clock_out'];
+    protected $fillable = ['teacher_id', 'school_id', 'date', 'clock_in', 'clock_out', 'comment'];
 
     public function scopeFilter(Builder $query, array $filters): void
     {

@@ -35,14 +35,14 @@ class ClockInController extends Controller
         $allTeachers = User::role(ROLE::ROLE_TEACHER)->get();
         $allTeacherData = fractal($allTeachers, new UserTransformer())->toArray()['data'];
         if ($filters) {
-            if(!isset($filters['teacher_id'])){
+            if (!isset($filters['teacher_id'])) {
                 $filters['teacher_id'] = null;
             }
             foreach ($clokInData['meta']['pagination']['links'] as $link) {
                 if (isset($link->url)) {
-                    $link->url = $link->url.
-                        '&filters[teacher_id]='.$filters['teacher_id'].
-                        '&filters[month]='.$filters['month'];
+                    $link->url = $link->url .
+                        '&filters[teacher_id]=' . $filters['teacher_id'] .
+                        '&filters[month]=' . $filters['month'];
                 }
             }
         }
@@ -53,7 +53,8 @@ class ClockInController extends Controller
                 'allTeachers' => $allTeacherData,
                 'monthOptions' => $monthOptions,
                 'clockIns' => $clokInData,
-            ]);
+            ]
+        );
     }
 
     public function in(Request $request)
@@ -76,7 +77,7 @@ class ClockInController extends Controller
                 'clock_out' => null
             ]);
         }
-        $message = 'You have clocked in at '.$now->format('h:i:sa');
+        $message = 'You have clocked in at ' . $now->format('h:i:sa');
         return redirect()->route('dashboard')->with('success', $message);
     }
 
@@ -91,9 +92,8 @@ class ClockInController extends Controller
 
         $clockedIn->clock_out = $now;
         $clockedIn->save();
-        $message = 'You have clocked out at '.$now->format('h:i:sa');
+        $message = 'You have clocked out at ' . $now->format('h:i:sa');
         return redirect()->route('dashboard')->with('success', $message);
-
     }
 
     public function generateReport(Request $request)
@@ -142,14 +142,47 @@ class ClockInController extends Controller
         foreach ($teachers as $teacher) {
             $timeSheetData[$teacher->id]['teacher_name'] = $teacher->name;
             $timeSheetData[$teacher->id]['school_name'] = $teacher->school[0]->name ?? 'untitled';
-            $timeSheetData[$teacher->id]['month'] = Carbon::parse($year.'-'.$month.'-1')->format('F');
-            $timeSheetData[$teacher->id]['year'] = Carbon::parse($year.'-'.$month.'-1')->format('Y');
+            $timeSheetData[$teacher->id]['month'] = Carbon::parse($year . '-' . $month . '-1')->format('F');
+            $timeSheetData[$teacher->id]['year'] = Carbon::parse($year . '-' . $month . '-1')->format('Y');
             $timeSheetData[$teacher->id]['data'] = $timeSheet->execute($teacher, $month, $year);
         }
         return Inertia::render(
             'Dashboard/ClockIns/PrintPreview',
             [
                 'timeSheets' => $timeSheetData
+            ]
+        );
+    }
+
+    public function leaveRequest(Request $request)
+    {
+        $req = $request->validate([
+            'teacher_id' => ['required', 'integer', 'exists:users,id'],
+            'date' => ['required', 'date'],
+            'reason' => ['required', 'string', 'min:10', 'max:1000'],
+        ]);
+        $now = Carbon::now();
+        $teacher = User::find($req['teacher_id']);;
+        $clockedIn = ClockIn::where('teacher_id', $teacher->id)
+            ->where('school_id', $teacher->school[0]->id)
+            ->where('date', $now->format('Y-m-d'))
+            ->first();
+        if ($clockedIn) {
+            $clockedIn->clock_in = null;
+            $clockedIn->clock_out = null;
+            $clockedIn->comment = $req['reason'];
+            $clockedIn->save();
+        }
+        if (!$clockedIn) {
+            ClockIn::create([
+                'teacher_id' => $teacher->id,
+                'school_id' => $teacher->school[0]->id,
+                'date' => $req['date'],
+                'clock_in' => null,
+                'clock_out' => null,
+                'comment' => $req['reason']
             ]);
+        }
+        return redirect()->back()->with('success', 'Leave has been recorded.');;
     }
 }

@@ -31,12 +31,24 @@
               {{ clockIn.displayDate }}
             </td>
             <td class="px-6 py-1 whitespace-nowrap text-sm font-light text-gray-800 border border-gray-300">
-              {{ clockIn.clockedIn != null ? clockIn.clockedIn.clock_in : '-' }}
+              <p>{{ clockIn.clockedIn != null ? clockIn.clockedIn.clock_in : '-' }}</p>
+              <p
+                v-if="clockIn.clockedIn && clockIn.clockedIn.clock_in === null && clockIn.clockedIn.comment !== null"
+                class="text-red-500">
+                ลา
+              </p>
             </td>
             <td class="px-6 py-1 whitespace-nowrap text-sm font-light text-gray-800 border border-gray-300">
-              {{ clockIn.clockedIn != null ? clockIn.clockedIn.clock_out : '-' }}
+              <p>{{ clockIn.clockedIn != null ? clockIn.clockedIn.clock_out : '-' }}</p>
+              <p
+                v-if="clockIn.clockedIn && clockIn.clockedIn.clock_in === null && clockIn.clockedIn.comment !== null"
+                class="text-red-500">
+                ลา
+              </p>
             </td>
-            <td class="px-6 py-1 whitespace-nowrap text-sm font-light text-gray-800 border border-gray-300"></td>
+            <td class="px-6 py-1 whitespace-nowrap text-sm font-light text-gray-800 border border-gray-300">
+              <p class="text-red-500">{{ clockIn.clockedIn?.comment }}</p>
+            </td>
           </tr>
           </tbody>
         </table>
