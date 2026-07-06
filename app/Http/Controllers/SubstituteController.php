@@ -35,6 +35,7 @@ class SubstituteController extends Controller
     public function store(Request $request, School $school)
     {
         $req = $request->validate([
+            'date' => ['nullable', 'date'],
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'grade' => ['required', 'string'],
@@ -42,9 +43,12 @@ class SubstituteController extends Controller
             'absent' => ['required', 'string'],
             'substitute' => ['nullable', 'string'],
         ]);
+        $date = isset($req['date'])
+            ? Carbon::parse($req['date'])->format('Y-m-d')
+            : Carbon::today()->format('Y-m-d');
         Substitute::create([
             'school_id' => $school->id,
-            'date' => Carbon::today()->format('Y-m-d'),
+            'date' => $date,
             'start_time' => $req['start_time'],
             'end_time' => $req['end_time'],
             'grade' => $req['grade'],
