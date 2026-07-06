@@ -12,9 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('clock_ins', function (Blueprint $table) {
-            $table->text('comment')->nullable()->after('clock_out');
-        });
+        if (!Schema::hasColumn('clock_ins', 'comment')) {
+            Schema::table('clock_ins', function (Blueprint $table) {
+                $table->text('comment')->nullable()->after('clock_out');
+            });
+        }
     }
 
     /**
