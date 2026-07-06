@@ -400,7 +400,8 @@ export default {
       window.location.reload();
     },
     addNewSubstitute() {
-      Inertia.post(this.route('dashboard.substitute.store', {school: this.school.id}), this.form, {
+      const payload = {...this.form, date: this.date};
+      Inertia.post(this.route('dashboard.substitute.store', {school: this.school.id}), payload, {
         onSuccess: () => {
           window.location.reload();
         }
