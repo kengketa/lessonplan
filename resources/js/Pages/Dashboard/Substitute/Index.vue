@@ -13,7 +13,7 @@
                 <h3 v-if="date==null" class="text-xl font-semibold">Today’s Substitutions ({{ currentDateTime }})</h3>
                 <h3 v-if="date" class="text-xl font-semibold">Substitutions On ({{ formattedDate(date) }})</h3>
                 <p v-show="isEditAble" class="cursor-pointer text-blue-500 hover:underline" @click="copyToClipboard">
-                  {{ route('substitute.volunteer') }}
+                  {{ volunteerUrl }}
                 </p>
               </div>
               <div class="flex items-center gap-1">
@@ -308,7 +308,7 @@ export default {
       )
     },
     copyToClipboard() {
-      const text = this.route('substitute.volunteer');
+      const text = this.volunteerUrl;
       navigator.clipboard.writeText(text)
         .then(() => {
           alert('Copied to clipboard!');
@@ -439,6 +439,9 @@ export default {
     }
   },
   computed: {
+    volunteerUrl() {
+      return 'https://mep.abpy.org/substitutions';
+    },
     computedRoute() {
       let url = this.route('dashboard.substitute.print', {school: this.school.id});
       if (this.date) {
