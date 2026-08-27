@@ -8,6 +8,7 @@ use App\Transformers\Api\SubstituteTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SubstituteController extends Controller
 {
@@ -37,25 +38,43 @@ class SubstituteController extends Controller
             ], 422);
         }
 
-        $substitutes = Substitute::query()
-            ->whereBetween('date', [$from->format('Y-m-d'), $to->format('Y-m-d')])
-            ->when(isset($req['school_id']), fn ($query) => $query->where('school_id', $req['school_id']))
-            ->when(
-                filter_var($req['unassigned'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                fn ($query) => $query->whereNull('volunteer')
-            )
-            ->orderBy('date', 'asc')
-            ->orderBy('start_time', 'asc')
-            ->get();
+        $schoolId = isset($req['school_id']) ? (int) $req['school_id'] : null;
+        $unassigned = filter_var($req['unassigned'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        return response()->json([
-            'data' => fractal($substitutes, new SubstituteTransformer())->toArray()['data'],
-            'meta' => [
-                'from' => $from->format('Y-m-d'),
-                'to' => $to->format('Y-m-d'),
-                'school_id' => isset($req['school_id']) ? (int) $req['school_id'] : null,
-                'total' => $substitutes->count(),
-            ],
-        ]);
+        // Keyed on the normalised filters so equivalent requests share an entry.
+        // The version prefix is bumped by Substitute's model events, so any write
+        // makes every previously cached response unreachable straight away.
+        $cacheKey = 'cache_substitutes_api_v'.Substitute::apiCacheVersion().'_'.md5(json_encode([
+            $from->format('Y-m-d'),
+            $to->format('Y-m-d'),
+            $schoolId,
+            $unassigned,
+        ]));
+
+        $payload = Cache::remember(
+            $cacheKey,
+            Substitute::API_CACHE_TTL,
+            function () use ($from, $to, $schoolId, $unassigned) {
+                $substitutes = Substitute::query()
+                    ->whereBetween('date', [$from->format('Y-m-d'), $to->format('Y-m-d')])
+                    ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+                    ->when($unassigned, fn ($query) => $query->whereNull('volunteer'))
+                    ->orderBy('date', 'asc')
+                    ->orderBy('start_time', 'asc')
+                    ->get();
+
+                return [
+                    'data' => fractal($substitutes, new SubstituteTransformer())->toArray()['data'],
+                    'meta' => [
+                        'from' => $from->format('Y-m-d'),
+                        'to' => $to->format('Y-m-d'),
+                        'school_id' => $schoolId,
+                        'total' => $substitutes->count(),
+                    ],
+                ];
+            }
+        );
+
+        return response()->json($payload);
     }
 }
