@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\SubstituteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('inject-lesson-plans', [ApiController::class, 'injectLessonPlans'])
     ->middleware('verify.bearer');
+
+// Public, read-only. Mirrors the already-public volunteer board at /abpy-sub.
+Route::get('substitutes', [SubstituteController::class, 'index'])
+    ->name('api.substitutes.index');

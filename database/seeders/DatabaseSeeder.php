@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             $this->call(MeetingSeeder::class);
             $this->call(AgendaSeeder::class);
             $this->call(MisbehaviorSeeder::class);
+            $this->call(VolunteerSchoolSeeder::class);
             $this->call(SubstituteSeeder::class);
         }
         if (config('app.env') == 'production') {
